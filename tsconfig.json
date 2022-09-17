@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowJs": true,
+    "checkJs": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "noImplicitReturns": false,
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitThis": false,
+    "noImplicitAny": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "outDir": "./build",
+    "lib": [
+      "ES2015",
+      "ES2016",
+      "ES2017",
+      "ES2018",
+      "ES2019",
+      "ES2020",
+      "ESNext"
+    ],
+    "rootDirs": ["src"],
+    "baseUrl": "src",
+    "paths": {
+      "container": ["./container"],
+      "app/*": ["./app/*"],
+      "core": ["./core"],
+      "domain/*": ["./domain/*"],
+      "infra/*": ["./infra/*"],
+      "interfaces/*": ["./interfaces/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "test/**/*",
+    "**/__tests__/*",
+    "node_modules",
+    "dist",
+    "build",
+    "node_modules",
+    "config"
+  ],
+  "compileOnSave": false,
+  "buildOnSave": false
+}
