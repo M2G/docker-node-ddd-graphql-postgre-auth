@@ -5,15 +5,18 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from 'apollo-server-core';
 import express from 'express';
+
 import http from 'http';
 
-export default ({ config, logger, auth }: any) => {
-  console.log('STARRRRRRRRRRRRRRRRT')
+export default ({ config, logger, auth, schema, database }: any) => {
+  console.log('STARRRRRRRRRRRRRRRRT', schema, database)
   const app = express();
-  /*const httpServer = http.createServer(app);
+
+  const httpServer = http.createServer(app);
   const apolloServer = new ApolloServer({
-    //typeDefs,
-    //resolvers,
+    typeDefs: schema.typeDefs,
+    resolvers: schema.resolvers,
+    context: () => database.models,
     csrfPrevention: true,
     cache: 'bounded',
     plugins: [
@@ -23,16 +26,16 @@ export default ({ config, logger, auth }: any) => {
   });
 
   app.disable('x-powered-by');
-  app.use(auth.initialize())*/
+  app.use(auth.initialize())
   // app.use(router);
 
   return {
     app,
     start: () => new Promise(() => {
       app.listen(config.port, async () => {
-        //await apolloServer.start();
-        //apolloServer.applyMiddleware({ app });
-        //logger.info(`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`);
+        await apolloServer.start();
+        apolloServer.applyMiddleware({ app });
+        logger.info(`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`);
       })
     })
   }

@@ -21,20 +21,17 @@ const typeDefs = gql`
 export default ({
                   postUseCase,
                 }: any) => {
-  const resolvers = {
-    Type: {
 
-      /* Author: {
-        id: (parent) => parent._id,
-      }, */
-    },
+  console.log('postUseCase postUseCase', postUseCase)
+
+  const resolvers = {
     Mutation: {
       signin: (
         parent: any,
         args: any,
         context: any,
       ) => {
-        console.log('---------------------------_>',
+        console.log('--------------------------->',
           parent,
           args,
           context);
@@ -43,6 +40,12 @@ export default ({
           args, context,
         });
       },
+    },
+    Type: {
+
+      /* Author: {
+        id: (parent) => parent._id,
+      }, */
     },
   };
 
