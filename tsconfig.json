@@ -40,7 +40,8 @@
       "core": ["./core"],
       "domain/*": ["./domain/*"],
       "infra/*": ["./infra/*"],
-      "interfaces/*": ["./interfaces/*"]
+      "interfaces/*": ["./interfaces/*"],
+      "schema/*": ["./interfaces/schema-definition/*"]
     }
   },
   "include": ["src/**/*"],

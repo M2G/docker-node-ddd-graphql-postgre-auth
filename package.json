@@ -25,7 +25,8 @@
     "core": "./build/src/core",
     "domain": "./build/src/domain",
     "infra": "./build/src/infra",
-    "interfaces": "./build/src/interfaces"
+    "interfaces": "./build/src/interfaces",
+    "schema": "./build/src/interfaces/schema-definition"
   },
   "author": "M2G",
   "scripts": {

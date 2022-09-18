@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server-express';
-import authenticate from '../http/modules/authenticate';
+import authenticate from 'interfaces/http/modules/authenticate';
 // SCHEMA DEFINITIONS AND RESOLVERS
 
 // DEFAULT EMPTY ROOT TYPES
@@ -28,7 +28,7 @@ export default () => {
 
     return {
     resolvers: {
-      // ...authenticateResolvers.Type,
+      ...authenticateResolvers.Type,
 
       /* Query: {
         ...authorResolvers.Query,
@@ -43,7 +43,7 @@ export default () => {
       Query: {},
     },
       typeDefs: [
-        RootTypes,
+        RootTypes, authenticateTypeDefs,
       ],
   };
 };

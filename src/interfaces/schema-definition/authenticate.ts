@@ -1,25 +1,11 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { gql } from 'apollo-server-express';
 
-const typeDefs = gql`
-  input SignupInput {
-      email: String!
-      password: String!
-  }
+export default ({ postUseCase }: any) => {
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'schema.graphql'), 'utf-8'));
 
-  input SigninInput {
-      email: String!
-      password: String!
-  }
-
-  type Mutation {
-      signup(input: SignupInput): String!
-      signin(input: SigninInput): String!
-  }
-`;
-
-export default ({
-                  postUseCase,
-                }: any) => {
+  console.log('typeDefs typeDefs', typeDefs);
   console.log('postUseCase postUseCase', postUseCase);
 
   const resolvers = {
