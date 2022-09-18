@@ -1,7 +1,6 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
-  """Object Type that represents a Signup"""
   input SignupInput {
       email: String!
       password: String!
@@ -12,7 +11,7 @@ const typeDefs = gql`
       password: String!
   }
 
-  extend type Mutation {
+  type Mutation {
       signup(input: SignupInput): String!
       signin(input: SigninInput): String!
   }
@@ -21,8 +20,7 @@ const typeDefs = gql`
 export default ({
                   postUseCase,
                 }: any) => {
-
-  console.log('postUseCase postUseCase', postUseCase)
+  console.log('postUseCase postUseCase', postUseCase);
 
   const resolvers = {
     Mutation: {
@@ -37,16 +35,12 @@ export default ({
           context);
 
         return postUseCase.authenticate({
-          args, context,
+          ...args,
         });
       },
     },
-    Type: {
-
-      /* Author: {
-        id: (parent) => parent._id,
-      }, */
-    },
+    Query: {},
+    Type: {},
   };
 
   return {

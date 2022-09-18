@@ -1,21 +1,29 @@
 /*eslint-disable*/
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, gql } from 'apollo-server-express';
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
 } from 'apollo-server-core';
 import express from 'express';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 import http from 'http';
 
 export default ({ config, logger, auth, schema, database }: any) => {
-  console.log('STARRRRRRRRRRRRRRRRT', schema, database)
+  const typeDefs = gql(
+    readFileSync(join(__dirname, '../..', 'schema.graphql'), 'utf-8'),
+  );
+  console.log('STARRRRRRRRRRRRRRRRT', database)
+
   const app = express();
 
   const httpServer = http.createServer(app);
   const apolloServer = new ApolloServer({
-    typeDefs: schema.typeDefs,
+    //typeDefs: schema.typeDefs,
+    typeDefs,
     resolvers: schema.resolvers,
+    // resolvers,
     context: () => database.models,
     csrfPrevention: true,
     cache: 'bounded',

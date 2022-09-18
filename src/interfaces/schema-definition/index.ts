@@ -21,17 +21,14 @@ export default () => {
     typeDefs: authenticateTypeDefs,
 } = authenticate().authenticate;
 
-  console.log('postUseCase', {
+  console.log('::::::::::::::::::::::::::::::::::::::', {
     authenticateTypeDefs,
     authenticateResolvers,
   });
 
     return {
-    typeDefs: [
-     RootTypes,
-    ],
     resolvers: {
-      ...authenticateResolvers.Type,
+      // ...authenticateResolvers.Type,
 
       /* Query: {
         ...authorResolvers.Query,
@@ -43,6 +40,10 @@ export default () => {
         // ...bookResolvers.Mutation,
         // ...commentResolvers.Mutation,
       },
+      Query: {},
     },
+      typeDefs: [
+        RootTypes,
+      ],
   };
 };
