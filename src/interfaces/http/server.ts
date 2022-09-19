@@ -28,13 +28,13 @@ export default ({ config, logger, auth, schema, database }: any) => {
   });
 
   app.disable('x-powered-by');
-  app.use(auth.initialize())
-  // app.use(router);
+  // app.use(auth.initialize())
 
   return {
     app,
     start: () => new Promise(() => {
       app.listen(config.port, async () => {
+        console.log('config.port config.port', config.port)
         await apolloServer.start();
         apolloServer.applyMiddleware({ app });
         logger.info(`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`);

@@ -10,4 +10,4 @@ const time =
 const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
 const FAIL_AUTH = 'Failed to authenticate token is expired.';
 
-export default ({ response: { Fail }, jwt }: any) => {}
+export default ({ jwt }: any) => {}
