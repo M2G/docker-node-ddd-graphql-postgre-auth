@@ -1,5 +1,5 @@
+import authenticate from 'interfaces/schema-definition/authenticate';
 import instance from './instance';
-import authenticate from '../../../schema-definition/authenticate';
 
 export default () => {
   const app = instance();

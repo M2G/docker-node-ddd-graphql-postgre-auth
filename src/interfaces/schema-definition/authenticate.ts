@@ -6,7 +6,7 @@ export default ({ postUseCase }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'schema.graphql'), 'utf-8'));
 
   console.log('typeDefs typeDefs', typeDefs);
-  console.log('postUseCase postUseCase', postUseCase);
+  console.log('postUseCase postUseCase', postUseCase.postUseCase.authenticate);
 
   const resolvers = {
     Mutation: {
@@ -16,9 +16,11 @@ export default ({ postUseCase }: any) => {
         context: any,
       ) => {
         console.log('--------------------------->',
-          parent,
-          args,
-          context);
+          {
+            parent,
+            args,
+            context
+          });
 
         return postUseCase.authenticate({
           ...args,
