@@ -2,8 +2,8 @@ import authenticate from 'interfaces/schema-definition/authenticate';
 import instance from './instance';
 
 export default () => {
-  const app = instance();
+  const { postUseCase } = instance();
   return {
-    authenticate: authenticate({ postUseCase: app }),
+    authenticate: authenticate({ postUseCase }),
   };
 };

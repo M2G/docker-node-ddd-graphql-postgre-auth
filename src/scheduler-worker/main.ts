@@ -87,7 +87,7 @@ async function deleteInactiveUser() {
 
 cron.schedule('* * * * *', () => {
   void (async () => {
-    lastConnectedUser();
-    await deleteInactiveUser();
+    // lastConnectedUser();
+    // await deleteInactiveUser();
   })();
 });

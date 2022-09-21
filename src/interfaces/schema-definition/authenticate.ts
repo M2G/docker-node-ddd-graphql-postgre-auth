@@ -1,12 +1,13 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { gql } from 'apollo-server-express';
+import { comparePassword } from "infra/encryption";
 
 export default ({ postUseCase }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'schema.graphql'), 'utf-8'));
 
   console.log('typeDefs typeDefs', typeDefs);
-  console.log('postUseCase postUseCase', postUseCase.postUseCase.authenticate);
+  console.log('postUseCase postUseCase', postUseCase.authenticate);
 
   const resolvers = {
     Mutation: {
@@ -22,9 +23,36 @@ export default ({ postUseCase }: any) => {
             context
           });
 
-        return postUseCase.authenticate({
+        const { input } = args;
+        const { ...params } = input;
+
+        console.log('::::::::::::::', params)
+
+        /*const user = postUseCase.authenticate({
           ...args,
         });
+
+     if (match) {
+        const payload = <IUser>{ email, password };
+
+        const options = {
+          subject: email,
+          audience: [],
+          expiresIn: 60 * 60,
+        };
+
+        // if user is found and password is right, create a token
+        const token: string = jwt.signin(options)(payload);
+
+        logger.info({ token });
+   }
+
+
+
+
+        */
+
+
       },
     },
     Query: {},
