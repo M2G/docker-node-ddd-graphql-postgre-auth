@@ -6,7 +6,7 @@ interface IUser extends Document {
   username?: string;
   first_name?: string;
   last_name?: string;
-  password?: string;
+  password: string;
   created_at?: number;
   modified_at?: number;
   reset_password_token?: string;

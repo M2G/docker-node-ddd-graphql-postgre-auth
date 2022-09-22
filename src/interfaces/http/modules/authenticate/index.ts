@@ -2,8 +2,8 @@ import authenticate from 'interfaces/schema-definition/authenticate';
 import instance from './instance';
 
 export default () => {
-  const { postUseCase } = instance();
+  const { jwt, logger, postUseCase } = instance();
   return {
-    authenticate: authenticate({ postUseCase }),
+    authenticate: authenticate({ jwt, logger, postUseCase }),
   };
 };

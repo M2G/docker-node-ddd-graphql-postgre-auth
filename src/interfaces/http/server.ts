@@ -8,8 +8,8 @@ import express from 'express';
 
 import http from 'http';
 
-export default ({ config, logger, auth, schema, database }: any) => {
-  console.log('STARRRRRRRRRRRRRRRRT', schema, database)
+export default ({ config, logger, auth, schema }: any) => {
+  console.log('STARRRRRRRRRRRRRRRRT', schema)
 
   const app = express();
 
@@ -17,7 +17,6 @@ export default ({ config, logger, auth, schema, database }: any) => {
   const apolloServer = new ApolloServer({
     typeDefs: schema.typeDefs,
     resolvers: schema.resolvers,
-    context: () => database.models,
     csrfPrevention: true,
     cache: 'bounded',
     plugins: [

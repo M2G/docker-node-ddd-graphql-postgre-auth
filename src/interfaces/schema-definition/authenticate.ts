@@ -2,8 +2,9 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { gql } from 'apollo-server-express';
 import { comparePassword } from "infra/encryption";
+import type IUser from "core/IUser";
 
-export default ({ postUseCase }: any) => {
+export default ({ postUseCase, jwt, logger }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'schema.graphql'), 'utf-8'));
 
   console.log('typeDefs typeDefs', typeDefs);
@@ -11,7 +12,7 @@ export default ({ postUseCase }: any) => {
 
   const resolvers = {
     Mutation: {
-      signin: (
+      signin: async (
         parent: any,
         args: any,
         context: any,
@@ -20,39 +21,38 @@ export default ({ postUseCase }: any) => {
           {
             parent,
             args,
-            context
+            context,
           });
 
         const { input } = args;
         const { ...params } = input;
 
-        console.log('::::::::::::::', params)
+        console.log('::::::::::::::', params);
 
-        /*const user = postUseCase.authenticate({
-          ...args,
+        const data: any = await postUseCase.authenticate({
+          email: params.email,
         });
 
-     if (match) {
-        const payload = <IUser>{ email, password };
+        const { email, password } = <IUser>data || {};
 
-        const options = {
-          subject: email,
-          audience: [],
-          expiresIn: 60 * 60,
-        };
+        const match = comparePassword(params.password, password);
 
-        // if user is found and password is right, create a token
-        const token: string = jwt.signin(options)(payload);
+        if (match) {
+          const payload = <IUser>{ email, password };
 
-        logger.info({ token });
-   }
+          const options = {
+            audience: [],
+            expiresIn: 60 * 60,
+            subject: email,
+          };
 
+          // if user is found and password is right, create a token
+          const token: string = jwt.signin(options)(payload);
 
+          logger.info({ token });
 
-
-        */
-
-
+          return token;
+        }
       },
     },
     Query: {},

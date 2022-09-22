@@ -5,7 +5,7 @@ const encryptPassword = (password: any) => {
   return bcrypt.hashSync(password, salt);
 };
 
-const comparePassword = (password: any, encodedPassword: string) =>
+const comparePassword = (password: string, encodedPassword: string) =>
   bcrypt.compareSync(password, encodedPassword);
 
 export {
