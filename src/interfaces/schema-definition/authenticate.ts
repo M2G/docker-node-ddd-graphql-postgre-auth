@@ -5,7 +5,7 @@ import { comparePassword } from "infra/encryption";
 import type IUser from "core/IUser";
 
 export default ({ postUseCase, jwt, logger }: any) => {
-  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'schema.graphql'), 'utf-8'));
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
 
   console.log('typeDefs typeDefs', typeDefs);
   console.log('postUseCase postUseCase', postUseCase.authenticate);
@@ -25,20 +25,20 @@ export default ({ postUseCase, jwt, logger }: any) => {
           });
 
         const { input } = args;
-        const { ...params } = input;
+        const { ...params } = input as IUser;
 
         console.log('::::::::::::::', params);
 
-        const data: any = await postUseCase.authenticate({
+        const data: IUser = await postUseCase.authenticate({
           email: params.email,
         });
 
-        const { email, password } = <IUser>data || {};
+        const { email, password } = data || {};
 
         const match = comparePassword(params.password, password);
 
         if (match) {
-          const payload = <IUser>{ email, password };
+          const payload = { email, password };
 
           const options = {
             audience: [],

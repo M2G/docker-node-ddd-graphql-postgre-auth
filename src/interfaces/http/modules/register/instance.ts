@@ -1,15 +1,15 @@
 import container from 'container';
-import post from 'app/register';
+import post from 'app/authenticate';
 
 export default () => {
   const { cradle } = container;
-  const {
-    repository: { usersRepository },
-  } = cradle;
-
-  const postUseCase = post({ usersRepository });
+  const { redis, repository, jwt, logger } = cradle;
+  const { usersRepository } = repository;
+  const postUseCase = post({ redis, usersRepository });
 
   return {
+    jwt,
+    logger,
     postUseCase,
   };
 };

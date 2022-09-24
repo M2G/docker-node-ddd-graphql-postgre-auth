@@ -1,14 +1,9 @@
-import container from 'container';
+import register from 'interfaces/schema-definition/register';
 import instance from './instance';
 
 export default () => {
-  const {
-    jwt,
-    logger,
-  } = container.cradle;
-  const app = instance();
-
+  const { jwt, logger, postUseCase } = instance();
   return {
-    app,
+    authenticate: register({ jwt, logger, postUseCase }),
   };
 };
