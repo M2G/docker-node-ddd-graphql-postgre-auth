@@ -4,6 +4,6 @@ import instance from './instance';
 export default () => {
   const { jwt, logger, postUseCase } = instance();
   return {
-    authenticate: register({ jwt, logger, postUseCase }),
+    register: register({ jwt, logger, postUseCase }),
   };
 };

@@ -7,9 +7,6 @@ import type IUser from "core/IUser";
 export default ({ postUseCase, jwt, logger }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
 
-  console.log('typeDefs typeDefs', typeDefs);
-  console.log('postUseCase postUseCase', postUseCase.authenticate);
-
   const resolvers = {
     Mutation: {
       signin: async (
@@ -29,6 +26,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
         console.log('::::::::::::::', params);
 
+        try {
         const data: IUser = await postUseCase.authenticate({
           email: params.email,
         });
@@ -37,7 +35,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
         const match = comparePassword(params.password, password);
 
-        if (match) {
+        if (!match) return null;
           const payload = { email, password };
 
           const options = {
@@ -52,6 +50,9 @@ export default ({ postUseCase, jwt, logger }: any) => {
           logger.info({ token });
 
           return token;
+        } catch (error: unknown) {
+          logger.error(error);
+          throw new Error(error as string | undefined);
         }
       },
     },

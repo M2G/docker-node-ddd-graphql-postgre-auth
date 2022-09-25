@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express';
 import authenticate from 'interfaces/http/modules/authenticate';
+import register from 'interfaces/http/modules/register';
 // SCHEMA DEFINITIONS AND RESOLVERS
 
 // DEFAULT EMPTY ROOT TYPES
@@ -21,14 +22,15 @@ export default () => {
     typeDefs: authenticateTypeDefs,
 } = authenticate().authenticate;
 
-  console.log('::::::::::::::::::::::::::::::::::::::', {
-    authenticateTypeDefs,
-    authenticateResolvers,
-  });
+  const {
+    resolvers: registerResolvers,
+    typeDefs: registerTypeDefs,
+  } = register().register;
 
     return {
     resolvers: {
       ...authenticateResolvers.Type,
+      ...registerResolvers.Type,
 
       /* Query: {
         ...authorResolvers.Query,
@@ -37,13 +39,16 @@ export default () => {
       }, */
       Mutation: {
         ...authenticateResolvers.Mutation,
+        ...registerResolvers.Mutation,
         // ...bookResolvers.Mutation,
         // ...commentResolvers.Mutation,
       },
       Query: {},
     },
       typeDefs: [
-        RootTypes, authenticateTypeDefs,
+        RootTypes,
+        authenticateTypeDefs,
+        registerTypeDefs,
       ],
   };
 };
