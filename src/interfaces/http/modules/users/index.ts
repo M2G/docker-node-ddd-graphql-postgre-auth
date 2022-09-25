@@ -1,16 +1,17 @@
-import container from 'container';
+import users from 'interfaces/schema-definition/users';
 import instance from './instance';
 
 export default () => {
-  const { cradle } = container;
-
   const {
+    jwt,
     logger,
-    auth,
-  } = cradle;
-  const app = instance();
-
+    deleteUseCase,
+    getOneUseCase,
+    getUseCase,
+    putUseCase,
+    postUseCase,
+  } = instance();
   return {
-    app,
+    users: users({ jwt, logger, postUseCase }),
   };
 };

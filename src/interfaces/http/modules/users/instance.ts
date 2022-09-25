@@ -5,7 +5,6 @@ import {
 
 export default () => {
   const { cradle } = container;
-
   const {
     redis,
     repository: { usersRepository },
