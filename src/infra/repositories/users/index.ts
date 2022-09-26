@@ -30,8 +30,11 @@ export default ({ model, jwt }: any) => {
       const m: IRead<any> = model;
       const users = await m.find(query).lean().sort({ email: 1 });
 
-      return users.map((user) => toEntity(user));
+      console.log('users params params params', users)
+
+      return users?.map((user) => toEntity(user));
     } catch (error) {
+      console.log('error error error error error', error)
       throw new Error(error as string | undefined);
     }
   };

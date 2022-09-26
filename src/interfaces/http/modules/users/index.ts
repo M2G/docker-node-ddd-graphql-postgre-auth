@@ -3,15 +3,23 @@ import instance from './instance';
 
 export default () => {
   const {
-    jwt,
-    logger,
     deleteUseCase,
     getOneUseCase,
     getUseCase,
-    putUseCase,
+    jwt,
+    logger,
     postUseCase,
+    putUseCase,
   } = instance();
   return {
-    users: users({ jwt, logger, postUseCase }),
+    users: users({
+      deleteUseCase,
+      getOneUseCase,
+      getUseCase,
+      jwt,
+      logger,
+      postUseCase,
+      putUseCase,
+}),
   };
 };

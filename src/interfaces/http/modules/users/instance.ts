@@ -7,6 +7,7 @@ export default () => {
   const { cradle } = container;
   const {
     redis,
+    logger,
     repository: { usersRepository },
   } = cradle;
 
@@ -16,6 +17,7 @@ export default () => {
   const deleteUseCase = remove({ usersRepository });
 
   return {
+    logger,
     deleteUseCase,
     getOneUseCase,
     getUseCase,

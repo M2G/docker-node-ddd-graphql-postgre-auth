@@ -1,20 +1,7 @@
-import { gql } from 'apollo-server-express';
 import authenticate from 'interfaces/http/modules/authenticate';
 import register from 'interfaces/http/modules/register';
+import users from 'interfaces/http/modules/users';
 // SCHEMA DEFINITIONS AND RESOLVERS
-
-// DEFAULT EMPTY ROOT TYPES
-const RootTypes = gql`
-  type Query {
-    _empty: String
-  }
-  type Mutation {
-    _empty: String
-  }
-  type Subscription {
-    _empty: String
-  }
-`;
 
 export default () => {
   const {
@@ -26,6 +13,11 @@ export default () => {
     resolvers: registerResolvers,
     typeDefs: registerTypeDefs,
   } = register().register;
+
+  const {
+    resolvers: usersResolvers,
+    typeDefs: usersTypeDefs,
+  } = users().users;
 
     return {
     resolvers: {
@@ -43,12 +35,14 @@ export default () => {
         // ...bookResolvers.Mutation,
         // ...commentResolvers.Mutation,
       },
-      Query: {},
+      Query: {
+        ...usersResolvers.Query,
+      },
     },
       typeDefs: [
-        RootTypes,
         authenticateTypeDefs,
         registerTypeDefs,
+        usersTypeDefs,
       ],
   };
 };
