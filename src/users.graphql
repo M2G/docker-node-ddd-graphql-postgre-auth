@@ -1,0 +1,60 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: String
+  email: String
+  password: String
+  first_name: String
+  last_name: String
+  username: String
+  created_at: Int
+  modified_at: Int
+  reset_password_token: String
+  reset_password_expires: String
+  deleted_at: Int
+  last_connected_at: Int
+}
+
+type Query {
+  users(filters: String): [User!]!
+}
+
+type Query {
+  getUser(id: String!): User!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
+
+type Mutation {
+  updateUserPassword(id: String!, input: updateUserPasswordInput!): User!
+}
+
+type Mutation {
+  deleteUser(id: String!): User!
+}
+
+type Mutation {
+  updateUser(id: String!, input: CreateUserInput!): User!
+}
+
+input updateUserPasswordInput {
+  old_password: String!
+  password: String!
+  password_again: String!
+}
+
+input CreateUserInput {
+  _id: String
+  email: String
+  password: String
+  first_name: String
+  last_name: String
+  username: String
+  created_at: Int
+  modified_at: Int
+}
+
