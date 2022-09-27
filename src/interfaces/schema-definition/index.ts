@@ -23,17 +23,9 @@ export default () => {
     resolvers: {
       ...authenticateResolvers.Type,
       ...registerResolvers.Type,
-
-      /* Query: {
-        ...authorResolvers.Query,
-        ...bookResolvers.Query,
-        ...commentResolvers.Query,
-      }, */
       Mutation: {
         ...authenticateResolvers.Mutation,
         ...registerResolvers.Mutation,
-        // ...bookResolvers.Mutation,
-        // ...commentResolvers.Mutation,
       },
       Query: {
         ...usersResolvers.Query,

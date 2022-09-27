@@ -14,14 +14,12 @@ export default (
   const resolvers = {
     Mutation: {
       deleteUser: async (parent: any, args: any) => {
-        const { input } = args;
-        const { ...params } = input;
-        const { _id } = params;
+        const { id } = args;
 
-        console.log('getUser', params);
+        console.log('deleteUser', id);
 
         try {
-          const data = await deleteUseCase.remove({ _id });
+          const data = await deleteUseCase.remove({ _id: id });
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {
@@ -50,14 +48,13 @@ export default (
 
         console.log('args args args', args);
 
-        const { input } = args;
-        const { ...params } = input;
-        const { _id } = params;
-
-        console.log('getUser', params);
+        const { id } = args;
 
         try {
-          const data = await getOneUseCase.getOne({ _id });
+          const data = await getOneUseCase.getOne({ _id: id });
+
+          console.log('------->', data);
+
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {
@@ -73,7 +70,7 @@ export default (
 
         const { search = {}} = args;
 
-        console.log('search search search search search', {search, getUseCase});
+        console.log('search search search search search', {search});
 
         try {
           const data = await getUseCase.all(search ? { ...search } : {});

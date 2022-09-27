@@ -18,11 +18,11 @@ type User {
 }
 
 type Query {
-  users(filters: String): [User!]!
+  users(filters: String): [User!]
 }
 
 type Query {
-  getUser(id: String!): User!
+  getUser(id: String!): User
 }
 
 type Mutation {
@@ -34,11 +34,11 @@ type Mutation {
 }
 
 type Mutation {
-  deleteUser(id: String!): User!
+  deleteUser(id: String!): User
 }
 
 type Mutation {
-  updateUser(id: String!, input: CreateUserInput!): User!
+  updateUser(id: String!, input: CreateUserInput!): User
 }
 
 input updateUserPasswordInput {
