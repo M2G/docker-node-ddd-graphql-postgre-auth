@@ -2,14 +2,14 @@
 import { ApolloServer } from 'apollo-server-express';
 import {
   ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageGraphQLPlayground,
 } from 'apollo-server-core';
 import express from 'express';
 
 import http from 'http';
 
 export default ({ config, logger, auth, schema }: any) => {
-  console.log('STARRRRRRRRRRRRRRRRT', schema)
+  console.log('STARRRRRRRRRRRRRRRRT', {schema, auth})
 
   const app = express();
 
@@ -21,13 +21,14 @@ export default ({ config, logger, auth, schema }: any) => {
     cache: 'bounded',
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
-      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+      ApolloServerPluginLandingPageGraphQLPlayground({}),
     ],
     introspection: true,
   });
 
   app.disable('x-powered-by');
-  // app.use(auth.initialize())
+  app.use(auth.initialize());
+  app.use(auth.authenticate);
 
   return {
     app,
