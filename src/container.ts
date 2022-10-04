@@ -11,6 +11,7 @@ import logger from './infra/logging/logger';
 import repository from './infra/repositories';
 import database from './infra/database';
 import schema from './interfaces/schema-definition';
+import response from './infra/support/response';
 
 const container = createContainer();
 
@@ -23,6 +24,7 @@ container.register({
   logger: asFunction(logger).singleton(),
   redis: asFunction(redis).singleton(),
   repository: asFunction(repository).singleton(),
+  response: asFunction(response).singleton(),
   schema: asFunction(schema).singleton(),
   server: asFunction(server).singleton(),
   verify: asFunction(verify).singleton(),

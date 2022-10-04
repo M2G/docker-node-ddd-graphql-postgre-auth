@@ -14,9 +14,9 @@ export default ({ repository: { usersRepository }, jwt }: any) => {
     'bearer',
     (token: any, done: (arg0: any, arg1: { email: any; password: any } | null) => any) => {
 
-      const { email }: any | number = jwt.decode()(token);
+      const { _id, ...args }: any | number = jwt.decode()(token);
 
-      console.log('bearerStrategy', {email, token})
+      console.log('bearerStrategy', {args, token})
       /*usersRepository
         .findOne({ email })
         .then((user: any) => {
@@ -36,7 +36,7 @@ export default ({ repository: { usersRepository }, jwt }: any) => {
     authenticate: (req: Request, res: Response, next: NextFunction) => {
       return passport.authenticate('bearer', { session: false }, (err, _) => {
 
-        console.log('ERR :', err);
+        console.log('ERRaaaaaaaaaaaaa', {err, req});
 
         /*  if (err === Status[Status.NOT_FOUND]) {
             return res.status(Status.NOT_FOUND).json(Fail(Status[Status.NOT_FOUND]));

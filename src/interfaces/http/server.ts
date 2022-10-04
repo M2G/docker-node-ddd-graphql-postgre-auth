@@ -8,8 +8,8 @@ import express from 'express';
 
 import http from 'http';
 
-export default ({ config, logger, auth, schema }: any) => {
-  console.log('STARRRRRRRRRRRRRRRRT', {schema, auth})
+export default ({ config, logger, auth, schema, verify }: any) => {
+  console.log('STARRRRRRRRRRRRRRRRT', {schema, auth, verify})
 
   const app = express();
 
@@ -28,7 +28,8 @@ export default ({ config, logger, auth, schema }: any) => {
 
   app.disable('x-powered-by');
   app.use(auth.initialize());
-  app.use(auth.authenticate);
+  // app.use(auth.authenticate);
+  app.use(verify.authenticate);
 
   return {
     app,
