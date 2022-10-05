@@ -2,7 +2,7 @@ export default ({ config }: any) => {
   const defaultResponse = (success = true) => ({
     date: new Date(),
     success,
-    version: config.version
+    version: config.version,
   });
 
   const Success = (data: any) => ({ ...defaultResponse(true), data });
