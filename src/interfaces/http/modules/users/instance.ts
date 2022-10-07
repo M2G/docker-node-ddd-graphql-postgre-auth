@@ -17,10 +17,10 @@ export default () => {
   const deleteUseCase = remove({ usersRepository });
 
   return {
-    logger,
     deleteUseCase,
     getOneUseCase,
     getUseCase,
+    logger,
     putUseCase,
   };
 };

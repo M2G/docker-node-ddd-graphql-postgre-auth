@@ -20,6 +20,6 @@ export default () => {
       logger,
       postUseCase,
       putUseCase,
-}),
+    }),
   };
 };

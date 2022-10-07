@@ -17,13 +17,14 @@ export default ({ repository: { usersRepository }, jwt }: any) => {
       const { _id, ...args }: any | number = jwt.decode()(token);
 
       console.log('bearerStrategy', {args, token})
-      /*usersRepository
-        .findOne({ email })
+
+      usersRepository
+        .findOne({ _id })
         .then((user: any) => {
           if (!user) return done(Status[Status.NOT_FOUND], null);
           done(null, { email: user.email, password: user.password });
         })
-        .catch((error: null) => done(error, null));*/
+        .catch((error: null) => done(error, null));
     },
   );
 
