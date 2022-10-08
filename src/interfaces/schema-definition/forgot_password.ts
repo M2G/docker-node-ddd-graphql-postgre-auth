@@ -15,20 +15,13 @@ export default ({ postUseCase, jwt, logger }: any) => {
       signin: async (
         parent: any,
         args: any,
-        context: any,
       ) => {
-        console.log('--------------------------->',
-          {
-            parent,
-            args,
-            context,
-          });
-
         const { input } = args;
         const { ...params } = input as IUser;
 
         console.log('::::::::::::::', params);
 
+        try {
         const data: IUser = await postUseCase.authenticate({
           email: params.email,
         });
@@ -52,6 +45,10 @@ export default ({ postUseCase, jwt, logger }: any) => {
           logger.info({ token });
 
           return token;
+        }
+        } catch (error: unknown) {
+          logger.error(error);
+          throw new Error(error as string | undefined);
         }
       },
     },

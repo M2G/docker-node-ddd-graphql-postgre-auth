@@ -28,8 +28,8 @@ export default ({ config, logger, auth, schema, verify }: any) => {
 
   app.disable('x-powered-by');
   app.use(auth.initialize());
-  // app.use(auth.authenticate);
-  app.use(verify.authenticate);
+  app.use(auth.authenticate);
+  app.use(verify.authorization);
 
   return {
     app,

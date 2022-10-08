@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from 'express';
  * middleware to check the if auth vaid
  */
 
-export default ({ repository: { usersRepository }, jwt }: any) => {
+export default ({ repository: { usersRepository }, response: { Fail }, jwt }: any) => {
 
   const bearerStrategy = new BearerStrategy(
     'bearer',
@@ -37,15 +37,15 @@ export default ({ repository: { usersRepository }, jwt }: any) => {
     authenticate: (req: Request, res: Response, next: NextFunction) => {
       return passport.authenticate('bearer', { session: false }, (err, _) => {
 
-        console.log('ERRaaaaaaaaaaaaa', {err, req});
+        console.log('passport.authenticate', err);
 
-        /*  if (err === Status[Status.NOT_FOUND]) {
+          if (err === Status[Status.NOT_FOUND]) {
             return res.status(Status.NOT_FOUND).json(Fail(Status[Status.NOT_FOUND]));
           }
 
           if (err) {
             return res.status(Status.UNAUTHORIZED).json(Fail(Status[Status.UNAUTHORIZED]));
-          }*/
+          }
 
         return next();
       })(req, res, next);

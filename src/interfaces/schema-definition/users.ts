@@ -66,8 +66,6 @@ export default (
         parent: any,
         args: any,
       ) => {
-        console.log('users users users', { args, parent });
-
         const { search = {}} = args;
 
         console.log('search search search search search', {search});

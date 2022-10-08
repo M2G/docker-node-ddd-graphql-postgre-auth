@@ -1,6 +1,11 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { gql } from 'apollo-server-express';
+import {
+  SchemaDirectiveVisitor,
+  AuthenticationError,
+  ForbiddenError,
+  gql
+} from 'apollo-server-express';
 import { comparePassword } from "infra/encryption";
 import type IUser from "core/IUser";
 
@@ -12,14 +17,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
       signin: async (
         parent: any,
         args: any,
-        context: any,
       ) => {
-        console.log('--------------------------->',
-          {
-            parent,
-            args,
-            context,
-          });
 
         const { input } = args;
         const { ...params } = input as IUser;

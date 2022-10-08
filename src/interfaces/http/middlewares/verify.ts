@@ -12,7 +12,7 @@ const FAIL_AUTH = 'Failed to authenticate token is expired.';
 
 export default ({ response: { Success, Fail }, jwt }: any) => {
   return {
-    authenticate: (req: Request, res: Response, next: NextFunction) => {
+    authorization: (req: Request, res: Response, next: NextFunction) => {
       const extractToken =
         req?.headers?.authorization?.startsWith('Bearer ');
 
