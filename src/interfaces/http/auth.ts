@@ -34,7 +34,9 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
 
   return {
     initialize: () => passport.initialize(),
-    authenticate: (req: Request, res: Response, next: NextFunction) => {
+    authenticate: (req: Request, res: Response,
+                   // next: NextFunction
+    ) => {
       return passport.authenticate('bearer', { session: false }, (err, _) => {
 
         console.log('passport.authenticate', err);
@@ -47,8 +49,10 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
             return res.status(Status.UNAUTHORIZED).json(Fail(Status[Status.UNAUTHORIZED]));
           }
 
-        return next();
-      })(req, res, next);
+        // return next();
+      })(req, res,
+        // next
+      );
     }
   };
 };

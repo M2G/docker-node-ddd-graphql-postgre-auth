@@ -4,7 +4,7 @@ import {
   SchemaDirectiveVisitor,
   AuthenticationError,
   ForbiddenError,
-  gql
+  gql,
 } from 'apollo-server-express';
 import { comparePassword } from "infra/encryption";
 import type IUser from "core/IUser";
@@ -20,26 +20,24 @@ export default ({ postUseCase, jwt, logger }: any) => {
       ) => {
 
         const { input } = args;
-        const { ...params } = input as IUser;
-
-        console.log('::::::::::::::', params);
+        const { email, password } = input as IUser;
 
         try {
         const data: IUser = await postUseCase.authenticate({
-          email: params.email,
+          email,
         });
 
-        const { email, password } = data || {};
+        if (!email) throw new Error(`User not found (email: ${email}).`);
 
-        const match = comparePassword(params.password, password);
+        const match = comparePassword(password, data.password);
 
-        if (!match) return null;
-          const payload = { email, password };
+        if (!match) throw new Error('Wrong username and password combination.');
+          const payload = { email: data.email, password: data.password };
 
           const options = {
             audience: [],
             expiresIn: 60 * 60,
-            subject: email,
+            subject: data.email,
           };
 
           // if user is found and password is right, create a token

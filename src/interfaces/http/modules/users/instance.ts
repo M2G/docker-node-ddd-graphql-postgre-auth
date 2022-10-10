@@ -9,6 +9,8 @@ export default () => {
     redis,
     logger,
     repository: { usersRepository },
+    auth,
+    verify,
   } = cradle;
 
   const getUseCase = get({ redis, usersRepository });
@@ -17,10 +19,12 @@ export default () => {
   const deleteUseCase = remove({ usersRepository });
 
   return {
+    auth,
     deleteUseCase,
     getOneUseCase,
     getUseCase,
     logger,
     putUseCase,
+    verify,
   };
 };

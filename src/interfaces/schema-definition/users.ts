@@ -6,7 +6,7 @@ import { gql } from 'apollo-server-express';
 
 export default (
   {
- getUseCase, getOneUseCase, deleteUseCase, jwt, logger,
+ getUseCase, getOneUseCase, deleteUseCase, logger, auth, verify,
 }: any,
 ) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
@@ -65,10 +65,20 @@ export default (
       users: async (
         parent: any,
         args: any,
+        context: any,
       ) => {
         const { search = {}} = args;
 
-        console.log('search search search search search', {search});
+        console.log(' contextcontext context context', {
+          auth,
+          verify,
+                context
+        });
+        auth.authenticate(context.req, context.res);
+        // verify.authorization(context.req, context.res);
+
+
+        console.log('search search search search search', search);
 
         try {
           const data = await getUseCase.all(search ? { ...search } : {});

@@ -3,6 +3,7 @@ import { ApolloServer } from 'apollo-server-express';
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginCacheControl,
 } from 'apollo-server-core';
 import express from 'express';
 
@@ -20,16 +21,19 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     csrfPrevention: true,
     cache: 'bounded',
     plugins: [
+      ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageGraphQLPlayground({}),
     ],
     introspection: true,
+    context: async ({ ...params}) => ({ ...params })
   });
 
   app.disable('x-powered-by');
+
   app.use(auth.initialize());
-  app.use(auth.authenticate);
-  app.use(verify.authorization);
+  // app.use(auth.authenticate);
+  // app.use(verify.authorization);
 
   return {
     app,

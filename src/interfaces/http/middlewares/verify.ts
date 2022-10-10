@@ -16,6 +16,10 @@ export default ({ response: { Success, Fail }, jwt }: any) => {
       const extractToken =
         req?.headers?.authorization?.startsWith('Bearer ');
 
+      console.log('extractToken extractToken', extractToken);
+
+      //console.log('extractToken', extractToken)
+
       if (extractToken) {
         const token = req?.headers?.authorization?.split(' ')?.[1];
 
@@ -40,7 +44,7 @@ export default ({ response: { Success, Fail }, jwt }: any) => {
           );
         }
 
-        return next();
+       //  return next();
       }
 
       return res.status(Status.UNAUTHORIZED).json(

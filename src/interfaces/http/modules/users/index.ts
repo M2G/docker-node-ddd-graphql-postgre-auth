@@ -2,24 +2,16 @@ import users from 'interfaces/schema-definition/users';
 import instance from './instance';
 
 export default () => {
-  const {
-    deleteUseCase,
-    getOneUseCase,
-    getUseCase,
-    jwt,
-    logger,
-    postUseCase,
-    putUseCase,
-  } = instance();
+  const { auth, deleteUseCase, getOneUseCase, getUseCase, logger, putUseCase, verify } = instance();
   return {
     users: users({
+      auth,
       deleteUseCase,
       getOneUseCase,
       getUseCase,
-      jwt,
       logger,
-      postUseCase,
       putUseCase,
+      verify,
     }),
   };
 };
