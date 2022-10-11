@@ -10,8 +10,6 @@ import express from 'express';
 import http from 'http';
 
 export default ({ config, logger, auth, schema, verify }: any) => {
-  console.log('STARRRRRRRRRRRRRRRRT', {schema, auth, verify})
-
   const app = express();
 
   const httpServer = http.createServer(app);
@@ -26,14 +24,13 @@ export default ({ config, logger, auth, schema, verify }: any) => {
       ApolloServerPluginLandingPageGraphQLPlayground({}),
     ],
     introspection: true,
-    context: async ({ ...params}) => ({ ...params })
   });
 
   app.disable('x-powered-by');
 
   app.use(auth.initialize());
-  // app.use(auth.authenticate);
-  // app.use(verify.authorization);
+  app.use(auth.authenticate);
+  app.use(verify.authorization);
 
   return {
     app,

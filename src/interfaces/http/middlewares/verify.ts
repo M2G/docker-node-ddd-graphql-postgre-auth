@@ -44,7 +44,7 @@ export default ({ response: { Success, Fail }, jwt }: any) => {
           );
         }
 
-       //  return next();
+       return next();
       }
 
       return res.status(Status.UNAUTHORIZED).json(

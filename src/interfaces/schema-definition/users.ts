@@ -65,19 +65,8 @@ export default (
       users: async (
         parent: any,
         args: any,
-        context: any,
       ) => {
         const { search = {}} = args;
-
-        console.log(' contextcontext context context', {
-          auth,
-          verify,
-                context
-        });
-        auth.authenticate(context.req, context.res);
-        // verify.authorization(context.req, context.res);
-
-
         console.log('search search search search search', search);
 
         try {
