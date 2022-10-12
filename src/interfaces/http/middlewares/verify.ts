@@ -13,6 +13,11 @@ const FAIL_AUTH = 'Failed to authenticate token is expired.';
 export default ({ response: { Success, Fail }, jwt }: any) => {
   return {
     authorization: (req: Request, res: Response, next: NextFunction) => {
+
+      console.log('req req req req req req', req);
+
+   throw new Error('ok');
+
       const extractToken =
         req?.headers?.authorization?.startsWith('Bearer ');
 
@@ -27,31 +32,31 @@ export default ({ response: { Success, Fail }, jwt }: any) => {
           jwt.verify({ maxAge: time })(token);
         } catch (e: any) {
           if (e.name === TOKEN_EXPIRED_ERROR) {
-            return res.status(Status.UNAUTHORIZED).json(
+            /*return res.status(Status.UNAUTHORIZED).json(
               Fail({
                 success: false,
                 expireTime: true,
                 message: FAIL_AUTH,
               }),
-            );
+            );*/
           }
 
-          return res.status(Status.BAD_REQUEST).json(
+          /*return res.status(Status.BAD_REQUEST).json(
             Fail({
               success: false,
               message: Status[Status.BAD_REQUEST],
             }),
-          );
+          );*/
         }
 
-       return next();
+       // return next();
       }
 
-      return res.status(Status.UNAUTHORIZED).json(
+      /*return res.status(Status.UNAUTHORIZED).json(
         Fail({
           success: false,
           message: 'No token provided.',
-        }));
+        }));*/
     }
   }
 }

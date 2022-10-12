@@ -24,13 +24,16 @@ export default ({ config, logger, auth, schema, verify }: any) => {
       ApolloServerPluginLandingPageGraphQLPlayground({}),
     ],
     introspection: true,
+    context: async ({ req, res }: any) => {
+      verify.authorization(req, res);
+    },
   });
 
   app.disable('x-powered-by');
 
   app.use(auth.initialize());
-  app.use(auth.authenticate);
-  app.use(verify.authorization);
+  //app.use(auth.authenticate);
+  // app.use(verify.authorization);
 
   return {
     app,
