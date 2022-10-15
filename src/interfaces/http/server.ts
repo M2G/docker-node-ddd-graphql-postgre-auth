@@ -24,8 +24,10 @@ export default ({ config, logger, auth, schema, verify }: any) => {
       ApolloServerPluginLandingPageGraphQLPlayground({}),
     ],
     introspection: true,
-    context: async ({ req, res }: any) => {
-      verify.authorization(req, res);
+    context: async ({ ...args }: any) => {
+      verify.authorization({
+        ...args
+      });
     },
   });
 

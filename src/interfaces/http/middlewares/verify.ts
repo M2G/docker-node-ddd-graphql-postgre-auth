@@ -1,5 +1,4 @@
 /*eslint-disable*/
-import { Request, Response, NextFunction } from 'express';
 import Status from 'http-status';
 
 const time =
@@ -10,53 +9,34 @@ const time =
 const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
 const FAIL_AUTH = 'Failed to authenticate token is expired.';
 
-export default ({ response: { Success, Fail }, jwt }: any) => {
+export default ({ jwt }: any) => {
   return {
-    authorization: (req: Request, res: Response, next: NextFunction) => {
+    authorization: ({ req }: any) => {
 
-      console.log('req req req req req req', req);
+      const { headers: { authorization }, body: { query }, next } = req;
 
-   throw new Error('ok');
+      if (!query?.includes('users')) return next();
 
-      const extractToken =
-        req?.headers?.authorization?.startsWith('Bearer ');
+      console.log('operationName operationName operationName', query?.includes('users'))
+
+      const extractToken = authorization?.startsWith('Bearer ');
 
       console.log('extractToken extractToken', extractToken);
 
-      //console.log('extractToken', extractToken)
-
       if (extractToken) {
-        const token = req?.headers?.authorization?.split(' ')?.[1];
-
+        const token = authorization?.split(' ')?.[1];
         try {
           jwt.verify({ maxAge: time })(token);
         } catch (e: any) {
-          if (e.name === TOKEN_EXPIRED_ERROR) {
-            /*return res.status(Status.UNAUTHORIZED).json(
-              Fail({
-                success: false,
-                expireTime: true,
-                message: FAIL_AUTH,
-              }),
-            );*/
-          }
+          if (e.name === TOKEN_EXPIRED_ERROR) throw new Error(FAIL_AUTH);
 
-          /*return res.status(Status.BAD_REQUEST).json(
-            Fail({
-              success: false,
-              message: Status[Status.BAD_REQUEST],
-            }),
-          );*/
+          throw new Error(Status[Status.BAD_REQUEST].toString());
         }
 
-       // return next();
+       return next();
       }
 
-      /*return res.status(Status.UNAUTHORIZED).json(
-        Fail({
-          success: false,
-          message: 'No token provided.',
-        }));*/
+      throw new Error('No token provided.');
     }
   }
 }
