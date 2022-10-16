@@ -8,6 +8,7 @@ import {
 } from 'apollo-server-express';
 import { comparePassword } from "infra/encryption";
 import type IUser from "core/IUser";
+import { GraphQLError } from 'graphql';
 
 export default ({ postUseCase, jwt, logger }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
@@ -28,10 +29,11 @@ export default ({ postUseCase, jwt, logger }: any) => {
         });
 
         if (!email) throw new Error(`User not found (email: ${email}).`);
-
+        // throw new GraphQLError('User doesn\'t exist', { extensions: { code: 'BAD_USER_INPUT' }} as any);
         const match = comparePassword(password, data.password);
 
         if (!match) throw new Error('Wrong username and password combination.');
+        // throw new GraphQLError('User doesn\'t exist', { extensions: { code: 'BAD_USER_INPUT' }} as any);
           const payload = { email: data.email, password: data.password };
 
           const options = {

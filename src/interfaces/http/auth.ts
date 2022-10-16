@@ -1,9 +1,8 @@
 /*eslint-disable*/
-import { ApolloError } from 'apollo-server-errors';
+import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import BearerStrategy from 'passport-http-bearer';
 import Status from 'http-status';
-import { Request, Response, NextFunction } from 'express';
 
 /**
  * middleware to check the if auth vaid
@@ -41,20 +40,11 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
 
         console.log('passport.authenticate', err);
 
-          if (err === Status[Status.NOT_FOUND]) {
+          if (err === Status[Status.NOT_FOUND])
+            return res.status(Status.NOT_FOUND).json(Fail(Status[Status.NOT_FOUND]));
 
-            throw new ApolloError(String(Status.NOT_FOUND), String(Status[Status.NOT_FOUND]), Fail({
-              message: Status[Status.NOT_FOUND]
-            }));
-
-              /*return res.status(Status.NOT_FOUND).json(Fail({
-                message: Status[Status.NOT_FOUND]
-            }));*/
-          }
-
-          if (err) {
+          if (err)
             return res.status(Status.UNAUTHORIZED).json(Fail(Status[Status.UNAUTHORIZED]));
-          }
 
         return next();
       })(req, res, next);

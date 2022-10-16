@@ -3,12 +3,11 @@ import { join } from 'path';
 import { gql } from 'apollo-server-express';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
-import { ApolloError } from 'apollo-server-errors';
-import Status from "http-status";
+import { GraphQLError } from 'graphql';
 
 export default (
   {
- getUseCase, getOneUseCase, deleteUseCase, logger, response: { Fail },
+ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, response: { Fail },
 }: any,
 ) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
@@ -36,8 +35,11 @@ export default (
         console.log('users', params);
 
         try {
-          const data = await deleteUseCase.remove({ _id });
+          const data = await putUseCase.update({ _id, ...params });
           logger.info({ ...data });
+
+          if (!data) throw new GraphQLError('User doesn\'t exist', { extensions: { code: 'BAD_USER_INPUT' }} as any);
+
           return data;
         } catch (error: unknown) {
           logger.error(error);
@@ -47,7 +49,6 @@ export default (
     },
     Query: {
       getUser: async (parent: any, args: any) => {
-
         console.log('args args args', args);
 
         const { id } = args;
@@ -68,9 +69,6 @@ export default (
         parent: any,
         args: any,
       ) => {
-
-        throw new Error('test');
-
         const { search = {}} = args;
         console.log('search search search search search', search);
 
