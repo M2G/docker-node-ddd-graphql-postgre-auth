@@ -1,4 +1,5 @@
 /*eslint-disable*/
+import { ApolloError } from 'apollo-server-errors';
 import passport from 'passport';
 import BearerStrategy from 'passport-http-bearer';
 import Status from 'http-status';
@@ -21,6 +22,7 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
       usersRepository
         .findOne({ _id })
         .then((user: any) => {
+          console.log('user', user);
           if (!user) return done(Status[Status.NOT_FOUND], null);
           done(null, { email: user.email, password: user.password });
         })
@@ -38,10 +40,16 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
       return passport.authenticate('bearer', { session: false }, (err, _) => {
 
         console.log('passport.authenticate', err);
-        console.log('REQ.TEST', req?.test);
 
           if (err === Status[Status.NOT_FOUND]) {
-            return res.status(Status.NOT_FOUND).json(Fail(Status[Status.NOT_FOUND]));
+
+            throw new ApolloError(String(Status.NOT_FOUND), String(Status[Status.NOT_FOUND]), Fail({
+              message: Status[Status.NOT_FOUND]
+            }));
+
+              /*return res.status(Status.NOT_FOUND).json(Fail({
+                message: Status[Status.NOT_FOUND]
+            }));*/
           }
 
           if (err) {

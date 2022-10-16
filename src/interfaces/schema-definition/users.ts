@@ -3,10 +3,12 @@ import { join } from 'path';
 import { gql } from 'apollo-server-express';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
+import { ApolloError } from 'apollo-server-errors';
+import Status from "http-status";
 
 export default (
   {
- getUseCase, getOneUseCase, deleteUseCase, logger, auth, verify,
+ getUseCase, getOneUseCase, deleteUseCase, logger, response: { Fail },
 }: any,
 ) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
@@ -66,6 +68,9 @@ export default (
         parent: any,
         args: any,
       ) => {
+
+        throw new Error('test');
+
         const { search = {}} = args;
         console.log('search search search search search', search);
 

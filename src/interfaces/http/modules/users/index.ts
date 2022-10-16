@@ -2,7 +2,9 @@ import users from 'interfaces/schema-definition/users';
 import instance from './instance';
 
 export default () => {
-  const { deleteUseCase, getOneUseCase, getUseCase, logger, putUseCase } = instance();
+  const {
+    deleteUseCase, getOneUseCase, getUseCase, logger, putUseCase, response,
+  } = instance();
   return {
     users: users({
       deleteUseCase,
@@ -10,6 +12,7 @@ export default () => {
       getUseCase,
       logger,
       putUseCase,
+      response,
     }),
   };
 };
