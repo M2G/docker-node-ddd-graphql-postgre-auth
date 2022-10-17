@@ -19,21 +19,17 @@ export default ({ postUseCase, jwt, logger }: any) => {
         parent: any,
         args: any,
       ) => {
-
         const { input } = args;
         const { email, password } = input as IUser;
 
         try {
-        const data: IUser = await postUseCase.authenticate({
-          email,
-        });
+        const data: IUser = await postUseCase.authenticate({ email });
 
-        if (!email) throw new Error(`User not found (email: ${email}).`);
-        // throw new GraphQLError('User doesn\'t exist', { extensions: { code: 'BAD_USER_INPUT' }} as any);
+        if (!email) throw new AuthenticationError(`User not found (email: ${email}).`);
+
         const match = comparePassword(password, data.password);
 
-        if (!match) throw new Error('Wrong username and password combination.');
-        // throw new GraphQLError('User doesn\'t exist', { extensions: { code: 'BAD_USER_INPUT' }} as any);
+        if (!match) throw new AuthenticationError('Wrong username and password combination.');
           const payload = { email: data.email, password: data.password };
 
           const options = {
