@@ -13,9 +13,9 @@ export default ({ jwt }: any) => {
   return {
     authorization: ({ req }: any) => {
 
-      const { headers: { authorization }, body: { query }, next } = req;
+      const { headers: { authorization }, body: { query } } = req;
 
-      if (!query?.includes('users')) return next();
+      if (!query?.includes('users')) return null;
 
       console.log('operationName operationName operationName', query?.includes('users'))
 
@@ -30,10 +30,10 @@ export default ({ jwt }: any) => {
         } catch (e: any) {
           if (e.name === TOKEN_EXPIRED_ERROR) throw new Error(FAIL_AUTH);
 
-          throw new Error(Status[Status.BAD_REQUEST].toString());
+          throw new Error('BAD_REQUEST');
         }
 
-       return next();
+       return null;
       }
 
       throw new Error('No token provided.');

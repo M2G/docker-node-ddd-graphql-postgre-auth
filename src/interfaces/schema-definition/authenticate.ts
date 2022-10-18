@@ -25,7 +25,9 @@ export default ({ postUseCase, jwt, logger }: any) => {
         try {
         const data: IUser = await postUseCase.authenticate({ email });
 
-        if (!email) throw new AuthenticationError(`User not found (email: ${email}).`);
+        console.log('data data data data', data);
+
+        if (!data || !data.email) throw new AuthenticationError(`User not found (email: ${data.email}).`);
 
         const match = comparePassword(password, data.password);
 
