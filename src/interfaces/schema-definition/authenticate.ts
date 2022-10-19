@@ -32,7 +32,11 @@ export default ({ postUseCase, jwt, logger }: any) => {
         const match = comparePassword(password, data.password);
 
         if (!match) throw new AuthenticationError('Wrong username and password combination.');
-          const payload = { email: data.email, password: data.password };
+          const payload: IUser | any = {
+            _id: data._id,
+            email: data.email,
+            password: data.password,
+          };
 
           const options = {
             audience: [],
