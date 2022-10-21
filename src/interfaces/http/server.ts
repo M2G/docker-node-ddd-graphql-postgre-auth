@@ -11,28 +11,6 @@ import http from 'http';
 import { GraphQLError } from "graphql";
 import { ApolloServerPlugin } from "apollo-server-plugin-base";
 
-
-const customError401Plugin: ApolloServerPlugin = {
-  async requestDidStart() {
-    return {
-      willSendResponse({ errors, response }: any) {
-        if (response && response.http) {
-          if (
-            errors &&
-            errors.some(
-              (err: GraphQLError) => err.name === 'AuthenticationError'
-                || err.message === 'Response not successful: Received status code 401'
-            )
-          ) {
-            response.data = undefined;
-            response.http.status = 401;
-          }
-        }
-      }
-    }
-  }
-};
-
 // CORS configuration
 const whitelist = ['http://localhost:3000'];
 
@@ -56,7 +34,6 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     csrfPrevention: true,
     cache: 'bounded',
     plugins: [
-      // customError401Plugin,
       ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageGraphQLPlayground({}),

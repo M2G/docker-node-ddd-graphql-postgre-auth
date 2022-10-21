@@ -40,7 +40,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
           const options = {
             audience: [],
-            expiresIn: 60 * 60,
+            expiresIn: 5 * 60,
             subject: data.email,
           };
 
