@@ -24,6 +24,24 @@ const corsOptionsDelegate = function (req: { header: (arg0: string) => string; }
   callback(console.error('cors triggered twice'), corsOptions);
 }
 
+const customError401Plugin: ApolloServerPlugin = {
+  requestDidStart: () => ({
+    willSendResponse({ errors, response }) {
+      if (response && response.http) {
+        if (
+          errors &&
+          errors.some(
+            (err: GraphQLError) => err.name === 'AuthenticationError' || err.message === 'Response not successful: Received status code 401'
+          )
+        ) {
+          response.data = undefined;
+          response.http.status = 401;
+        }
+      }
+    },
+  }),
+};
+
 export default ({ config, logger, auth, schema, verify }: any) => {
   const app = express();
 
@@ -34,6 +52,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     csrfPrevention: true,
     cache: 'bounded',
     plugins: [
+      customError401Plugin,
       ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageGraphQLPlayground({}),
