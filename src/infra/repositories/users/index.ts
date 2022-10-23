@@ -6,9 +6,9 @@ import toEntity from './transform';
 export default ({ model, jwt }: any) => {
   const getAll = async (...args: any[]) => {
     try {
-      const [{ ...params }] = args;
+      const [{ ...params }]: any = args;
 
-      console.log('params params params params', params)
+      console.log('params params params params', args)
 
       let query: any = {
         ...params,
@@ -17,13 +17,14 @@ export default ({ model, jwt }: any) => {
         },
       };
 
-      if (params.search) {
+      if (params.filters) {
         query.$or = [
-          { first_name: { $regex: params.search, $options: 'i' } },
-          { last_name: { $regex: params.search, $options: 'i' } },
-          { email: { $regex: params.search, $options: 'i' } },
+          { first_name: { $regex: params.filters, $options: 'i' } },
+          { last_name: { $regex: params.filters, $options: 'i' } },
+          { email: { $regex: params.filters, $options: 'i' } },
         ];
       }
+
       // size
       // limit
       // offset
@@ -139,16 +140,8 @@ export default ({ model, jwt }: any) => {
   const update = async (...args: any) => {
     try {
       const m: IWrite<any> = model;
-
-      console.log("--------------> args", args)
-
       const [{ _id, ...params }] = args;
-      console.log("--------------> update", { _id, ...params })
-      const user = await m
-        .findByIdAndUpdate({ _id } as any, { ...params }, { upsert: true, new: true }).lean();
-
-      console.log("-------------->", user)
-
+      const user = await m.findByIdAndUpdate({ _id } as any, { ...params }, { upsert: true, new: true }).lean();
       return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);

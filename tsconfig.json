@@ -41,7 +41,8 @@
       "domain/*": ["./domain/*"],
       "infra/*": ["./infra/*"],
       "interfaces/*": ["./interfaces/*"],
-      "schema/*": ["./interfaces/schema-definition/*"]
+      "schema/*": ["./interfaces/schema-definition/*"],
+      "generated/*": ["./generated/*"]
     }
   },
   "include": ["src/**/*"],
