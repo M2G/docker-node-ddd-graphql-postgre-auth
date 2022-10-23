@@ -9,7 +9,6 @@ export default () => {
     redis,
     logger,
     repository: { usersRepository },
-    response,
   } = cradle;
 
   const getUseCase = get({ redis, usersRepository });
@@ -23,6 +22,5 @@ export default () => {
     getUseCase,
     logger,
     putUseCase,
-    response,
   };
 };

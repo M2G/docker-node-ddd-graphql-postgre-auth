@@ -139,7 +139,10 @@ export default ({ model, jwt }: any) => {
   const update = async (...args: any) => {
     try {
       const m: IWrite<any> = model;
-      const [{ _id, ...params }] = args
+
+      console.log("--------------> args", args)
+
+      const [{ _id, ...params }] = args;
       console.log("--------------> update", { _id, ...params })
       const user = await m
         .findByIdAndUpdate({ _id } as any, { ...params }, { upsert: true, new: true }).lean();

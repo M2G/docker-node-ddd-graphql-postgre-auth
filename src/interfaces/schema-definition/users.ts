@@ -7,7 +7,7 @@ import { GraphQLError } from 'graphql';
 
 export default (
   {
- getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, response: { Fail },
+ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase,
 }: any,
 ) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
@@ -29,13 +29,13 @@ export default (
         }
       },
       updateUser: async (parent: any, args: any) => {
-        const { input } = args;
+        const { input, id } = args;
         const { ...params } = input;
-        const { _id } = params;
-        console.log('users', params);
+
+        console.log('users', args);
 
         try {
-          const data = await putUseCase.update({ _id, ...params });
+          const data = await putUseCase.update({ _id: id, ...params });
           logger.info({ ...data });
 
           if (!data) throw new GraphQLError('User doesn\'t exist', { extensions: { code: 'BAD_USER_INPUT' }} as any);

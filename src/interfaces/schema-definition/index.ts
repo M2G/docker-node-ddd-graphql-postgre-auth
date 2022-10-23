@@ -26,6 +26,7 @@ export default () => {
       Mutation: {
         ...authenticateResolvers.Mutation,
         ...registerResolvers.Mutation,
+        ...usersResolvers.Mutation,
       },
       Query: {
         ...usersResolvers.Query,
