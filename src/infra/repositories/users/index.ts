@@ -3,33 +3,44 @@ import { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
+import { ObjectId, ObjectIdLike } from 'bson';
 
-export default ({ model, jwt }: any) => {
+export default ({
+                  model,
+                  jwt,
+                }: any) => {
   const getAll = async (...args: any[]) => {
     try {
-      const [{ filters, first, last, order, before, after }]: any = args;
-      console.log('params params params params', args)
+      const [{
+        filters,
+        first = 2,
+        last,
+        order,
+        before,
+        after,
+      }]: any = args;
+      console.log('params params params params', args);
 
-      const orderField = "id";
+      const orderField = 'id';
+
 
       const query = {};
 
       const m: IRead<any> = model;
-      let users = await m.find(query).lean().sort({ email: 1 });
+      let users = await m.find(query)
+        // .lean();
+        //.sort({ email: 1 });
 
       if (orderField === 'id') {
-        users = await limitQueryWithId(m, before, after, 1);
+        users = await limitQueryWithId(m, "6325166e24edff96de6bf90c", after, 1);
       } else {
         users = await limitQuery(m, orderField, order, before, after);
       }
-      const pageInfo = await applyPagination(
-        users, first, last
-      );
+      const pageInfo = await applyPagination(m, first, last);
       console.log('---------------------------------------------->', {
         users,
         pageInfo,
-      })
-
+      });
 
       /*let query: any = {
         deleted_at: {
@@ -55,9 +66,8 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-
-  const limitQueryWithId = async (query, before, after, order) => {
-console.log('limitQueryWithId')
+  const limitQueryWithId = async (query: IRead<any>, before: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined, after: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined, order: number) => {
+    console.log('limitQueryWithId');
     const filter = {
       _id: {},
     };
@@ -72,16 +82,17 @@ console.log('limitQueryWithId')
       filter._id[op] = new Types.ObjectId(after);
     }
 
-    console.log('limitQueryWithId 1', filter)
+    console.log('limitQueryWithId 1', filter);
 
-    const res = await query.find(filter).sort({ _id: order });
+    const res = await query.find(filter)
+      .sort({ _id: order });
 
-    console.log('limitQueryWithId 2', res)
+    console.log('limitQueryWithId 2', res);
 
-    return res
-  }
+    return res;
+  };
 
-  async function limitQuery(query, field, order, before, after) {
+  async function limitQuery(query: IRead<any>, field: string | number, order: number, before: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined, after: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined) {
     let filter = {};
     const limits = {};
     const ors = [];
