@@ -17,11 +17,6 @@ type User {
   last_connected_at: Int
 }
 
- type PageInfo {
-     nextPageCursor: String
-     hasNextPage: Boolean
- }
-
 type Query {
   users(filters: String): [User!]
 }

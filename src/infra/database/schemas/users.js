@@ -1,9 +1,6 @@
-/*eslint-disable*/
-// @ts-ignore
 export default ({ model, Schema }) => {
   const emailMatch = [
-    /([a-z0-9_\-\.])+@([a-z0-9_\-\.])+\.([a-z0-9])+/i,
-    'No email found ({VALUE})',
+    /([a-z0-9_\-\.])+@([a-z0-9_\-\.])+\.([a-z0-9])+/i, 'No email found ({VALUE})',
   ];
 
   /**

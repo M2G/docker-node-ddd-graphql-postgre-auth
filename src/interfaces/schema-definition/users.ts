@@ -3,9 +3,6 @@ import { join } from 'path';
 import { gql } from 'apollo-server-express';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
-import type { ASTNode } from 'graphql';
-import { GraphQLError } from 'graphql';
-import type { Maybe } from 'generated/graphql';
 import type IUser from '../../core/IUser';
 
 export default (
@@ -42,7 +39,7 @@ export default (
           const data = await putUseCase.update({ _id: id, ...updateValue });
           logger.info({ ...data });
 
-          if (!data) throw new GraphQLError('User doesn\'t exist', { extensions: { code: 'BAD_USER_INPUT' } } as unknown as Maybe<ASTNode | readonly ASTNode[]>);
+          if (!data) throw new Error('User doesn\'t exist');
 
           return data;
         } catch (error: unknown) {
@@ -71,13 +68,11 @@ export default (
       },
       users: async (
         parent: any,
-        args: any,
+        { filters }: any,
       ) => {
         try {
-          const data = await getUseCase.all(args?.filters ? args : {});
-          console.log(':::::::::::::::::::', data);
+          const data = await getUseCase.all(filters || {});
           logger.info({ ...data });
-          console.log('data data data data data', data);
           return data;
         } catch (error: unknown) {
           logger.error(error);

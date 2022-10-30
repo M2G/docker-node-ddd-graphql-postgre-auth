@@ -6,36 +6,28 @@ import toEntity from './transform';
 export default ({ model, jwt }: any) => {
   const getAll = async (...args: any[]) => {
     try {
-      const [{ ...params }]: any = args;
+      const [{ filters }]: any = args;
 
       console.log('params params params params', args)
 
       let query: any = {
-        ...params,
         deleted_at: {
           $lte: 0,
         },
       };
 
-      if (params.filters) {
+      if (filters) {
         query.$or = [
-          { first_name: { $regex: params.filters, $options: 'i' } },
-          { last_name: { $regex: params.filters, $options: 'i' } },
-          { email: { $regex: params.filters, $options: 'i' } },
+          { first_name: { $regex: filters, $options: 'i' } },
+          { last_name: { $regex: filters, $options: 'i' } },
+          { email: { $regex: filters, $options: 'i' } },
         ];
       }
 
-      // size
-      // limit
-      // offset
       const m: IRead<any> = model;
       const users = await m.find(query).lean().sort({ email: 1 });
-
-      console.log('users params params params', users)
-
       return users?.map((user) => toEntity(user));
     } catch (error) {
-      console.log('error error error error error', error)
       throw new Error(error as string | undefined);
     }
   };
