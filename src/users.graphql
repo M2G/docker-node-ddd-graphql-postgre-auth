@@ -38,7 +38,7 @@ enum sortOrder {
 }
 
 type Query {
-  users(filters: String, sortBy: String = "email", order: sortOrder = "ASC", first: Int, last: Int, before: Int, after: String): [User!]
+  users(filters: String, sortBy: String = "email", order: sortOrder = "ASC", first: Int, last: Int, before: String, after: String): [User!]
 }
 
 type Query {

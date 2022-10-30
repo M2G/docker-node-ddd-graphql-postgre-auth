@@ -67,6 +67,12 @@ export type MutationUpdateUserPasswordArgs = {
   input: UpdateUserPasswordInput;
 };
 
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getUser?: Maybe<User>;
@@ -81,6 +87,12 @@ export type QueryGetUserArgs = {
 
 export type QueryUsersArgs = {
   filters?: Maybe<Scalars['String']>;
+  sortBy?: Maybe<Scalars['String']>;
+  order?: Maybe<SortOrder>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
 };
 
 export type SigninInput = {
@@ -108,6 +120,23 @@ export type User = {
   deleted_at?: Maybe<Scalars['Int']>;
   last_connected_at?: Maybe<Scalars['Int']>;
 };
+
+export type UserEdge = {
+  __typename?: 'UserEdge';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<User>;
+};
+
+export type Users = {
+  __typename?: 'Users';
+  edges?: Maybe<Array<Maybe<UserEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export enum SortOrder {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
 
 export type UpdateUserPasswordInput = {
   old_password: Scalars['String'];
@@ -198,12 +227,16 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
+  PageInfo: ResolverTypeWrapper<PageInfo>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Query: ResolverTypeWrapper<{}>;
   SigninInput: SigninInput;
   SignupInput: SignupInput;
   User: ResolverTypeWrapper<User>;
+  UserEdge: ResolverTypeWrapper<UserEdge>;
+  Users: ResolverTypeWrapper<Users>;
+  sortOrder: SortOrder;
   updateUserPasswordInput: UpdateUserPasswordInput;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -212,12 +245,15 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   Int: Scalars['Int'];
   Mutation: {};
+  PageInfo: PageInfo;
+  Boolean: Scalars['Boolean'];
   Query: {};
   SigninInput: SigninInput;
   SignupInput: SignupInput;
   User: User;
+  UserEdge: UserEdge;
+  Users: Users;
   updateUserPasswordInput: UpdateUserPasswordInput;
-  Boolean: Scalars['Boolean'];
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -229,9 +265,15 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   updateUserPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserPasswordArgs, 'id' | 'input'>>;
 }>;
 
+export type PageInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+}>;
+
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
-  users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryUsersArgs, never>>;
+  users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryUsersArgs, 'sortBy'>>;
 }>;
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -250,10 +292,25 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
+export type UserEdgeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserEdge'] = ResolversParentTypes['UserEdge']> = ResolversObject<{
+  cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+}>;
+
+export type UsersResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Users'] = ResolversParentTypes['Users']> = ResolversObject<{
+  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+}>;
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
+  PageInfo?: PageInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserEdge?: UserEdgeResolvers<ContextType>;
+  Users?: UsersResolvers<ContextType>;
 }>;
 
 
