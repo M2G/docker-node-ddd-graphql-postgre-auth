@@ -59,7 +59,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     ],
     introspection: true,
     context: async ({ ...args }: any) => {
-      verify.authorization({ ...args });
+     // verify.authorization({ ...args });
     },
   });
 
@@ -68,7 +68,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
   app.disable('x-powered-by');
 
   app.use(auth.initialize());
-  app.use(auth.authenticate);
+  // app.use(auth.authenticate);
   // app.use(verify.authorization);
 
   return {
