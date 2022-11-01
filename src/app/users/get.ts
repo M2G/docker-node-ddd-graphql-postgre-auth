@@ -9,6 +9,9 @@ export default ({ usersRepository, redis }: any) => {
     ...arg
   }: ArrayLike<unknown> | Record<string, unknown>) => {
     try {
+
+      console.log('------->', arg && Object.entries(arg).length === 0)
+
       if (arg && Object.entries(arg).length === 0) {
         return usersRepository.getAll({ ...arg });
       }

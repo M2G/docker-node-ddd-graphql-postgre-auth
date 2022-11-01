@@ -18,18 +18,15 @@ type User {
 }
 
 type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
+  count: Int
+  pages: Int
+  next: Int
+  prev: Int
 }
 
 type Users {
-  edges: [UserEdge]
+  results: [User]
   pageInfo: PageInfo!
-}
-
-type UserEdge {
-  cursor: String
-  node: User
 }
 
 enum sortOrder {
@@ -38,7 +35,7 @@ enum sortOrder {
 }
 
 type Query {
-  users(filters: String, sortBy: String = "email", order: sortOrder = "ASC", first: Int, last: Int, before: String, after: String): [User!]
+  users(filters: String, pageSize: Int, page: Int): [Users!]
 }
 
 type Query {

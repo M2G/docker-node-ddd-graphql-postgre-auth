@@ -68,10 +68,13 @@ export default (
       },
       users: async (
         parent: any,
-        { filters }: any,
+        { filters, page, pageSize }: any,
       ) => {
+
+        console.log('users users users users', { filters, page, pageSize });
+
         try {
-          const data = await getUseCase.all(filters || {});
+          const data = await getUseCase.all({ filters, page, pageSize });
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {

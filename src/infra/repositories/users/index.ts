@@ -1,9 +1,7 @@
 /*eslint-disable*/
-import { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
-import { ObjectId, ObjectIdLike } from 'bson';
 
 export default ({
                   model,
@@ -13,36 +11,13 @@ export default ({
     try {
       const [{
         filters,
-        first = 2,
-        last,
-        order,
-        before,
-        after,
+        pageSize,
+        page,
       }]: any = args;
+
       console.log('params params params params', args);
 
-      const orderField = 'id';
-
-
-      const query = {};
-
-      const m: IRead<any> = model;
-      let users = await m.find(query)
-        // .lean();
-        //.sort({ email: 1 });
-
-      if (orderField === 'id') {
-        users = await limitQueryWithId(m, "6325166e24edff96de6bf90c", after, 1);
-      } else {
-        users = await limitQuery(m, orderField, order, before, after);
-      }
-      const pageInfo = await applyPagination(m, first, last);
-      console.log('---------------------------------------------->', {
-        users,
-        pageInfo,
-      });
-
-      /*let query: any = {
+      let query: any = {
         deleted_at: {
           $lte: 0,
         },
@@ -57,155 +32,40 @@ export default ({
       }
 
       const m: IRead<any> = model;
-      const users = await m.find(query).lean().sort({ email: 1 });
-      return users?.map((user) => toEntity(user));*/
+      const users = await m.find(query)
+        .skip(pageSize * (page - 1))
+        .limit(pageSize)
+        .sort({ email: 1 }).lean();
 
-      return [];
+      const count = await model.countDocuments();
+
+      const pages = Math.ceil(count / pageSize);
+      const prev = page > 1 ? page - 1 : null;
+      const next = page < pages ? page + 1 : null;
+
+      console.log('---------------------->', {
+        results: (users || [])?.map((user) => toEntity(user)),
+        pageInfos: {
+          count,
+          pages,
+          prev,
+          next,
+        }
+      })
+
+      return [{
+        results: (users || [])?.map((user) => toEntity(user)),
+        pageInfo: {
+          count,
+          pages,
+          prev,
+          next,
+        }
+      }];
     } catch (error) {
       throw new Error(error as string | undefined);
     }
   };
-
-  const limitQueryWithId = async (query: IRead<any>, before: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined, after: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined, order: number) => {
-    console.log('limitQueryWithId');
-    const filter = {
-      _id: {},
-    };
-
-    if (before) {
-      const op = order === 1 ? '$lt' : '$gt';
-      filter._id[op] = new Types.ObjectId(before);
-    }
-
-    if (after) {
-      const op = order === 1 ? '$gt' : '$lt';
-      filter._id[op] = new Types.ObjectId(after);
-    }
-
-    console.log('limitQueryWithId 1', filter);
-
-    const res = await query.find(filter)
-      .sort({ _id: order });
-
-    console.log('limitQueryWithId 2', res);
-
-    return res;
-  };
-
-  async function limitQuery(query: IRead<any>, field: string | number, order: number, before: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined, after: string | number | ObjectId | ObjectIdLike | Buffer | Uint8Array | undefined) {
-    let filter = {};
-    const limits = {};
-    const ors = [];
-    if (before) {
-      const op = order === 1 ? '$lt' : '$gt';
-      const beforeObject = await query.findOne({
-        _id: new Types.ObjectId(before),
-      }, {
-        fields: {
-          [field]: 1,
-        },
-      } as any);
-      limits[op] = beforeObject[field];
-      ors.push(
-        {
-          [field]: beforeObject[field],
-          _id: { [op]: new Types.ObjectId(before) },
-        },
-      );
-    }
-
-    if (after) {
-      const op = order === 1 ? '$gt' : '$lt';
-      const afterObject = await query.findOne({
-        _id: new Types.ObjectId(after),
-      }, {
-        fields: {
-          [field]: 1,
-        },
-      } as any);
-      limits[op] = afterObject[field];
-      ors.push(
-        {
-          [field]: afterObject[field],
-          _id: { [op]: new Types.ObjectId(after) },
-        },
-      );
-    }
-
-    if (before || after) {
-      filter = {
-        $or: [
-          {
-            [field]: limits,
-          },
-          ...ors,
-        ],
-      };
-    }
-
-    return query.find(filter).sort([[field, order], ['_id', order]]);
-  }
-
-
-  const applyPagination = async (query, first, last) => {
-    let count;
-
-    if (first || last) {
-      count = await query.clone().count();
-      let limit;
-      let skip;
-
-      if (first && count > first) {
-        limit = first;
-      }
-
-      if (last) {
-        if (limit && limit > last) {
-          skip = limit - last;
-          limit = limit - skip;
-        } else if (!limit && count > last) {
-          skip = count - last;
-        }
-      }
-
-      if (skip) {
-        query.skip(skip);
-      }
-
-      if (limit) {
-        query.limit(limit);
-      }
-    }
-
-    return {
-      hasNextPage: Boolean(first && count > first),
-      hasPreviousPage: Boolean(last && count > last),
-    };
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const register = async (...args: any[]) => {
     try {
