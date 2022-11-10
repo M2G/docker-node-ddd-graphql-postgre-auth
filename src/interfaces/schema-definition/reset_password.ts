@@ -1,13 +1,13 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { gql } from 'apollo-server-express';
-import IUser from "../../core/IUser";
+import type IUser from "../../core/IUser";
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
 
 export default (
   {
-    getUseCase, getOneUseCase, deleteUseCase, jwt, logger,
+    postUseCase , getUseCase, getOneUseCase, deleteUseCase, jwt, logger,
   }: any,
 ) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
@@ -15,9 +15,6 @@ export default (
   const resolvers = {
     Mutation: {
       resetPassword: async (parent: any, args: any) => {
-
-        console.log('deleteUser', args);
-
         const { password, email } = <IUser>args;
 
         if (!email || !password)
