@@ -10,7 +10,14 @@ export default ({ model, jwt }: any) => {
 
       console.log('params params params params', args);
 
-      let query: any = {
+      const query: {
+        $or?: (
+          | { first_name: { $regex: string; $options: string } }
+          | { last_name: { $regex: string; $options: string } }
+          | { email: { $regex: string; $options: string } }
+        )[];
+        deleted_at: { $lte: number };
+      } = {
         deleted_at: {
           $lte: 0
         }
@@ -33,20 +40,9 @@ export default ({ model, jwt }: any) => {
         .lean();
 
       const count = await model.countDocuments();
-
       const pages = Math.ceil(count / pageSize);
       const prev = page > 1 ? page - 1 : null;
       const next = page < pages ? page + 1 : null;
-
-      console.log('---------------------->', {
-        results: (users || [])?.map((user) => toEntity(user)),
-        pageInfos: {
-          count,
-          pages,
-          prev,
-          next
-        }
-      });
 
       return [
         {
