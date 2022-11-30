@@ -1,9 +1,3 @@
-import {
-  encryptPassword,
-  comparePassword,
-} from './encryption';
+import { encryptPassword, comparePassword } from './encryption';
 
-export {
-  encryptPassword,
-  comparePassword,
-};
+export { encryptPassword, comparePassword };

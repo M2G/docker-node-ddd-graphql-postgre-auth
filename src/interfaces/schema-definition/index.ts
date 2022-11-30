@@ -4,22 +4,13 @@ import users from 'interfaces/http/modules/users';
 // SCHEMA DEFINITIONS AND RESOLVERS
 
 export default () => {
-  const {
-    resolvers: authenticateResolvers,
-    typeDefs: authenticateTypeDefs,
-} = authenticate().authenticate;
+  const { resolvers: authenticateResolvers, typeDefs: authenticateTypeDefs } = authenticate().authenticate;
 
-  const {
-    resolvers: registerResolvers,
-    typeDefs: registerTypeDefs,
-  } = register().register;
+  const { resolvers: registerResolvers, typeDefs: registerTypeDefs } = register().register;
 
-  const {
-    resolvers: usersResolvers,
-    typeDefs: usersTypeDefs,
-  } = users().users;
+  const { resolvers: usersResolvers, typeDefs: usersTypeDefs } = users().users;
 
-    return {
+  return {
     resolvers: {
       ...authenticateResolvers.Type,
       ...registerResolvers.Type,
@@ -32,10 +23,8 @@ export default () => {
         ...usersResolvers.Query,
       },
     },
-      typeDefs: [
-        authenticateTypeDefs,
-        registerTypeDefs,
-        usersTypeDefs,
-      ],
+    typeDefs: [authenticateTypeDefs,
+registerTypeDefs,
+usersTypeDefs],
   };
 };

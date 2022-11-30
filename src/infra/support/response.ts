@@ -9,11 +9,11 @@ export default ({ config }: any) => {
 
   const Fail = (data: any) => ({
     ...defaultResponse(false),
-    error: data
+    error: data,
   });
 
   return {
     Fail,
-    Success
+    Success,
   };
 };

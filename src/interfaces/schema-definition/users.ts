@@ -5,12 +5,16 @@ import { gql } from 'apollo-server-express';
 // import type IUser from "core/IUser";
 import type IUser from '../../core/IUser';
 
-export default (
-  {
- getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase,
-}: any,
-) => {
-  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
+export default ({
+  getUseCase,
+  getOneUseCase,
+  deleteUseCase,
+  logger,
+  putUseCase,
+}: any) => {
+  const typeDefs = gql(
+    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
+  );
 
   const resolvers = {
     Mutation: {
@@ -39,7 +43,7 @@ export default (
           const data = await putUseCase.update({ _id: id, ...updateValue });
           logger.info({ ...data });
 
-          if (!data) throw new Error('User doesn\'t exist');
+          if (!data) throw new Error("User doesn't exist");
 
           return data;
         } catch (error: unknown) {
@@ -66,11 +70,7 @@ export default (
           throw new Error(error as string | undefined);
         }
       },
-      users: async (
-        parent: any,
-        { filters, page, pageSize }: any,
-      ) => {
-
+      users: async (parent: any, { filters, page, pageSize }: any) => {
         console.log('users users users users', { filters, page, pageSize });
 
         try {

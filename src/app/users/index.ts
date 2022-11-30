@@ -4,8 +4,5 @@ import remove from './delete';
 import put from './put';
 
 export {
-  get,
-  getOne,
-  remove,
-  put,
+ get, getOne, remove, put,
 };

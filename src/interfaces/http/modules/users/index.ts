@@ -3,8 +3,8 @@ import instance from './instance';
 
 export default () => {
   const {
-    deleteUseCase, getOneUseCase, getUseCase, logger, putUseCase,
-  } = instance();
+ deleteUseCase, getOneUseCase, getUseCase, logger, putUseCase,
+} = instance();
   return {
     users: users({
       deleteUseCase,

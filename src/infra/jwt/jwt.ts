@@ -12,6 +12,6 @@ export default ({ config }: any) => ({
   },
   verify: (options?: any) => (token: string) => {
     const opt = Object.assign({}, options, { ignoreExpiration: true });
-   return jwt.verify(token, config.authSecret as string, opt);
+    return jwt.verify(token, config.authSecret as string, opt);
   }
-})
+});

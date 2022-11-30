@@ -5,7 +5,9 @@ import { comparePassword, encryptPassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
 
 export default ({ postUseCase, jwt, logger }: any) => {
-  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
+  const typeDefs = gql(
+    readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'),
+  );
   const resolvers = {
     Mutation: {
       signup: async (parent: any, args: any) => {
@@ -15,14 +17,13 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
         const hasPassword = encryptPassword(params.password);
         try {
-          const { _doc: data }:
-            { _doc: { email: string; password: string } } = await postUseCase.register({
-            created_at: Math.floor(Date.now() / 1000),
-            deleted_at: 0,
-            email: params.email,
-            last_connected_at: null,
-            password: hasPassword,
-          });
+          const { _doc: data }: { _doc: { email: string; password: string } } = await postUseCase.register({
+              created_at: Math.floor(Date.now() / 1000),
+              deleted_at: 0,
+              email: params.email,
+              last_connected_at: null,
+              password: hasPassword,
+            });
 
           const { email, password } = data || {};
 

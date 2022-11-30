@@ -9,10 +9,15 @@ export default ({ usersRepository, redis }: any) => {
     ...arg
   }: ArrayLike<unknown> | Record<string, unknown>) => {
     try {
+      console.log('-------> arg', arg);
+      console.log('-------> entries', Object.entries(arg).length);
 
-      console.log('------->', arg && Object.entries(arg).length === 0)
+      console.log(
+        '------->',
+        arg && Object.values(arg).filter(Boolean).length === 0,
+      );
 
-      if (arg && Object.entries(arg).length === 0) {
+      if (arg && Object.values(arg).filter(Boolean).length) {
         return usersRepository.getAll({ ...arg });
       }
 

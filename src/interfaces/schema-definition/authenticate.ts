@@ -6,32 +6,39 @@ import {
   ForbiddenError,
   gql,
 } from 'apollo-server-express';
-import { comparePassword } from "infra/encryption";
-import type IUser from "core/IUser";
+import { comparePassword } from 'infra/encryption';
+import type IUser from 'core/IUser';
 import { GraphQLError } from 'graphql';
 
 export default ({ postUseCase, jwt, logger }: any) => {
-  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
+  const typeDefs = gql(
+    readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'),
+  );
 
   const resolvers = {
     Mutation: {
-      signin: async (
-        parent: any,
-        args: any,
-      ) => {
+      signin: async (parent: any, args: any) => {
         const { input } = args;
         const { email, password } = input as IUser;
 
         try {
-        const data: IUser = await postUseCase.authenticate({ email });
+          const data: IUser = await postUseCase.authenticate({ email });
 
-        console.log('data data data data', data);
+          console.log('data data data data', data);
 
-        if (!data || !data.email) throw new AuthenticationError(`User not found (email: ${data.email}).`);
+          if (!data || !data.email) {
+throw new AuthenticationError(
+              `User not found (email: ${data.email}).`,
+            );
+}
 
-        const match = comparePassword(password, data.password);
+          const match = comparePassword(password, data.password);
 
-        if (!match) throw new AuthenticationError('Wrong username and password combination.');
+          if (!match) {
+throw new AuthenticationError(
+              'Wrong username and password combination.',
+            );
+}
           const payload: IUser | any = {
             _id: data._id,
             email: data.email,

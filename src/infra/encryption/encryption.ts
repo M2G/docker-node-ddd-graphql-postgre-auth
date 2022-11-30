@@ -8,7 +8,4 @@ const encryptPassword = (password: any) => {
 const comparePassword = (password: string, encodedPassword: string) =>
   bcrypt.compareSync(password, encodedPassword);
 
-export {
-  encryptPassword,
-  comparePassword,
-};
+export { encryptPassword, comparePassword };

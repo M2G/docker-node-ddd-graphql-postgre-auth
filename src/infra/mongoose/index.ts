@@ -4,7 +4,7 @@ import {
   connect,
   connection,
   Schema,
-  model,
+  model
   // Model,
 } from 'mongoose';
 import path from 'path';
@@ -25,8 +25,8 @@ export default ({ config, basePath, logger }: any) => {
         maxPoolSize: 20,
         socketTimeoutMS: 60000,
         serverSelectionTimeoutMS: 60000,
-        loggerLevel: 'error',
-      } as ConnectOptions,
+        loggerLevel: 'error'
+      } as ConnectOptions
     );
 
     connection.on('connecting', () => logger.info('database connecting'));
@@ -37,7 +37,7 @@ export default ({ config, basePath, logger }: any) => {
   }
 
   const db = {
-    models: {},
+    models: {}
   };
 
   const dir = path.join(basePath, './schemas');
@@ -45,7 +45,10 @@ export default ({ config, basePath, logger }: any) => {
   for (const files of fs
     .readdirSync(dir)
     ?.filter(
-      (file) => file.indexOf('.') !== 0 && file !== 'index.js' && file.slice(-3) === '.js',
+      (file) =>
+        file.indexOf('.') !== 0 &&
+        file !== 'index.js' &&
+        file.slice(-3) === '.js'
     )) {
     const modelDir = path.join(dir, files);
     const requireModel: any = require(modelDir);
@@ -54,7 +57,7 @@ export default ({ config, basePath, logger }: any) => {
 
     db.models[fileName] = models({
       Schema,
-      model,
+      model
     });
   }
 

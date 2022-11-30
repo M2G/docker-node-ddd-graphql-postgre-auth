@@ -6,8 +6,5 @@
  * express server
  */
 export default ({ server, database }: any) => ({
-    start: () =>
-      Promise.resolve()
-        .then(database.authenticate)
-        .then(server.start),
-  });
+  start: () => Promise.resolve().then(database.authenticate).then(server.start)
+});

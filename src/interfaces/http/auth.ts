@@ -8,15 +8,20 @@ import Status from 'http-status';
  * middleware to check the if auth vaid
  */
 
-export default ({ repository: { usersRepository }, response: { Fail }, jwt }: any) => {
-
+export default ({
+  repository: { usersRepository },
+  response: { Fail },
+  jwt
+}: any) => {
   const bearerStrategy = new BearerStrategy(
     'bearer',
-    (token: any, done: (arg0: any, arg1: { email: any; password: any } | null) => any) => {
-
+    (
+      token: any,
+      done: (arg0: any, arg1: { email: any; password: any } | null) => any
+    ) => {
       const { _id, ...args }: any | number = jwt.decode()(token);
 
-      console.log('bearerStrategy', {args, token})
+      console.log('bearerStrategy', { args, token });
 
       usersRepository
         .findOne({ _id })
@@ -26,7 +31,7 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
           done(null, { email: user.email, password: user.password });
         })
         .catch((error: null) => done(error, null));
-    },
+    }
   );
 
   passport.use(bearerStrategy);
@@ -37,14 +42,17 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
     initialize: () => passport.initialize(),
     authenticate: (req: Request, res: Response, next: NextFunction) => {
       return passport.authenticate('bearer', { session: false }, (err, _) => {
-
         console.log('passport.authenticate', err);
 
-          if (err === Status[Status.NOT_FOUND])
-            return res.status(Status.NOT_FOUND).json(Fail({ message: Status[Status.NOT_FOUND] }));
+        if (err === Status[Status.NOT_FOUND])
+          return res
+            .status(Status.NOT_FOUND)
+            .json(Fail({ message: Status[Status.NOT_FOUND] }));
 
-          if (err)
-            return res.status(Status.UNAUTHORIZED).json(Fail(Status[Status.UNAUTHORIZED]));
+        if (err)
+          return res
+            .status(Status.UNAUTHORIZED)
+            .json(Fail(Status[Status.UNAUTHORIZED]));
 
         return next();
       })(req, res, next);

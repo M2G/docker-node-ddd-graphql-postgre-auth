@@ -23,12 +23,15 @@ function lastConnectedUser() {
       // otherwise it will be an empty array.
       matchingKeys?.map(async (userKey) => {
         const usersInfo: { _id: string; last_connected_at: number } = await redis.get(userKey);
-          const updatedUser: any = await usersRepository.update({
-            _id: usersInfo?._id,
-            last_connected_at: usersInfo?.last_connected_at,
-          });
+        const updatedUser: any = await usersRepository.update({
+          _id: usersInfo?._id,
+          last_connected_at: usersInfo?.last_connected_at,
+        });
 
-          logger.info('[Users.updateLastConnectedAt] users updated in mongo', updatedUser?._id);
+        logger.info(
+          '[Users.updateLastConnectedAt] users updated in mongo',
+          updatedUser?._id,
+        );
       });
     });
   } catch (error: unknown) {
@@ -59,7 +62,9 @@ async function anonymizeUser(userId: any): Promise<any> {
 
     logger.info('[Users.anonymizeInactivity]', userDataToUpdate);
 
-    logger.info(`[AnonymizeUser]: user with email ${updatedUser.email} anonymized to ${userDataToUpdate.email}`);
+    logger.info(
+      `[AnonymizeUser]: user with email ${updatedUser.email} anonymized to ${userDataToUpdate.email}`,
+    );
   } catch (error: unknown) {
     logger.error(`[AnonymizeUser]: Error while anonymizing user`);
     throw error;
@@ -75,9 +80,11 @@ async function deleteInactiveUser() {
       },
     });
 
-    await Promise.all(users?.map(async (user: { readonly _id: string }) => {
-      await anonymizeUser(user._id);
-    }));
+    await Promise.all(
+      users?.map(async (user: { readonly _id: string }) => {
+        await anonymizeUser(user._id);
+      }),
+    );
 
     logger.info('[Users.anonymizeInactivity] users anonymized successfully');
   } catch (error: unknown) {

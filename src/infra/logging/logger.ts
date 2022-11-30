@@ -12,8 +12,8 @@ export default ({ config }: any) =>
       new winston.transports.Console(),
       new winston.transports.File(
         Object.assign(config.logging, {
-          filename: `logs/${config.env}.log`,
-        }),
-      ),
-    ],
+          filename: `logs/${config.env}.log`
+        })
+      )
+    ]
   });

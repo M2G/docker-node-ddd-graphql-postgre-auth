@@ -3,39 +3,34 @@ import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
 
-export default ({
-                  model,
-                  jwt,
-                }: any) => {
+export default ({ model, jwt }: any) => {
   const getAll = async (...args: any[]) => {
     try {
-      const [{
-        filters,
-        pageSize,
-        page,
-      }]: any = args;
+      const [{ filters, pageSize, page }]: any = args;
 
       console.log('params params params params', args);
 
       let query: any = {
         deleted_at: {
-          $lte: 0,
-        },
+          $lte: 0
+        }
       };
 
       if (filters) {
         query.$or = [
           { first_name: { $regex: filters, $options: 'i' } },
           { last_name: { $regex: filters, $options: 'i' } },
-          { email: { $regex: filters, $options: 'i' } },
+          { email: { $regex: filters, $options: 'i' } }
         ];
       }
 
       const m: IRead<any> = model;
-      const users = await m.find(query)
+      const users = await m
+        .find(query)
         .skip(pageSize * (page - 1))
         .limit(pageSize)
-        .sort({ email: 1 }).lean();
+        .sort({ email: 1 })
+        .lean();
 
       const count = await model.countDocuments();
 
@@ -49,19 +44,21 @@ export default ({
           count,
           pages,
           prev,
-          next,
+          next
         }
-      })
+      });
 
-      return [{
-        results: (users || [])?.map((user) => toEntity(user)),
-        pageInfo: {
-          count,
-          pages,
-          prev,
-          next,
+      return [
+        {
+          results: (users || [])?.map((user) => toEntity(user)),
+          pageInfo: {
+            count,
+            pages,
+            prev,
+            next
+          }
         }
-      }];
+      ];
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -89,17 +86,17 @@ export default ({
       const options = {
         subject: email,
         audience: [],
-        expiresIn: 60 * 60,
+        expiresIn: 60 * 60
       };
       const token: string = jwt.signin(options)(payload);
 
       const updatedUser = await update({
         _id,
         reset_password_token: token,
-        reset_password_expires: Date.now() + 86400000,
+        reset_password_expires: Date.now() + 86400000
       });
 
-      console.log('updatedUser', updatedUser)
+      console.log('updatedUser', updatedUser);
 
       return toEntity(updatedUser);
     } catch (error) {
@@ -108,22 +105,21 @@ export default ({
   };
 
   const resetPassword = async (...args: any[]) => {
-
     try {
       const [{ ...params }] = args;
 
-      console.log('resetPassword resetPassword ', params)
+      console.log('resetPassword resetPassword ', params);
 
       const data: any = await findOne({
         reset_password_token: params.token,
         reset_password_expires: {
-          $gt: Math.floor(Date.now() / 1000),
-        },
+          $gt: Math.floor(Date.now() / 1000)
+        }
       });
 
       if (!data) return null;
 
-      console.log('resetPassword resetPassword { ...data }', { data })
+      console.log('resetPassword resetPassword { ...data }', { data });
 
       data.password = params.password;
       data.reset_password_token = undefined;
@@ -158,7 +154,6 @@ export default ({
       if (!user) return null;
 
       return true;
-
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -168,7 +163,13 @@ export default ({
     try {
       const m: IWrite<any> = model;
       const [{ _id, ...params }] = args;
-      const user = await m.findByIdAndUpdate({ _id } as any, { ...params }, { upsert: true, new: true }).lean();
+      const user = await m
+        .findByIdAndUpdate(
+          { _id } as any,
+          { ...params },
+          { upsert: true, new: true }
+        )
+        .lean();
       return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
@@ -197,6 +198,6 @@ export default ({
     resetPassword,
     forgotPassword,
     getAll,
-    register,
+    register
   };
 };
