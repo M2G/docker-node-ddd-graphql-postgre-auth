@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { ApolloServer } from 'apollo-server-express';
 import {
   ApolloServerPluginDrainHttpServer,
@@ -14,40 +13,38 @@ export default ({ config, logger, auth, schema, verify }: any) => {
 
   const httpServer = http.createServer(app);
   const apolloServer = new ApolloServer({
-    typeDefs: schema.typeDefs,
-    resolvers: schema.resolvers,
-    csrfPrevention: true,
     cache: 'bounded',
+    context: verify.authorization,
+    csrfPrevention: true,
+    introspection: true,
     plugins: [
       ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
-      ApolloServerPluginLandingPageGraphQLPlayground({})
+      ApolloServerPluginLandingPageGraphQLPlayground({}),
     ],
-    introspection: true,
-    context: async ({ ...args }: any) => {
-      // verify.authorization({ ...args });
-    }
+    resolvers: schema.resolvers,
+    typeDefs: schema.typeDefs,
   });
 
-  app.use(cors({ origin: true, credentials: true }));
+  app.use(cors({ credentials: true, origin: true }));
   app.disable('x-powered-by');
 
   app.use(auth.initialize());
-  // app.use(auth.authenticate);
+  app.use(auth.authenticate);
   // app.use(verify.authorization);
 
   return {
     app,
-    start: () =>
+    start: async () =>
       new Promise(() => {
-        app.listen(config.port, async () => {
+        app.listen(config.port, async (): Promise<void> => {
           console.log('config.port config.port', config.port);
           await apolloServer.start();
           apolloServer.applyMiddleware({ app, cors: false });
           logger.info(
-            `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
+            `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`,
           );
         });
-      })
+      }),
   };
 };

@@ -16,7 +16,7 @@ export default ({ jwt }: any) => {
       const {
         headers: { authorization },
         body: { query }
-      } = req;
+      } = req || {};
 
       if (!query?.includes('users')) return null;
 

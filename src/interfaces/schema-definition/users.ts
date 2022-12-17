@@ -32,7 +32,9 @@ export default ({
           throw new Error(error as string | undefined);
         }
       },
-      updateUser: async (parent: any, args: any) => {
+      updateUser: async (parent: any, args: {
+        readonly input: any; readonly id: string;
+      }) => {
         const { input, id } = args;
         const { ...params } = input;
         try {
