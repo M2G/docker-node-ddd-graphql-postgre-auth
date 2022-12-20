@@ -1,14 +1,8 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import {
-  SchemaDirectiveVisitor,
-  AuthenticationError,
-  ForbiddenError,
-  gql,
-} from 'apollo-server-express';
+import gql from 'graphql-tag';
 import { comparePassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
-import { GraphQLError } from 'graphql';
 
 export default ({ postUseCase, jwt, logger }: any) => {
   const typeDefs = gql(
@@ -27,28 +21,28 @@ export default ({ postUseCase, jwt, logger }: any) => {
           console.log('data data data data', data);
 
           if (!data || !data.email) {
-throw new AuthenticationError(
-              `User not found (email: ${data.email}).`,
+            throw new Error(
+              `User not found (email: ${data.email}).`
             );
-}
+          }
 
           const match = comparePassword(password, data.password);
 
           if (!match) {
-throw new AuthenticationError(
-              'Wrong username and password combination.',
+            throw new Error(
+              'Wrong username and password combination.'
             );
-}
+          }
           const payload: IUser | any = {
             _id: data._id,
             email: data.email,
-            password: data.password,
+            password: data.password
           };
 
           const options = {
             audience: [],
             expiresIn: 5 * 60,
-            subject: data.email,
+            subject: data.email
           };
 
           // if user is found and password is right, create a token
@@ -61,14 +55,14 @@ throw new AuthenticationError(
           logger.error(error);
           throw new Error(error as string | undefined);
         }
-      },
+      }
     },
     Query: {},
-    Type: {},
+    Type: {}
   };
 
   return {
     resolvers,
-    typeDefs,
+    typeDefs
   };
 };

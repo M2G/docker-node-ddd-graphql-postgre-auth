@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { gql } from 'apollo-server-express';
+import gql from 'graphql-tag';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
 import type IUser from '../../core/IUser';

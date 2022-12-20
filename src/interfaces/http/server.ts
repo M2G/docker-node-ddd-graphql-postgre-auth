@@ -1,20 +1,22 @@
-import { ApolloServer } from 'apollo-server-express';
-import {
-  ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageGraphQLPlayground,
-  ApolloServerPluginCacheControl
-} from 'apollo-server-core';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
+import { json } from 'body-parser';
 
-export default ({ config, logger, auth, schema, verify }: any) => {
+export default ({
+ config, logger, auth, schema, verify,
+}: any) => {
   const app = express();
 
   const httpServer = http.createServer(app);
-  const apolloServer = new ApolloServer({
+  const apolloServer = new ApolloServer<any>({
     cache: 'bounded',
-    context: verify.authorization,
     csrfPrevention: true,
     introspection: true,
     plugins: [
@@ -35,15 +37,24 @@ export default ({ config, logger, auth, schema, verify }: any) => {
 
   return {
     app,
-    start: async () =>
+    start: async (): Promise<unknown> =>
       new Promise(() => {
-        app.listen(config.port, async (): Promise<void> => {
-          console.log('config.port config.port', config.port);
-          await apolloServer.start();
-          apolloServer.applyMiddleware({ app, cors: false });
-          logger.info(
-            `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`,
-          );
+        app.listen(config.port, () => {
+          void (async () => {
+            console.log('config.port config.port', config.port);
+            await apolloServer.start();
+            app.use(
+              '/graphql',
+              cors<cors.CorsRequest>(),
+              json(),
+              expressMiddleware(apolloServer, {
+                context: verify.authorization,
+              }),
+            );
+            logger.info(
+              `🚀 Server ready at http://localhost:8181/graphql`,
+            );
+          })();
         });
       }),
   };

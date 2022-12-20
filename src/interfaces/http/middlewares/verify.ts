@@ -1,7 +1,4 @@
 /*eslint-disable*/
-import Status from 'http-status';
-import { AuthenticationError } from 'apollo-server-express';
-
 const time =
   process.env.NODE_ENV === 'development'
     ? '60s' //process.env.JWT_TOKEN_EXPIRE_TIME
@@ -16,7 +13,7 @@ export default ({ jwt }: any) => {
       const {
         headers: { authorization },
         body: { query }
-      } = req || {};
+      } = req;
 
       if (!query?.includes('users')) return null;
 
@@ -36,7 +33,7 @@ export default ({ jwt }: any) => {
         } catch (e: any) {
           if (e.name === TOKEN_EXPIRED_ERROR)
             //throw new Error(FAIL_AUTH);
-            throw new AuthenticationError(FAIL_AUTH);
+            throw new Error(FAIL_AUTH);
 
           throw new Error('BAD_REQUEST');
         }
