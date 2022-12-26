@@ -4,9 +4,11 @@ import users from 'interfaces/http/modules/users';
 // SCHEMA DEFINITIONS AND RESOLVERS
 
 export default () => {
-  const { resolvers: authenticateResolvers, typeDefs: authenticateTypeDefs } = authenticate().authenticate;
+  const { resolvers: authenticateResolvers, typeDefs: authenticateTypeDefs } =
+    authenticate().authenticate;
 
-  const { resolvers: registerResolvers, typeDefs: registerTypeDefs } = register().register;
+  const { resolvers: registerResolvers, typeDefs: registerTypeDefs } =
+    register().register;
 
   const { resolvers: usersResolvers, typeDefs: usersTypeDefs } = users().users;
 
@@ -17,14 +19,12 @@ export default () => {
       Mutation: {
         ...authenticateResolvers.Mutation,
         ...registerResolvers.Mutation,
-        ...usersResolvers.Mutation,
+        ...usersResolvers.Mutation
       },
       Query: {
-        ...usersResolvers.Query,
-      },
+        ...usersResolvers.Query
+      }
     },
-    typeDefs: [authenticateTypeDefs,
-registerTypeDefs,
-usersTypeDefs],
+    typeDefs: [authenticateTypeDefs, registerTypeDefs, usersTypeDefs]
   };
 };
