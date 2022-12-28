@@ -43,7 +43,10 @@ module.exports = {
     "node"
   ],
   testPathIgnorePatterns: [
-    "<rootDir>/test/",
+    "<rootDir>/src",
+    "<rootDir>/test/api",
+    "<rootDir>/test/unit",
+    "<rootDir>/test/dbHandler.test.ts",
     "<rootDir>/(build|node_modules)/"
   ],
   testEnvironment: 'node',

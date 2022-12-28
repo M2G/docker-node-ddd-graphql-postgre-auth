@@ -1,11 +1,23 @@
-import fs from 'fs';
-import { makeExecutableSchema } from 'graphql-tools';
-import { graphql } from 'graphql';
+/*eslint-disable*/
+// import { readFileSync } from 'fs';
+//import { makeExecutableSchema } from '@graphql-tools/schema';
+//import { graphql } from 'graphql';
 // the actual resolvers
 // import resolvers from '../src/resolvers';
 // the mock service
-import mockAuthService from './mockAuthService';
+//import authenticate from 'interfaces/http/modules/authenticate';
+//import mockAuthService from './mockAuthService';
+//import { join } from 'path';
 
+/*
+const { resolvers: authenticateResolvers } =
+  authenticate().authenticate;
+
+console.log('-------->', authenticateResolvers);*/
+
+console.log('ok')
+
+/*
 const allAuthTestCase = {
   id: '',
   query: `
@@ -34,19 +46,7 @@ const allAuthTestCase = {
   // expected result
   expected: {
     data: {
-      allMovies: [
-        {
-          id: '1',
-          title: 'Interstellar',
-          year: '2014',
-          director: { firstName: 'Christopher', lastName: 'Nolan' },
-        },
-        {
-          id: '2',
-          title: 'Mad Max: Fury Road',
-          year: '2015',
-          director: { firstName: 'George', lastName: 'Miller' },
-        },
+      users: [
       ],
     },
   },
@@ -56,9 +56,13 @@ describe('My Test Cases', () => {
   // array of all test cases, just 1 for now
   const cases = [allAuthTestCase];
   // reading the actual schema
-  const typeDefs = fs.readFileSync('./src/schemas/Movie.graphql', 'utf8');
+  const typeDefs = readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8');
+
+  console.log('typeDefs', typeDefs);
+
   // make the actual schema and resolvers executable
-  const schema = makeExecutableSchema({ typeDefs, resolvers });
+  // @ts-ignore
+  const schema = makeExecutableSchema({ typeDefs, resolvers: authenticateResolvers });
 
   // running the test for each case in the cases array
   cases.forEach((obj) => {
@@ -67,8 +71,18 @@ describe('My Test Cases', () => {
 } = obj;
 
     test(`query: ${id}`, async () => {
-      const result = await graphql(schema, query, null, context, variables);
+      // @ts-ignore
+      const result = await graphql({
+        schema,
+        rootValue: query,
+        contextValue: context,
+        variableValues: variables,
+      });
+
+      console.log('result', result);
+
       expect(result).toEqual(expected);
     });
   });
 });
+*/

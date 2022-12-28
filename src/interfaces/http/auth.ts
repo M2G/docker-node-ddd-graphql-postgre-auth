@@ -13,6 +13,7 @@ export default ({
   response: { Fail },
   jwt
 }: any) => {
+  // @ts-ignore
   const bearerStrategy = new BearerStrategy(
     'bearer',
     (

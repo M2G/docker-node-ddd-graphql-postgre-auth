@@ -88,14 +88,19 @@ export default ({ config }: any) => {
   ) => {
     if (!callback) {
       callback = eachScanCallback;
+      //@ts-ignore
       eachScanCallback = options;
       options = {};
     }
-
+    //@ts-ignore
     const method = options.method || 'scan';
+    //@ts-ignore
     const key = options.key || '';
+    //@ts-ignore
     const count = options.count || 0;
+    //@ts-ignore
     const type = options.type || '';
+    //@ts-ignore
     const limit = options.limit || Infinity;
 
     let matchesCount = 0;
@@ -174,6 +179,7 @@ export default ({ config }: any) => {
    */
   const scan = (pattern: string, options: object = {}, callback: Function) => {
     if (!callback) {
+      //@ts-ignore
       callback = options;
       options = {};
     }

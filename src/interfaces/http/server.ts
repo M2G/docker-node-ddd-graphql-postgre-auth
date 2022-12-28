@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
@@ -15,6 +16,7 @@ export default ({
   const app = express();
 
   const httpServer = http.createServer(app);
+  // @ts-ignore
   const apolloServer = new ApolloServer<any>({
     cache: 'bounded',
     csrfPrevention: true,
@@ -42,6 +44,7 @@ export default ({
         app.listen(config.port, () => {
           void (async () => {
             console.log('config.port config.port', config.port);
+            //@ts-ignore
             await apolloServer.start();
             app.use(
               '/graphql',
