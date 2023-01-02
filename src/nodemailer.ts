@@ -1,3 +1,5 @@
+/*eslint-disable*/
+/*
 import nodemailer from 'nodemailer';
 import type { Options } from 'nodemailer-mailgun-transport';
 import mg from 'nodemailer-mailgun-transport';
@@ -20,3 +22,4 @@ const smtpTransport: any = nodemailer.createTransport(mg(mailgunAuth));
 const template = handlebars.compile(emailTemplateSource);
 
 export { template, smtpTransport };
+*/

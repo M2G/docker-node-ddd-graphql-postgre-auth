@@ -22,7 +22,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
           if (!data || !data.email) {
             throw new Error(
-              `User not found (email: ${data.email}).`
+              `User not found (email: ${data.email}).`,
             );
           }
 
@@ -30,19 +30,19 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
           if (!match) {
             throw new Error(
-              'Wrong username and password combination.'
+              'Wrong username and password combination.',
             );
           }
           const payload: IUser | any = {
             _id: data._id,
             email: data.email,
-            password: data.password
+            password: data.password,
           };
 
           const options = {
             audience: [],
             expiresIn: 5 * 60,
-            subject: data.email
+            subject: data.email,
           };
 
           // if user is found and password is right, create a token
@@ -55,14 +55,14 @@ export default ({ postUseCase, jwt, logger }: any) => {
           logger.error(error);
           throw new Error(error as string | undefined);
         }
-      }
+      },
     },
     Query: {},
-    Type: {}
+    Type: {},
   };
 
   return {
     resolvers,
-    typeDefs
+    typeDefs,
   };
 };

@@ -75,7 +75,7 @@ typings/
 dist/
 build/
 src/.DS_Store
-test/.DS_Store
+tests/.DS_Store
 redis-data/
 
 .idea/*.xmlz

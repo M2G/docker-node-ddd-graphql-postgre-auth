@@ -5,16 +5,10 @@ import gql from 'graphql-tag';
 // import type IUser from "core/IUser";
 import type IUser from '../../core/IUser';
 
-export default ({
-  getUseCase,
-  getOneUseCase,
-  deleteUseCase,
-  logger,
-  putUseCase,
-}: any) => {
-  const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
-  );
+export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }: any) => {
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
+
+  console.log('typeDefs', typeDefs);
 
   const resolvers = {
     Mutation: {
@@ -32,9 +26,13 @@ export default ({
           throw new Error(error as string | undefined);
         }
       },
-      updateUser: async (parent: any, args: {
-        readonly input: any; readonly id: string;
-      }) => {
+      updateUser: async (
+        parent: any,
+        args: {
+          readonly input: any;
+          readonly id: string;
+        },
+      ) => {
         const { input, id } = args;
         const { ...params } = input;
         try {
@@ -75,6 +73,7 @@ export default ({
       users: async (parent: any, { filters, page, pageSize }: any) => {
         console.log('users users users users', { filters, page, pageSize });
 
+        /*
         try {
           const data = await getUseCase.all({ filters, page, pageSize });
           logger.info({ ...data });
@@ -82,8 +81,11 @@ export default ({
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);
-        }
+        }*/
+
+        return "Test";
       },
+      hello: (_: any, { name }: any) => `Hello ${name}!`,
     },
     Type: {},
   };

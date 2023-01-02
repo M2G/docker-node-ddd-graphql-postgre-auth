@@ -4,20 +4,21 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+import { startStandaloneServer } from '@apollo/server/standalone';
 
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { json } from 'body-parser';
 
-export default ({
+export default async ({
  config, logger, auth, schema, verify,
 }: any) => {
   const app = express();
 
   const httpServer = http.createServer(app);
   // @ts-ignore
-  const apolloServer = new ApolloServer<any>({
+  const apolloServer: any = new ApolloServer<any>({
     cache: 'bounded',
     csrfPrevention: true,
     introspection: true,
@@ -33,25 +34,28 @@ export default ({
   app.use(cors({ credentials: true, origin: true }));
   app.disable('x-powered-by');
 
-  app.use(auth.initialize());
-  app.use(auth.authenticate);
+  //app.use(auth.initialize());
+  //app.use(auth.authenticate);
   // app.use(verify.authorization);
 
+  const { url } = await startStandaloneServer(apolloServer, { listen: config.port });
+
   return {
+    server: apolloServer,
+    url,
     app,
     start: async (): Promise<unknown> =>
       new Promise(() => {
         app.listen(config.port, () => {
           void (async () => {
             console.log('config.port config.port', config.port);
-            //@ts-ignore
             await apolloServer.start();
             app.use(
               '/graphql',
               cors<cors.CorsRequest>(),
               json(),
               expressMiddleware(apolloServer, {
-                context: verify.authorization,
+                // context: verify.authorization,
               }),
             );
             logger.info(

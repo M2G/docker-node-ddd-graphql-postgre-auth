@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import gql from 'graphql-tag'
-import type IUser from '../../core/IUser';
+import gql from 'graphql-tag';
+// import type IUser from '../../core/IUser';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
 
@@ -11,16 +11,16 @@ export default ({
   getOneUseCase,
   deleteUseCase,
   jwt,
-  logger,
+  logger
 }: any) => {
   const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
+    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8')
   );
 
   const resolvers = {
     Mutation: {
       resetPassword: async (parent: any, args: any) => {
-        const { password, email } = <IUser>args;
+        /* const { password, email } = <IUser>args;
 
         if (!email || !password) return 'Empty value.';
 
@@ -69,15 +69,15 @@ return res
         } catch (error: any) {
           logger.error(error);
           return error;
-        }
-      },
+        } */
+      }
     },
     Query: {},
-    Type: {},
+    Type: {}
   };
 
   return {
     resolvers,
-    typeDefs,
+    typeDefs
   };
 };

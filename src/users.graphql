@@ -42,6 +42,10 @@ type Query {
   getUser(id: String!): User
 }
 
+type Query {
+  hello(name: String): String!
+}
+
 type Mutation {
   createUser(input: CreateUserInput!): User!
 }

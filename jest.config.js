@@ -1,5 +1,5 @@
 module.exports = {
-  coverageDirectory: './test/coverage/',
+  coverageDirectory: './tests/coverage/',
   collectCoverage: true,
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
@@ -18,10 +18,11 @@ module.exports = {
   },
   preset: "ts-jest",
   roots: [
-    "<rootDir>/test"
+    "<rootDir>/tests"
   ],
   transform: {
-    '^.+\\.ts?$': 'ts-jest'
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    "^.+\\.(js|jsx)$": "babel-jest",
   },
   testMatch: [
     '**/__tests__/**/*.(js|ts|tsx)',
@@ -44,9 +45,10 @@ module.exports = {
   ],
   testPathIgnorePatterns: [
     "<rootDir>/src",
-    "<rootDir>/test/api",
-    "<rootDir>/test/unit",
     "<rootDir>/test/dbHandler.test.ts",
+    "<rootDir>/(build|node_modules)/",
+  ],
+  transformIgnorePatterns:  [
     "<rootDir>/(build|node_modules)/"
   ],
   testEnvironment: 'node',
