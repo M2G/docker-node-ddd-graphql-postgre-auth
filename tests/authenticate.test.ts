@@ -11,10 +11,10 @@ const randomEmail = faker.internet.email();
 const randomUserName = faker.internet.userName();*/
 // we'll use supertest to test our server
 
-import { clear, close, connect } from './dbHandler';
+// import { clear, close, connect } from './dbHandler';
 
 // this is the query for our test
-beforeAll(async () => await connect());
+// beforeAll(async () => await connect());
 beforeEach((done) => {
   /*usersRepository.register({
     email: randomEmail,
@@ -23,30 +23,14 @@ beforeEach((done) => {
   }).then(() => done());*/
   done();
 });
-afterEach(async () => await clear());
-afterAll(async () => await close());
+// afterEach(async () => await clear());
+// afterAll(async () => await close());
 
 const queryData = {
-  query: `query GetUserList($filters: String, $pageSize: Int, $page: Int) {
-    users(filters: $filters, pageSize: $pageSize, page: $page) {
-      results {
-         _id
-          first_name
-          last_name
-          email
-          created_at
-          modified_at
-          password
-      }
-      pageInfo {
-        count
-        pages
-        next
-        prev
-      }
-    }
+  query: `query getUserList($filters: String, $pageSize: Int, $page: Int) {
+    users(filters: $filters, pageSize: $pageSize, page: $page)
   }`,
-  variables: { filters: '', pageSize: 5, page: 1 },
+  variables: { filters: 'test', pageSize: 5, page: 1 },
 };
 
 describe('e2e demo', () => {

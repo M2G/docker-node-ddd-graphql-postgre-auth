@@ -43,7 +43,7 @@ type Query {
 }
 
 type Query {
-  hello(name: String): String!
+  hello(filters: String, pageSize: Int, page: Int): String!
 }
 
 type Mutation {

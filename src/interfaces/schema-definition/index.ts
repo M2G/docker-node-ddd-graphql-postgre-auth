@@ -12,7 +12,6 @@ export default () => {
 
   console.log(':::::::::::::::::::::::::', {
     usersResolvers,
-    usersTypeDefs,
   });
 
   return {

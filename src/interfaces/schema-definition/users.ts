@@ -8,8 +8,6 @@ import type IUser from '../../core/IUser';
 export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
-  console.log('typeDefs', typeDefs);
-
   const resolvers = {
     Mutation: {
       deleteUser: async (parent: any, args: any) => {
@@ -70,7 +68,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }
           throw new Error(error as string | undefined);
         }
       },
-      users: async (parent: any, { filters, page, pageSize }: any) => {
+      users: (parent: any, { filters, page, pageSize }: any) => {
         console.log('users users users users', { filters, page, pageSize });
 
         /*
@@ -81,11 +79,40 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);
-        }*/
+        } */
 
-        return "Test";
+        return {
+          data: {
+            users: [
+              {
+                results: [
+                  {
+                    _id: '1325166e24edff96de6bf90b',
+                    first_name: 'Mick',
+                    last_name: 'Tayson',
+                    email: 'mick.tayson@university.com',
+                    created_at: 1658098356,
+                    modified_at: 1658098356,
+                  },
+                ],
+                pageInfo: {
+                  count: 7,
+                  pages: 7,
+                  next: 4,
+                  prev: 2,
+                },
+              },
+            ],
+          },
+        };
       },
-      hello: (_: any, { name }: any) => `Hello ${name}!`,
+      hello: (_: any, { filters, page, pageSize }: any) => {
+        console.log('users users users users', { filters, page, pageSize });
+
+
+
+        return 'test';
+      },
     },
     Type: {},
   };

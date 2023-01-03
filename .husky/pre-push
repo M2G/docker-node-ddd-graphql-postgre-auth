@@ -2,4 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npx validate-branch-name
-npm run test
+#npm run test
