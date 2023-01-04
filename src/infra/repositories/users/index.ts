@@ -31,6 +31,8 @@ export default ({ model, jwt }: any) => {
         ];
       }
 
+      console.log('query query query query query', query)
+
       const m: IRead<any> = model;
       const users = await m
         .find(query)

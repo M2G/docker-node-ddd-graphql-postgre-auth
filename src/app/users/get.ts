@@ -21,6 +21,8 @@ export default ({ usersRepository, redis }: any) => {
         return usersRepository.getAll({ ...arg });
       }
 
+      console.log('KOOOOOOOOO')
+
       const cachingUserList = await redis.get(KEY);
 
       if (cachingUserList) return cachingUserList;

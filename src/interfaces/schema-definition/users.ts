@@ -14,21 +14,26 @@ const libraries = [
     branch: 'riverside',
   },
 ];
-
-// The branch field of a book indicates which library has it in stock
-const books = [
+/*
+const data = [
   {
-    author: 'Kate Chopin',
-    branch: 'riverside',
-    title: 'The Awakening',
+    _id: '1325166e24edff96de6bf90b',
+    first_name: 'Mick',
+    last_name: 'Tayson',
+    email: 'mick.tayson@university.com',
+    created_at: 1658098356,
+    modified_at: 1658098356,
   },
   {
-    author: 'Paul Auster',
-    branch: 'downtown',
-    title: 'City of Glass',
+    _id: '1325166e24edff96de6bf90b',
+    first_name: 'Mick',
+    last_name: 'Tayson',
+    email: 'mick.tayson@university.com',
+    created_at: 1658098356,
+    modified_at: 1658098356,
   },
 ];
-
+*/
 export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
@@ -99,8 +104,13 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }
       },
       users: async (parent: any, { filters, page, pageSize }: any) => {
         console.log('users users users users', { filters, page, pageSize });
+
+        //return data;
         try {
           const data = await getUseCase.all({ filters, page, pageSize });
+
+          console.log('------------------- data', data);
+
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {

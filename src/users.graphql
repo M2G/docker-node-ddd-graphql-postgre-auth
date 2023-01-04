@@ -79,23 +79,23 @@ input CreateUserInput {
 # TESTS ONLY
 # ------------------------------------------------------
 
-  type Library {
-    branch: String!
-    books: [Book!]
-  }
+# A book has a title and author
+type Book {
+  title: String!
+  author: Author!
+}
 
-  # A book has a title and author
-  type Book {
-    title: String!
-    author: Author!
-  }
+# An author has a name
+type Author {
+  name: String!
+}
 
-  # An author has a name
-  type Author {
-    name: String!
-  }
+type Library {
+  branch: String!
+  books: [Book!]
+}
 
-  # Queries can fetch a list of libraries
-  type Query {
-    libraries: [Library]
-  }
+# Queries can fetch a list of libraries
+type Query {
+  libraries: [Library]
+}
