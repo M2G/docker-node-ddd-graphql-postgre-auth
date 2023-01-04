@@ -9,10 +9,16 @@ import request from 'supertest';
 
 // this is the query for our test
 const queryData = {
-  query: `query sayHello($filters: String, $pageSize: Int, $page: Int) {
-    hello(filters: $filters, pageSize: $pageSize, page: $page)
-  }`,
-  variables: { filters: 'world', pageSize: 5, page: 1 },
+  query: `query GetBooksByLibrary {
+  libraries {
+    books {
+      title
+      author {
+        name
+      }
+    }
+  }
+}`,
 };
 
 describe('e2e demo', () => {

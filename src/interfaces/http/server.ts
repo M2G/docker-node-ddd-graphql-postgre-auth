@@ -16,30 +16,6 @@ export default async ({
 }: any) => {
   const app = express();
 
-  const typeDefs = `
-    #graphql
-
-    type User {
-      email: String
-    }
-
-    type Query {
-      hello(filters: String, pageSize: Int, page: Int): Int
-    }
-  `;
-
-  const resolvers = {
-    Query: {
-      // @ts-ignore
-      hello: (_: any, { filters, page, pageSize }: any) => {
-        console.log('users users users users', { filters, page, pageSize });
-
-        return 0;
-      },
-    },
-  };
-
-
   const httpServer = http.createServer(app);
   // @ts-ignore
   const apolloServer: any = new ApolloServer<any>({
@@ -51,10 +27,8 @@ export default async ({
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageGraphQLPlayground({}),
     ],
-    // resolvers: schema.resolvers,
-    resolvers,
-    typeDefs,
-    // typeDefs: schema.typeDefs,
+    resolvers: schema.resolvers,
+    typeDefs: schema.typeDefs,
   });
 
   app.use(cors({ credentials: true, origin: true }));

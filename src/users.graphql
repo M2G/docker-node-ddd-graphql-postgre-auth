@@ -26,7 +26,7 @@ type PageInfo {
 
 type Users {
   results: [User]
-  pageInfo: PageInfo!
+  pageInfo: PageInfo
 }
 
 enum sortOrder {
@@ -40,10 +40,6 @@ type Query {
 
 type Query {
   getUser(id: String!): User
-}
-
-type Query {
-  hello(filters: String, pageSize: Int, page: Int): String!
 }
 
 type Mutation {
@@ -78,3 +74,28 @@ input CreateUserInput {
   created_at: Int
   modified_at: Int
 }
+
+# ------------------------------------------------------
+# TESTS ONLY
+# ------------------------------------------------------
+
+  type Library {
+    branch: String!
+    books: [Book!]
+  }
+
+  # A book has a title and author
+  type Book {
+    title: String!
+    author: Author!
+  }
+
+  # An author has a name
+  type Author {
+    name: String!
+  }
+
+  # Queries can fetch a list of libraries
+  type Query {
+    libraries: [Library]
+  }
