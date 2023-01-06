@@ -34,8 +34,8 @@ export default async ({
   app.use(cors({ credentials: true, origin: true }));
   app.disable('x-powered-by');
 
-  //app.use(auth.initialize());
-  //app.use(auth.authenticate);
+  app.use(auth.initialize());
+  app.use(auth.authenticate);
   // app.use(verify.authorization);
 
   const { url } = await startStandaloneServer(apolloServer, { listen: config.port });
@@ -55,7 +55,7 @@ export default async ({
               cors<cors.CorsRequest>(),
               json(),
               expressMiddleware(apolloServer, {
-                // context: verify.authorization,
+                context: verify.authorization,
               }),
             );
             logger.info(
