@@ -46,6 +46,9 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }
 
         try {
           const data = await deleteUseCase.remove({ _id: id });
+
+          console.log('data', data);
+
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {
@@ -103,14 +106,8 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }
         }
       },
       users: async (parent: any, { filters, page, pageSize }: any) => {
-        console.log('users users users users', { filters, page, pageSize });
-
-        //return data;
         try {
           const data = await getUseCase.all({ filters, page, pageSize });
-
-          console.log('------------------- data', data);
-
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {

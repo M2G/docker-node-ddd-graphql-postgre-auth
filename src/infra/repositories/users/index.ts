@@ -146,12 +146,13 @@ export default ({ model, jwt }: any) => {
   const remove = async (...args: any) => {
     try {
       const m: IWrite<any> = model;
+
       const [{ ...params }] = args;
       const user = await m.findByIdAndDelete({ ...params }).lean();
 
       if (!user) return null;
 
-      return true;
+      return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
     }

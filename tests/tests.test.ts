@@ -1,6 +1,6 @@
 /*eslint-disable*/
 // we import a function that we wrote to create a new instance of Apollo Server
-import container from '../src/container';
+import container from 'container';
 
 const containerServer: any = container.resolve('server');
 
@@ -9,16 +9,16 @@ import request from 'supertest';
 
 // this is the query for our test
 const queryData = {
-  query: `query GetBooksByLibrary {
-  libraries {
-    books {
-      title
-      author {
-        name
+    query: `query GetBooksByLibrary {
+    libraries {
+      books {
+        title
+        author {
+          name
+        }
       }
     }
-  }
-}`,
+  }`,
 };
 
 describe('e2e demo', () => {

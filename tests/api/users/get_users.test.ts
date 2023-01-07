@@ -2,7 +2,7 @@
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
-import container from '../../../src/container';
+import container from 'container';
 
 const containerServer: any = container.resolve('server');
 const jwt = container.resolve('jwt') as any;
@@ -43,28 +43,6 @@ beforeEach((done) => {
 afterEach(async () => await clear());
 afterAll(async () => await close());
 
-const queryData = {
-  query: `query getUserList($filters: String, $pageSize: Int, $page: Int) {
-    users(filters: $filters, pageSize: $pageSize, page: $page) {
-       results {
-        _id
-        first_name
-        last_name
-        email
-        created_at
-        modified_at
-      }
-      pageInfo {
-        count
-        pages
-        next
-        prev
-      }
-    }
-  }`,
-  variables: { filters: '', pageSize: 5, page: 1 },
-};
-
 describe('e2e demo', () => {
   let server: any, url: any;
 
@@ -77,6 +55,28 @@ describe('e2e demo', () => {
   });
 
   it('says hello', async () => {
+    const queryData = {
+      query: `query getUserList($filters: String, $pageSize: Int, $page: Int) {
+        users(filters: $filters, pageSize: $pageSize, page: $page) {
+           results {
+            _id
+            first_name
+            last_name
+            email
+            created_at
+            modified_at
+          }
+          pageInfo {
+            count
+            pages
+            next
+            prev
+          }
+        }
+      }`,
+      variables: { filters: '', pageSize: 5, page: 1 },
+    };
+
     const response: any = await request(url).post('/').send(queryData);
     expect(response.errors).toBeUndefined();
     expect(response?.body?.data?.users?.[0]?.results[0]?._id).toBe(userId.toString());
