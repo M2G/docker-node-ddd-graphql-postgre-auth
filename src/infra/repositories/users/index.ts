@@ -169,6 +169,9 @@ export default ({ model, jwt }: any) => {
           { upsert: true, new: true }
         )
         .lean();
+
+      console.log('findByIdAndUpdate findByIdAndUpdate', user)
+
       return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
