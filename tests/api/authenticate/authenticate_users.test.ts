@@ -9,11 +9,10 @@ const jwt = container.resolve('jwt') as any;
 const { usersRepository } = container.resolve('repository');
 const randomEmail = faker.internet.email();
 const randomUserName = faker.internet.userName();
+const password = faker.internet.password();
 const signIn = jwt.signin();
 let token: string;
-let userId: string;
 const createdAt = Math.floor(Date.now() / 1000);
-const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
 
 import { clear, close, connect } from '../../dbHandler';
 
@@ -30,8 +29,6 @@ beforeEach((done) => {
       last_connected_at: null,
     })
     .then((user: { _id: any; email: any; username: any; password: any }) => {
-      userId = user._id;
-
       token = signIn({
         _id: user._id,
         email: user.email,
@@ -57,41 +54,23 @@ describe('e2e demo', () => {
   });
 
   it('says hello', async () => {
-    const randomEmail = faker.internet.email();
-    const randomUserName = faker.internet.userName();
-    const randomPassword = faker.internet.password();
-
     const queryData = {
-      query: `mutation updateUser($id: String!, $input: CreateUserInput!) {
-        updateUser(id: $id, input: $input) {
-           _id
-           email
-           username
-           password
-           created_at
-           deleted_at
-        }
+      query: `mutation Signin($input: SigninInput!) {
+        signin(input: $input)
       }`,
       variables: {
-        id: userId,
         input: {
           email: randomEmail,
-          username: randomUserName,
-          password: randomPassword,
+          password: password,
         },
       },
     };
 
     const response: any = await request(url).post('/').send(queryData);
+   const user = response?.body?.data?.signup;
 
-    console.log('response response response', response?.body?.data)
-   /* const user = response?.body?.data?.deleteUser;
+    console.log('response response response', user)
+
     expect(response.errors).toBeUndefined();
-    expect(user?._id).toBe(userId.toString());
-    expect(user?._id).toBe(userId.toString());
-    expect(user?.email).toBe(randomEmail.toLowerCase());
-    expect(user?.username).toBe(randomUserName.toLowerCase());
-    expect(user?.created_at).toBe(createdAt);
-    expect(user?.deleted_at).toBe(0);*/
   });
 });
