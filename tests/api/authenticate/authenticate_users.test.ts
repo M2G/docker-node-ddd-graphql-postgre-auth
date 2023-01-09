@@ -9,7 +9,7 @@ const jwt = container.resolve('jwt') as any;
 const { usersRepository } = container.resolve('repository');
 const randomEmail = faker.internet.email();
 const randomUserName = faker.internet.userName();
-const password = faker.internet.password();
+const password = "$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG";
 const signIn = jwt.signin();
 let token: string;
 const createdAt = Math.floor(Date.now() / 1000);
@@ -55,22 +55,20 @@ describe('e2e demo', () => {
 
   it('says hello', async () => {
     const queryData = {
-      query: `mutation Signin($input: SigninInput!) {
+      query: `mutation Signin($input: SigninInput) {
         signin(input: $input)
       }`,
       variables: {
         input: {
           email: randomEmail,
-          password: password,
+          password: "test",
         },
       },
     };
 
     const response: any = await request(url).post('/').send(queryData);
-   const user = response?.body?.data?.signup;
-
-    console.log('response response response', user)
-
+    const token = response?.body?.data?.signin;
+    expect(token).toBeDefined();
     expect(response.errors).toBeUndefined();
   });
 });

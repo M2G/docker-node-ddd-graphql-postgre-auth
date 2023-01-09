@@ -15,6 +15,8 @@ export default ({ postUseCase, jwt, logger }: any) => {
         const { input } = args;
         const { email, password } = input as IUser;
 
+        console.log('input input input input', input);
+
         try {
           const data: IUser = await postUseCase.authenticate({ email });
 
@@ -47,6 +49,8 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
           // if user is found and password is right, create a token
           const token: string = jwt.signin(options)(payload);
+
+          console.log('token token token', token)
 
           logger.info({ token });
 

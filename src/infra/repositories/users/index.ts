@@ -185,8 +185,12 @@ export default ({ model, jwt }: any) => {
     try {
       const [{ ...params }] = args;
 
+      console.log('authenticate params params', params);
+
       const m: IRead<any> = model;
       const user = await m.findOne({ ...params }).lean();
+
+      console.log('authenticate authenticate authenticate', user);
 
       if (!user) return null;
       return toEntity(user);
