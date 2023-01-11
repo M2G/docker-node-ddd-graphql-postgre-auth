@@ -6,7 +6,7 @@ import type IUser from 'core/IUser';
 
 export default ({ postUseCase, jwt, logger }: any) => {
   const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'),
+    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
   );
 
   console.log('typeDefs typeDefs', typeDefs);
@@ -14,41 +14,11 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
   const resolvers = {
     Mutation: {
-      signin: async (parent: any, args: any) => {
-        const { input } = args;
-        const { ...params } = input as IUser;
-
-        console.log('::::::::::::::', params);
-
-        try {
-          const data: IUser = await postUseCase.authenticate({
-            email: params.email,
+      forgotPassword: async (parent: any, args: any) => {
+          console.log('---------', {
+            parent,
+            args,
           });
-
-          const { email, password } = data || {};
-
-          const match = comparePassword(params.password, password);
-
-          if (match) {
-            const payload = { email, password };
-
-            const options = {
-              audience: [],
-              expiresIn: 60 * 60,
-              subject: email,
-            };
-
-            // if user is found and password is right, create a token
-            const token: string = jwt.signin(options)(payload);
-
-            logger.info({ token });
-
-            return token;
-          }
-        } catch (error: unknown) {
-          logger.error(error);
-          throw new Error(error as string | undefined);
-        }
       },
     },
     Query: {},

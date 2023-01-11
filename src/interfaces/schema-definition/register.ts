@@ -13,7 +13,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
       signup: async (parent: any, args: any) => {
         const { input } = args;
         const { ...params } = input as IUser;
-        console.log('------------------------>', postUseCase);
+        console.log('------------------------>', { ...params });
 
         const hasPassword = encryptPassword(params.password);
         try {
@@ -25,9 +25,13 @@ export default ({ postUseCase, jwt, logger }: any) => {
               password: hasPassword,
             });
 
+          console.log('data data data data', data);
+
           const { email, password } = data || {};
 
           const match = comparePassword(params.password, password);
+
+          console.log('match comparePassword', match);
 
           if (!match) return null;
           const payload = { email, password };
@@ -45,6 +49,9 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
           return token;
         } catch (error: unknown) {
+
+          console.log('error error', error);
+
           logger.error(error);
           throw new Error(error as string | undefined);
         }
