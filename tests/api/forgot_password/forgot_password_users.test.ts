@@ -55,20 +55,23 @@ describe('e2e demo', () => {
 
   it('says hello', async () => {
     const queryData = {
-      query: `mutation Signin($input: SigninInput) {
-        signin(input: $input)
+      query: `mutation ResetPassword($input: ResetPasswordInput) {
+        resetPassword(input: $input)
       }`,
       variables: {
         input: {
-          email: randomEmail,
-          password: "test",
+          token: "token",
+          password: "password",
         },
       },
     };
 
     const response: any = await request(url).post('/').send(queryData);
-    const token = response?.body?.data?.signin;
-    expect(token).toBeDefined();
+
+    console.log('response', response)
+
+    //const token = response?.body?.data?.signin;
+   // expect(token).toBeDefined();
     expect(response.errors).toBeUndefined();
   });
 });

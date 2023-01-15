@@ -5,11 +5,17 @@ export default () => {
   const { cradle } = container;
   const {
     repository: { usersRepository },
+    jwt,
+    logger,
   } = cradle;
 
-  const postUseCase = post({ usersRepository });
+  const postUseCase = post({
+    usersRepository,
+  });
 
   return {
+    jwt,
+    logger,
     postUseCase,
   };
 };

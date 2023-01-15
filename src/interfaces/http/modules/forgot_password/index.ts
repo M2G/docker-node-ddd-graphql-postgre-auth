@@ -1,11 +1,9 @@
-import container from 'container';
+import forgotPassword from 'interfaces/schema-definition/forgot_password';
 import instance from './instance';
 
 export default () => {
-  const { jwt, logger } = container.cradle;
-  const app = instance();
-
+  const { jwt, logger, postUseCase } = instance();
   return {
-    app,
+    forgotPassword: forgotPassword({ jwt, logger, postUseCase }),
   };
 };

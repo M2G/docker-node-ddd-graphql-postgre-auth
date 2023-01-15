@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 import { comparePassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
 
@@ -15,10 +15,13 @@ export default ({ postUseCase, jwt, logger }: any) => {
   const resolvers = {
     Mutation: {
       forgotPassword: async (parent: any, args: any) => {
-          console.log('---------', {
+
+          console.log('--------->', {
             parent,
             args,
           });
+
+          return "test";
       },
     },
     Query: {},
