@@ -9,9 +9,7 @@ export default () => {
     logger,
   } = cradle;
 
-  const postUseCase = post({
-    usersRepository,
-  });
+  const postUseCase = post({ usersRepository });
 
   return {
     jwt,

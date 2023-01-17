@@ -2,8 +2,11 @@ import forgotPassword from 'interfaces/schema-definition/forgot_password';
 import instance from './instance';
 
 export default () => {
-  const { jwt, logger, postUseCase } = instance();
+  const { jwt, logger } = instance();
   return {
-    forgotPassword: forgotPassword({ jwt, logger, postUseCase }),
+    forgotPassword: forgotPassword({
+      jwt,
+      logger,
+    }),
   };
 };

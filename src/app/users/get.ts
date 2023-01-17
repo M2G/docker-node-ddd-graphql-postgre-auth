@@ -5,23 +5,10 @@ const TTL = 1 * 60;
  * function for get users.
  */
 export default ({ usersRepository, redis }: any) => {
-  const all = async ({
-    ...arg
-  }: ArrayLike<unknown> | Record<string, unknown>) => {
+  const all = async ({ ...arg }: ArrayLike<unknown> | Record<string, unknown>) => {
     try {
-      console.log('-------> arg', arg);
-      console.log('-------> entries', Object.entries(arg).length);
-
-      console.log(
-        '------->',
-        arg && Object.values(arg).filter(Boolean).length === 0,
-      );
-
-      if (arg && Object.values(arg).filter(Boolean).length) {
+      if (arg && Object.values(arg).filter(Boolean).length)
         return usersRepository.getAll({ ...arg });
-      }
-
-      console.log('KOOOOOOOOO')
 
       const cachingUserList = await redis.get(KEY);
 
