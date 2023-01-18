@@ -1,12 +1,12 @@
-import container from 'container';
+import resetPassword from 'interfaces/schema-definition/reset_password';
 import instance from './instance';
 
 export default () => {
-  const { cradle } = container;
-  const { jwt, logger } = cradle;
-  const app = instance();
-
+  const { jwt, logger } = instance();
   return {
-    app,
+    resetPassword: resetPassword({
+      jwt,
+      logger,
+    }),
   };
 };

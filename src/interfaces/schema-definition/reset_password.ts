@@ -15,6 +15,15 @@ export default ({ postUseCase, getUseCase, getOneUseCase, deleteUseCase, jwt, lo
           parent,
           args,
         });
+
+        try {
+          const user = postUseCase.resetPassword(args);
+          logger.info({ ...user });
+          return user;
+        } catch (error: unknown) {
+          logger.error(error);
+          throw new Error(error as string | undefined);
+        }
       },
     },
     Query: {},
