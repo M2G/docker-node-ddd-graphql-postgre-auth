@@ -77,6 +77,8 @@ export default ({ model, jwt }: any) => {
 
   const forgotPassword = async (...args: any[]) => {
     try {
+
+
       const [{ ...params }] = args;
       const { ...user }: any = await findOne(params);
 
@@ -96,8 +98,6 @@ export default ({ model, jwt }: any) => {
         reset_password_token: token,
         reset_password_expires: Date.now() + 86400000
       });
-
-      console.log('updatedUser', updatedUser);
 
       return toEntity(updatedUser);
     } catch (error) {

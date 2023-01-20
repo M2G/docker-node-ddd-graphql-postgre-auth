@@ -1,24 +1,21 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
-import { comparePassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
-import toEntity from 'infra/repositories/users/transform';
 
-export default ({
- getOneUseCase, postUseCase, putUseCase, jwt, logger,
-}: any) => {
-  const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
-  );
+export default ({ postUseCase, logger }: any) => {
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
   const resolvers = {
     Mutation: {
-      forgotPassword: (parent: any, args: any) => {
+      forgotPassword: async (parent: any, args: any) => {
+        const { email } = args;
         try {
-          const user = postUseCase.forgotPassword(args);
+          const user: IUser = await postUseCase.forgotPassword({ email });
+          console.log('postUseCase resetPassword', user);
           logger.info({ ...user });
-          return user;
+
+          return true;
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);

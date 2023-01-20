@@ -11,13 +11,16 @@ export default ({ postUseCase, getUseCase, getOneUseCase, deleteUseCase, jwt, lo
   const resolvers = {
     Mutation: {
       resetPassword: async (parent: any, args: any) => {
-        console.log('---------', {
+        console.log('resetPassword', {
           parent,
           args,
         });
 
         try {
           const user = postUseCase.resetPassword(args);
+
+          console.log('postUseCase resetPassword', user);
+
           logger.info({ ...user });
           return user;
         } catch (error: unknown) {

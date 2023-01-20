@@ -7,8 +7,9 @@ const TTL = 1 * 60;
 export default ({ usersRepository, redis }: any) => {
   const all = async ({ ...arg }: ArrayLike<unknown> | Record<string, unknown>) => {
     try {
-      if (arg && Object.values(arg).filter(Boolean).length)
+      if (arg && Object.values(arg).filter(Boolean).length) {
         return usersRepository.getAll({ ...arg });
+      }
 
       const cachingUserList = await redis.get(KEY);
 

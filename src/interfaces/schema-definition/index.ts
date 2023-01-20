@@ -10,21 +10,18 @@ export default () => {
 
   const { resolvers: resetPasswordResolvers, typeDefs: resetPasswordTypeDefs } = resetPassword().resetPassword;
 
-  const { resolvers: resetPasswordResolvers, typeDefs: resetPasswordTypeDefs } = resetPassword().resetPassword;
+  const { resolvers: forgotPasswordResolvers, typeDefs: forgotPasswordTypeDefs } = forgotPassword().forgotPassword;
 
   const { resolvers: registerResolvers, typeDefs: registerTypeDefs } = register().register;
 
   const { resolvers: usersResolvers, typeDefs: usersTypeDefs } = users().users;
-
-  console.log(':::::::::::::::::::::::::', {
-    usersResolvers,
-  });
 
   return {
     resolvers: {
       ...authenticateResolvers.Type,
       ...registerResolvers.Type,
       Mutation: {
+        ...resetPasswordResolvers.Mutation,
         ...forgotPasswordResolvers.Mutation,
         ...authenticateResolvers.Mutation,
         ...registerResolvers.Mutation,
@@ -34,6 +31,6 @@ export default () => {
         ...usersResolvers.Query,
       },
     },
-    typeDefs: [authenticateTypeDefs, registerTypeDefs, usersTypeDefs, forgotPasswordTypeDefs],
+    typeDefs: [authenticateTypeDefs, registerTypeDefs, usersTypeDefs, forgotPasswordTypeDefs, resetPasswordTypeDefs],
   };
 };
