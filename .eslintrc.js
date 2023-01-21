@@ -66,6 +66,7 @@ module.exports = {
     'no-void': 1,
     'nonblock-statement-body-position': 1,
 
+    "@typescript-eslint/prefer-nullish-coalescing": 1,
     '@typescript-eslint/ban-types': 1,
     '@typescript-eslint/object-curly-spacing': 0,
     '@typescript-eslint/no-unsafe-return': 1,

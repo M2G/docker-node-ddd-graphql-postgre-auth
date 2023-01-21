@@ -22,19 +22,18 @@ const queryData = {
 };
 
 describe('e2e demo', () => {
-  // @ts-ignore
-  let server, url: any;
+  let server: { stop: () => any; }, url: any, serverStandalone: any;
 
   // before the tests we spin up a new Apollo Server
   beforeAll(async () => {
     // Note we must wrap our object destructuring in parentheses because we already declared these variables
     // We pass in the port as 0 to let the server pick its own ephemeral port for testing
-    ({ server, url } = await containerServer);
+    ({ server, serverStandalone } = await containerServer);
+    ({ url } = await serverStandalone)
   });
 
   // after the tests we'll stop the server
   afterAll(async () => {
-    // @ts-ignore
     await server?.stop();
   });
 

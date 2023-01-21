@@ -5,6 +5,6 @@
  * memcache
  * express server
  */
-export default ({ server, database }: any) => ({
-  start: () => Promise.resolve().then(database.authenticate).then(server.start)
+export default ({ server }: any) => ({
+  start: () => Promise.resolve().then(server.start)
 });

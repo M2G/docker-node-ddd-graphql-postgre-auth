@@ -17,11 +17,6 @@ export default ({ jwt }: any) => {
 
       if (!query?.includes('users')) return null;
 
-      console.log(
-        'operationName operationName operationName',
-        query?.includes('users')
-      );
-
       const extractToken = authorization?.startsWith('Bearer ');
 
       console.log('extractToken extractToken', extractToken);

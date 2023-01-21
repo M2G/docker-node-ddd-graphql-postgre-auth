@@ -11,9 +11,7 @@ import cors from 'cors';
 import http from 'http';
 import { json } from 'body-parser';
 
-export default async ({
- config, logger, auth, schema, verify,
-}: any) => {
+export default ({ config, logger, auth, schema, verify }: any) => {
   const app = express();
 
   const httpServer = http.createServer(app);
@@ -31,23 +29,27 @@ export default async ({
     typeDefs: schema.typeDefs,
   });
 
-  app.use(cors({ credentials: true, origin: true }));
+  app.use(
+    cors({
+      credentials: true,
+      origin: true,
+    }),
+  );
   app.disable('x-powered-by');
 
   app.use(auth.initialize());
   app.use(auth.authenticate);
-  // app.use(verify.authorization);
 
-  const { url } = await startStandaloneServer(apolloServer, { listen: config.port });
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 
   return {
     server: apolloServer,
-    url,
+    serverStandalone: process.env.NODE_ENV === 'test' && startStandaloneServer(apolloServer, { listen: config.port }),
     app,
-    start: async (): Promise<unknown> =>
+    start: (): Promise<unknown> =>
       new Promise(() => {
-        app.listen(config.port, () => {
-          void (async () => {
+        if (process.env.NODE_ENV === 'development') {
+          return app.listen(config.port, async () => {
             console.log('config.port config.port', config.port);
             await apolloServer.start();
             app.use(
@@ -58,11 +60,9 @@ export default async ({
                 context: verify.authorization,
               }),
             );
-            logger.info(
-              `🚀 Server ready at http://localhost:8181/graphql`,
-            );
-          })();
-        });
+            logger.info(`🚀 Server ready at http://localhost:8181/graphql`);
+          });
+        }
       }),
   };
 };

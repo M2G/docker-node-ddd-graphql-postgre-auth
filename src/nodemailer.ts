@@ -1,6 +1,4 @@
-/*eslint-disable*/
-//@ts-ignore
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import type { Options } from 'nodemailer-mailgun-transport';
 import mg from 'nodemailer-mailgun-transport';
 import handlebars from 'handlebars';
@@ -18,8 +16,7 @@ const auth: Options = {
   },
 };
 
-const smtpTransport: any = nodemailer.createTransport(mg(auth));
+const smtpTransport: any = (nodemailer as any).createTransport(mg(auth));
 const template = handlebars.compile(emailTemplateSource);
 
 export { template, smtpTransport };
-
