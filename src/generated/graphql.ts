@@ -2,7 +2,10 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Context } from './src/interfaces/schema-definition/types';
 export type Maybe<T> = T | null | undefined;
-export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
+export type InputMaybe<T> = T | null | undefined;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -13,25 +16,43 @@ export type Scalars = {
   Float: number;
 };
 
+export type Author = {
+  __typename?: 'Author';
+  name: Scalars['String'];
+};
+
+export type Book = {
+  __typename?: 'Book';
+  author: Author;
+  title: Scalars['String'];
+};
+
 export type CreateUserInput = {
-  _id?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['Int']>;
-  email?: Maybe<Scalars['String']>;
-  first_name?: Maybe<Scalars['String']>;
-  last_name?: Maybe<Scalars['String']>;
-  modified_at?: Maybe<Scalars['Int']>;
-  password?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  _id?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
+  first_name?: InputMaybe<Scalars['String']>;
+  last_name?: InputMaybe<Scalars['String']>;
+  modified_at?: InputMaybe<Scalars['Int']>;
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
+export type Library = {
+  __typename?: 'Library';
+  books?: Maybe<Array<Book>>;
+  branch: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
   deleteUser?: Maybe<User>;
+  forgotPassword: Status;
+  resetPassword: Status;
   signin: Scalars['String'];
   signup: Scalars['String'];
   updateUser?: Maybe<User>;
-  updateUserPassword: User;
 };
 
 
@@ -45,25 +66,29 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordInput;
+};
+
+
 export type MutationSigninArgs = {
-  input?: Maybe<SigninInput>;
+  input?: InputMaybe<SigninInput>;
 };
 
 
 export type MutationSignupArgs = {
-  input?: Maybe<SignupInput>;
+  input?: InputMaybe<SignupInput>;
 };
 
 
 export type MutationUpdateUserArgs = {
   id: Scalars['String'];
   input: CreateUserInput;
-};
-
-
-export type MutationUpdateUserPasswordArgs = {
-  id: Scalars['String'];
-  input: UpdateUserPasswordInput;
 };
 
 export type PageInfo = {
@@ -77,7 +102,7 @@ export type PageInfo = {
 export type Query = {
   __typename?: 'Query';
   getUser?: Maybe<User>;
-  hello: Scalars['String'];
+  libraries?: Maybe<Array<Maybe<Library>>>;
   users?: Maybe<Array<Users>>;
 };
 
@@ -87,15 +112,15 @@ export type QueryGetUserArgs = {
 };
 
 
-export type QueryHelloArgs = {
-  name?: Maybe<Scalars['String']>;
+export type QueryUsersArgs = {
+  filters?: InputMaybe<Scalars['String']>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
 };
 
-
-export type QueryUsersArgs = {
-  filters?: Maybe<Scalars['String']>;
-  page?: Maybe<Scalars['Int']>;
-  pageSize?: Maybe<Scalars['Int']>;
+export type ResetPasswordInput = {
+  password: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type SigninInput = {
@@ -106,6 +131,11 @@ export type SigninInput = {
 export type SignupInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type Status = {
+  __typename?: 'Status';
+  success?: Maybe<Scalars['Boolean']>;
 };
 
 export type User = {
@@ -126,7 +156,7 @@ export type User = {
 
 export type Users = {
   __typename?: 'Users';
-  pageInfo: PageInfo;
+  pageInfo?: Maybe<PageInfo>;
   results?: Maybe<Array<Maybe<User>>>;
 };
 
@@ -134,12 +164,6 @@ export enum SortOrder {
   Asc = 'ASC',
   Desc = 'DESC'
 }
-
-export type UpdateUserPasswordInput = {
-  old_password: Scalars['String'];
-  password: Scalars['String'];
-  password_again: Scalars['String'];
-};
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -211,44 +235,70 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Author: ResolverTypeWrapper<Author>;
+  Book: ResolverTypeWrapper<Book>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateUserInput: CreateUserInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Library: ResolverTypeWrapper<Library>;
   Mutation: ResolverTypeWrapper<{}>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
+  ResetPasswordInput: ResetPasswordInput;
   SigninInput: SigninInput;
   SignupInput: SignupInput;
+  Status: ResolverTypeWrapper<Status>;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
   Users: ResolverTypeWrapper<Users>;
   sortOrder: SortOrder;
-  updateUserPasswordInput: UpdateUserPasswordInput;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Author: Author;
+  Book: Book;
   Boolean: Scalars['Boolean'];
   CreateUserInput: CreateUserInput;
   Int: Scalars['Int'];
+  Library: Library;
   Mutation: {};
   PageInfo: PageInfo;
   Query: {};
+  ResetPasswordInput: ResetPasswordInput;
   SigninInput: SigninInput;
   SignupInput: SignupInput;
+  Status: Status;
   String: Scalars['String'];
   User: User;
   Users: Users;
-  updateUserPasswordInput: UpdateUserPasswordInput;
+}>;
+
+export type AuthorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = ResolversObject<{
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type BookResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
+  author?: Resolver<ResolversTypes['Author'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type LibraryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Library'] = ResolversParentTypes['Library']> = ResolversObject<{
+  books?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType>;
+  branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  forgotPassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
+  resetPassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'input'>>;
   signin?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationSigninArgs>>;
   signup?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationSignupArgs>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'input'>>;
-  updateUserPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserPasswordArgs, 'id' | 'input'>>;
 }>;
 
 export type PageInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
@@ -261,8 +311,13 @@ export type PageInfoResolvers<ContextType = Context, ParentType extends Resolver
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
-  hello?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<QueryHelloArgs>>;
+  libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
   users?: Resolver<Maybe<Array<ResolversTypes['Users']>>, ParentType, ContextType, Partial<QueryUsersArgs>>;
+}>;
+
+export type StatusResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Status'] = ResolversParentTypes['Status']> = ResolversObject<{
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -282,15 +337,19 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 }>;
 
 export type UsersResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Users'] = ResolversParentTypes['Users']> = ResolversObject<{
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  pageInfo?: Resolver<Maybe<ResolversTypes['PageInfo']>, ParentType, ContextType>;
   results?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Author?: AuthorResolvers<ContextType>;
+  Book?: BookResolvers<ContextType>;
+  Library?: LibraryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Status?: StatusResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   Users?: UsersResolvers<ContextType>;
 }>;
