@@ -13,7 +13,6 @@ export default ({ postUseCase, logger }: any) => {
         const { email } = args;
         try {
           const user: IUser = await postUseCase.forgotPassword({ email });
-          console.log('postUseCase resetPassword', user);
           logger.info({ ...user });
 
           const htmlToSend = template({
@@ -21,18 +20,26 @@ export default ({ postUseCase, logger }: any) => {
             url: `http://localhost:3002/reset-password?token=${user.reset_password_token}`,
           });
 
+          console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+
           const mailOptions = {
             from: 'sendersemail@example.com',
             html: htmlToSend,
             subject: 'Password help has arrived!',
-            // to: user.email,
-            to: "m.pierrelouis@hotmail.fr",
+            to: process.env.NODE_ENV === 'test' ? user.email : 'm.pierrelouis@hotmail.fr',
+            // to: "m.pierrelouis@hotmail.fr",
           };
+
+          console.log('TEST TEST');
 
           const info = await smtpTransport.sendMail(mailOptions);
           console.log('Message sent successfully as %s', info.messageId);
 
-          return true;
+          const data = {
+            success: true,
+          };
+
+          return data;
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);

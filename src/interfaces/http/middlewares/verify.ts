@@ -1,11 +1,14 @@
 /*eslint-disable*/
+import { GraphQLError } from 'graphql';
+import Status from 'http-status';
+
 const time =
   process.env.NODE_ENV === 'development'
     ? '60s' //process.env.JWT_TOKEN_EXPIRE_TIME
     : '2s';
 
 const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
-const FAIL_AUTH = 'Failed to authenticate token is expired.';
+// const FAIL_AUTH = 'Failed to authenticate token is expired.';
 
 export default ({ jwt }: any) => {
   return {
@@ -27,10 +30,19 @@ export default ({ jwt }: any) => {
           jwt.verify({ maxAge: time })(token);
         } catch (e: any) {
           if (e.name === TOKEN_EXPIRED_ERROR)
-            //throw new Error(FAIL_AUTH);
-            throw new Error(FAIL_AUTH);
+            throw new GraphQLError(<string>Status[Status.UNAUTHORIZED], {
+              extensions: {
+                code: Status.UNAUTHORIZED,
+                http: { status: 401 },
+              },
+            });
 
-          throw new Error('BAD_REQUEST');
+          throw new GraphQLError(<string>Status[Status.BAD_REQUEST], {
+            extensions: {
+              code: Status.BAD_REQUEST,
+              http: { status: 400 },
+            },
+          });
         }
 
         return null;

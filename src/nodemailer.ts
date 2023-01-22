@@ -11,8 +11,8 @@ const emailTemplateSource = fs.readFileSync(
 );
 const auth: Options = {
   auth: {
-    api_key: process.env.MAILER_GUN_AUTH_API_KEY || '',
-    domain: process.env.MAILER_GUN_AUTH_DOMAIN || '',
+    api_key: process.env.MAILER_GUN_AUTH_API_KEY || 'test',
+    domain: process.env.MAILER_GUN_AUTH_DOMAIN || 'test',
   },
 };
 

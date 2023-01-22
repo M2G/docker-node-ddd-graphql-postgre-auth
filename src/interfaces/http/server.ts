@@ -5,7 +5,6 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 import { startStandaloneServer } from '@apollo/server/standalone';
-
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
@@ -39,8 +38,6 @@ export default ({ config, logger, auth, schema, verify }: any) => {
 
   app.use(auth.initialize());
   app.use(auth.authenticate);
-
-  console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 
   return {
     server: apolloServer,

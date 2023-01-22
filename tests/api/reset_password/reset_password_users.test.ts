@@ -3,7 +3,6 @@ import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
 import container from '../../../src/container';
-//import { smtpTransport } from '../../../src/nodemailer';
 
 const containerServer: any = container.resolve('server');
 const jwt = container.resolve('jwt') as any;
@@ -43,22 +42,11 @@ beforeEach((done) => {
 afterEach(async () => await clear());
 afterAll(async () => await close());
 
-const sendMailMock = jest.fn()
-jest.mock('nodemailer', () => ({
-  createTransport: jest.fn().mockImplementation(() => ({
-    sendMail: sendMailMock,
-  })),
-}))
-
 describe('e2e demo', () => {
-  let server: { stop: () => any; }, url: any, serverStandalone: any;
+  let server: any, url: any;
 
-  // before the tests we spin up a new Apollo Server
   beforeAll(async () => {
-    // Note we must wrap our object destructuring in parentheses because we already declared these variables
-    // We pass in the port as 0 to let the server pick its own ephemeral port for testing
-    ({ server, serverStandalone } = await containerServer);
-    ({ url } = await serverStandalone)
+    ({ server, url } = await containerServer);
   });
 
   afterAll(async () => {
@@ -67,19 +55,22 @@ describe('e2e demo', () => {
 
   it('says hello', async () => {
     const queryData = {
-      query: `mutation ForgotPassword($email: String!) {
-        forgotPassword(email: $email) {
+      query: `mutation ResetPassword($input: ResetPasswordInput) {
+        resetPassword(input: $input) {
           success
         }
       }`,
       variables: {
-          email: randomEmail,
+        input: {
+          token: "token",
+          password: "password",
+        },
       },
     };
 
     const response: any = await request(url).post('/').send(queryData);
 
-    console.log('response', response?.body)
+    console.log('response', response)
 
     //const token = response?.body?.data?.signin;
    // expect(token).toBeDefined();

@@ -45,6 +45,7 @@ module.exports = {
   ],
   testPathIgnorePatterns: [
     "<rootDir>/src",
+    "<rootDir>/src/nodemailer.js",
     "<rootDir>/test/dbHandler.test.ts",
     "<rootDir>/(build|node_modules)/",
   ],
