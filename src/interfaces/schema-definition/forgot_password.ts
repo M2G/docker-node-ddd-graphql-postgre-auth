@@ -33,6 +33,9 @@ export default ({ postUseCase, logger }: any) => {
           console.log('TEST TEST');
 
           const info = await smtpTransport.sendMail(mailOptions);
+
+          console.log('info info', info);
+
           console.log('Message sent successfully as %s', info.messageId);
 
           const data = {
