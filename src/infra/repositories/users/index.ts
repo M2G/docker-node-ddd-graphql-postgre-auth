@@ -69,7 +69,7 @@ export default ({ model, jwt }: any) => {
 
       console.log('register register', { ...params })
 
-      return await m.create({ ...params });
+      return m.create({ ...params });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -126,7 +126,7 @@ export default ({ model, jwt }: any) => {
       data.reset_password_token = undefined;
       data.reset_password_expires = undefined;
 
-      return await update({ ...data });
+      return update({ ...data });
     } catch (error) {
       throw new Error(error as string | undefined);
     }

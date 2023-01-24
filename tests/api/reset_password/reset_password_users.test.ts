@@ -15,6 +15,7 @@ let token: string;
 const createdAt = Math.floor(Date.now() / 1000);
 
 import { clear, close, connect } from '../../dbHandler';
+import { smtpTransport } from '../../../src/nodemailer';
 
 // this is the query for our test
 beforeAll(async () => await connect());
@@ -42,6 +43,11 @@ beforeEach((done) => {
 afterEach(async () => await clear());
 afterAll(async () => await close());
 
+const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
+  return {
+    messageId: true,
+  };
+});
 describe('e2e demo', () => {
   let server: any, url: any;
 
@@ -74,6 +80,8 @@ describe('e2e demo', () => {
 
     //const token = response?.body?.data?.signin;
    // expect(token).toBeDefined();
+    expect(response?.body?.data?.resetPassword?.success).toBeTruthy();
     expect(response.errors).toBeUndefined();
+    expect(spy).toBeCalledTimes(1);
   });
 });
