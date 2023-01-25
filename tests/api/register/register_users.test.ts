@@ -3,6 +3,7 @@ import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
 import container from '../../../src/container';
+import { clear, close, connect } from '../../dbHandler';
 
 const containerServer: any = container.resolve('server');
 const jwt = container.resolve('jwt') as any;
@@ -13,8 +14,6 @@ const password = "$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG";
 const signIn = jwt.signin();
 let token: string;
 const createdAt = Math.floor(Date.now() / 1000);
-
-import { clear, close, connect } from '../../dbHandler';
 
 // this is the query for our test
 beforeAll(async () => await connect());
@@ -43,10 +42,11 @@ afterEach(async () => await clear());
 afterAll(async () => await close());
 
 describe('e2e demo', () => {
-  let server: any, url: any;
+  let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
-    ({ server, url } = await containerServer);
+    ({ server, serverStandalone } = await containerServer);
+    ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {

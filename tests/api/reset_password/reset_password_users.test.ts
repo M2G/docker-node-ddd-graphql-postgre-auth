@@ -3,6 +3,8 @@ import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
 import container from '../../../src/container';
+import { smtpTransport } from '../../../src/nodemailer';
+import { clear, close, connect } from '../../dbHandler';
 
 const containerServer: any = container.resolve('server');
 const jwt = container.resolve('jwt') as any;
@@ -14,12 +16,12 @@ const signIn = jwt.signin();
 let token: string;
 const createdAt = Math.floor(Date.now() / 1000);
 
-import { clear, close, connect } from '../../dbHandler';
-import { smtpTransport } from '../../../src/nodemailer';
-
 // this is the query for our test
 beforeAll(async () => await connect());
 beforeEach((done) => {
+
+  console.log('usersRepository usersRepository usersRepository', usersRepository);
+
   usersRepository
     .register({
       email: randomEmail,
@@ -37,8 +39,17 @@ beforeEach((done) => {
         password: user.password,
       });
       console.log('token', token);
-      done();
+
+      usersRepository.forgotPassword({
+        email: randomEmail,
+      }).then((d: any) => {
+
+        console.log('forgotPassword forgotPassword forgotPassword', d);
+        done();
+      });
+
     });
+
 });
 afterEach(async () => await clear());
 afterAll(async () => await close());
@@ -49,10 +60,11 @@ const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
   };
 });
 describe('e2e demo', () => {
-  let server: any, url: any;
+  let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
-    ({ server, url } = await containerServer);
+    ({ server, serverStandalone } = await containerServer);
+    ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
@@ -68,7 +80,7 @@ describe('e2e demo', () => {
       }`,
       variables: {
         input: {
-          token: "token",
+          token,
           password: "password",
         },
       },

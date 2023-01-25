@@ -6,15 +6,15 @@ import gql from 'graphql-tag';
 // import type IUser from "core/IUser";
 import { smtpTransport, template } from '../../nodemailer';
 
-export default ({ postUseCase, getUseCase, getOneUseCase, deleteUseCase, jwt, logger }: any) => {
+export default ({ postUseCase, logger }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
   const resolvers = {
     Mutation: {
       resetPassword: async (parent: any, args: any) => {
         console.log('resetPassword', {
-          parent,
           args,
+          parent,
         });
 
         try {
@@ -24,20 +24,27 @@ export default ({ postUseCase, getUseCase, getOneUseCase, deleteUseCase, jwt, lo
             name: 'test',
           });
 
-          const data = {
+          const mailOptions = {
             from: 'sendersemail@example.com',
             html: htmlToSend,
             subject: 'Password Reset Confirmation',
-            to: user.email,
+            to: process.env.NODE_ENV === 'test' ? user.email : 'm.pierrelouis@hotmail.fr',
           };
 
-          const info = smtpTransport.sendMail(data);
+          console.log('TEST TEST');
+
+          const info = await smtpTransport.sendMail(mailOptions);
           console.log('Successfully sent email.');
           console.log('Message sent successfully as %s', info.messageId);
           console.log('postUseCase resetPassword', user);
 
           logger.info({ ...user });
-          return user;
+
+          const data = {
+            success: true,
+          };
+
+          return data;
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);

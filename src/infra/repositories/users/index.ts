@@ -93,14 +93,14 @@ export default ({ model, jwt }: any) => {
       };
       const token: string = jwt.signin(options)(payload);
 
-      const updatedUser = await update({
+      return update({
         _id,
         reset_password_token: token,
         reset_password_expires: Date.now() + 86400000
       });
-
-      return toEntity(updatedUser);
     } catch (error) {
+      console.log('forgotPassword error error ', error);
+
       throw new Error(error as string | undefined);
     }
   };
