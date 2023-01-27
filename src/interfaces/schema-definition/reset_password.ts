@@ -12,13 +12,15 @@ export default ({ postUseCase, logger }: any) => {
   const resolvers = {
     Mutation: {
       resetPassword: async (parent: any, args: any) => {
-        console.log('resetPassword', {
+        console.log('resolvers resetPassword', {
           args,
           parent,
         });
 
         try {
           const user = postUseCase.resetPassword(args);
+
+          console.log('postUseCase.resetPassword', user);
 
           const htmlToSend = template({
             name: 'test',
