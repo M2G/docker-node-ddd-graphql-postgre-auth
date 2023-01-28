@@ -32,17 +32,17 @@
       "ES2020",
       "ESNext"
     ],
-    "rootDirs": ["src"],
-    "baseUrl": "src",
+    "rootDirs": ["./src", "./tests"],
+    "baseUrl": ".",
     "paths": {
-      "container": ["./container"],
-      "app/*": ["./app/*"],
-      "core": ["./core"],
-      "domain/*": ["./domain/*"],
-      "infra/*": ["./infra/*"],
-      "interfaces/*": ["./interfaces/*"],
-      "schema/*": ["./interfaces/schema-definition/*"],
-      "generated/*": ["./generated/*"]
+      "container": ["./src/container"],
+      "app/*": ["./src/app/*"],
+      "core/*": ["./src/core/*"],
+      "domain/*": ["./src/domain/*"],
+      "infra/*": ["./src/infra/*"],
+      "interfaces/*": ["./src/interfaces/*"],
+      "schema/*": ["./src/interfaces/schema-definition/*"],
+      "generated/*": ["./src/generated/*"]
     }
   },
   "include": ["src/**/*"],

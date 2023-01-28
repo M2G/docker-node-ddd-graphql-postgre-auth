@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 // import type IUser from '../../core/IUser';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
-import { smtpTransport, template } from '../../nodemailer';
+import { smtpTransport, template } from 'src/nodemailer';
 
 export default ({ postUseCase, logger }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));

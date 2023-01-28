@@ -2,7 +2,7 @@
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
-import container from '../../../src/container';
+import container from 'src/container';
 
 const containerServer: any = container.resolve('server');
 const jwt = container.resolve('jwt') as any;
@@ -15,7 +15,7 @@ let userId: string;
 const createdAt = Math.floor(Date.now() / 1000);
 const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
 
-import { clear, close, connect } from '../../dbHandler';
+import { clear, close, connect } from 'tests/dbHandler';
 
 // this is the query for our test
 beforeAll(async () => await connect());

@@ -2,8 +2,8 @@
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
-import container from '../../../src/container';
-import { clear, close, connect } from '../../dbHandler';
+import container from 'src/container';
+import { clear, close, connect } from 'tests/dbHandler';
 
 const containerServer: any = container.resolve('server');
 const jwt = container.resolve('jwt') as any;

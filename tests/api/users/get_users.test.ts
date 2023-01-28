@@ -14,7 +14,7 @@ let token: string;
 let userId: string;
 const createdAt = Math.floor(Date.now() / 1000);
 
-import { clear, close, connect } from '../../dbHandler';
+import { clear, close, connect } from 'tests/dbHandler';
 
 // this is the query for our test
 beforeAll(async () => await connect());
