@@ -10,13 +10,12 @@ const containerServer: any = container.resolve('server');
 const { usersRepository } = container.resolve('repository');
 const randomEmail = faker.internet.email();
 const randomUserName = faker.internet.userName();
-const password = "$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG";
+const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
 let user: any;
 const createdAt = Math.floor(Date.now() / 1000);
 
 // this is the query for our test
 beforeEach((done) => {
-
   console.log('usersRepository usersRepository usersRepository', usersRepository);
 
   usersRepository
@@ -29,15 +28,16 @@ beforeEach((done) => {
       last_connected_at: null,
     })
     .then(() => {
-       usersRepository.forgotPassword({
-        email: randomEmail,
-      }).then((data: any) => {
-         user = data
-        console.log('forgotPassword forgotPassword forgotPassword', data);
-        done();
-      });
+      usersRepository
+        .forgotPassword({
+          email: randomEmail,
+        })
+        .then((data: any) => {
+          user = data;
+          console.log('forgotPassword forgotPassword forgotPassword', data);
+          done();
+        });
     });
-
 });
 
 const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
@@ -62,8 +62,7 @@ describe('e2e demo', () => {
   });
 
   it('says hello', async () => {
-
-    console.log('user?.reset_password_token', user)
+    console.log('user?.reset_password_token', user);
 
     const queryData = {
       query: `mutation ResetPassword($input: ResetPasswordInput!) {
@@ -74,19 +73,14 @@ describe('e2e demo', () => {
       variables: {
         input: {
           token: user?.reset_password_token || '',
-          password: "password",
+          password: 'password',
         },
       },
     };
 
     const response: any = await request(url).post('/').send(queryData);
-
-    console.log('response', response)
-
-    //const token = response?.body?.data?.signin;
-   // expect(token).toBeDefined();
-   // expect(response?.body?.data?.resetPassword?.success).toBeTruthy();
-    //expect(response.errors).toBeUndefined();
+    expect(response?.body?.data?.resetPassword?.success).toBeTruthy();
+    expect(response.errors).toBeUndefined();
     expect(spy).toBeCalledTimes(1);
   });
 });
