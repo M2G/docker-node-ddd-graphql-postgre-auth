@@ -18,7 +18,6 @@ const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
 import { clear, close, connect } from 'tests/dbHandler';
 
 // this is the query for our test
-beforeAll(async () => await connect());
 beforeEach((done) => {
   usersRepository
     .register({
@@ -43,16 +42,18 @@ beforeEach((done) => {
     });
 });
 afterEach(async () => await clear());
-afterAll(async () => await close());
 
 describe('e2e demo', () => {
-  let server: any, url: any;
+  let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
-    ({ server, url } = await containerServer);
+    await connect();
+    ({ server, serverStandalone } = await containerServer);
+    ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
+    await close();
     await server?.stop();
   });
 

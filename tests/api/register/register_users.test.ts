@@ -15,8 +15,6 @@ const signIn = jwt.signin();
 let token: string;
 const createdAt = Math.floor(Date.now() / 1000);
 
-// this is the query for our test
-beforeAll(async () => await connect());
 beforeEach((done) => {
   usersRepository
     .register({
@@ -39,17 +37,18 @@ beforeEach((done) => {
     });
 });
 afterEach(async () => await clear());
-afterAll(async () => await close());
 
 describe('e2e demo', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
+    await connect();
     ({ server, serverStandalone } = await containerServer);
     ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
+    await close();
     await server?.stop();
   });
 

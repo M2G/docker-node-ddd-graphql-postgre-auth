@@ -13,8 +13,6 @@ const randomUserName = faker.internet.userName();
 const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
 const createdAt = Math.floor(Date.now() / 1000);
 
-// this is the query for our test
-beforeAll(async () => await connect());
 beforeEach((done) => {
   usersRepository
     .register({
@@ -27,7 +25,6 @@ beforeEach((done) => {
     }).then(() => done());
 });
 afterEach(async () => await clear());
-afterAll(async () => await close());
 
 const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
   return {
@@ -38,15 +35,14 @@ const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
 describe('e2e demo', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
-  // before the tests we spin up a new Apollo Server
   beforeAll(async () => {
-    // Note we must wrap our object destructuring in parentheses because we already declared these variables
-    // We pass in the port as 0 to let the server pick its own ephemeral port for testing
+    await connect();
     ({ server, serverStandalone } = await containerServer);
     ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
+    await close();
     await server?.stop();
   });
 

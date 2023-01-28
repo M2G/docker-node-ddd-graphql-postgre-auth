@@ -40,6 +40,8 @@ beforeEach((done) => {
     });
 });
 
+afterEach(async () => await clear());
+
 const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
   return {
     messageId: true,
@@ -53,8 +55,6 @@ describe('e2e demo', () => {
     ({ server, serverStandalone } = await containerServer);
     ({ url } = await serverStandalone);
   });
-
-  afterEach(async () => await clear());
 
   afterAll(async () => {
     await close();
