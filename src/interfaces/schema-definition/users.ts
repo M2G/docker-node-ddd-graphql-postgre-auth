@@ -105,9 +105,9 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }
           throw new Error(error as string | undefined);
         }
       },
-      users: async (parent: any, { filters, page, pageSize }: any) => {
+      users: async (parent: any, { ...args }: any) => {
         try {
-          const data = await getUseCase.all({ filters, page, pageSize });
+          const data = await getUseCase.all({ ...args });
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {

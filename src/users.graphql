@@ -17,15 +17,21 @@ type User {
   last_connected_at: Int
 }
 
+type Edge {
+   node: User
+   cursor: String
+}
+
 type PageInfo {
-  count: Int
-  pages: Int
-  next: Int
-  prev: Int
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
 }
 
 type Users {
-  results: [User]
+  totalCount: Int
+  edges: [Edge]
   pageInfo: PageInfo
 }
 
@@ -35,7 +41,7 @@ enum sortOrder {
 }
 
 type Query {
-  users(filters: String, pageSize: Int, page: Int): [Users!]
+  users(first: Int!, afterCursor: String, filters: String): Users!
 }
 
 type Query {

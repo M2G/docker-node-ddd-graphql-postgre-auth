@@ -3,10 +3,21 @@ import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
 
+const convertNodeToCursor = (node: { _id: string; }) => {
+  return new Buffer(node._id, 'binary').toString('base64')
+}
+
+const convertCursorToNodeId = (cursor: string) => {
+  return new Buffer(cursor, 'base64').toString('binary')
+}
+
+
 export default ({ model, jwt }: any) => {
   const getAll = async (...args: any[]) => {
     try {
-      const [{ filters, pageSize, page }]: any = args;
+      const [{ filters, pageSize, page, first, afterCursor }]: any = args;
+
+      let afterIndex = 0;
 
       console.log('params params params params', args);
 
@@ -34,29 +45,72 @@ export default ({ model, jwt }: any) => {
       console.log('query query query query query', query)
 
       const m: IRead<any> = model;
-      const users = await m
+      const data: any[] = await m
         .find(query)
-        .skip(pageSize * (page - 1))
-        .limit(pageSize)
+        //.skip(pageSize * (page - 1))
+        //.limit(pageSize)
         .sort({ email: 1 })
         .lean();
 
-      const count = await model.countDocuments();
-      const pages = Math.ceil(count / pageSize);
-      const prev = page > 1 ? page - 1 : null;
-      const next = page < pages ? page + 1 : null;
+      console.log('data?.length', data?.length)
 
-      return [
-        {
-          results: (users || [])?.map((user) => toEntity(user)),
-          pageInfo: {
-            count,
-            pages,
-            prev,
-            next
-          }
+
+      if (typeof afterCursor === 'string') {
+        /* Extracting nodeId from afterCursor */
+        let nodeId = convertCursorToNodeId(afterCursor)
+        /* Finding the index of nodeId */
+        let nodeIndex = data?.findIndex((datum: { id: string; }) => datum.id === nodeId)
+        if (nodeIndex >= 0) {
+          afterIndex = nodeIndex + 1 // 1 is added to exclude the afterIndex node and include items after it
         }
-      ];
+      }
+
+      console.log('afterIndex', afterIndex)
+      console.log('first', first)
+
+      const slicedData = data?.slice(afterIndex, afterIndex + first)
+
+      console.log('slicedData', slicedData)
+
+      const edges = slicedData?.map((node: { _id: string; }) => {
+
+        console.log('node node node node', node)
+        console.log('convertNodeToCursor(node)', convertNodeToCursor(node))
+        return {
+          node,
+          cursor: convertNodeToCursor(node)
+        }
+      });
+
+      let startCursor, endCursor = null;
+      if (edges.length > 0) {
+        startCursor = convertNodeToCursor(edges[0].node)
+        endCursor = convertNodeToCursor(edges[edges.length - 1].node)
+      }
+      let hasNextPage = data.length > afterIndex + first;
+
+      console.log('------------', {
+        totalCount: data.length,
+        edges,
+        pageInfo: {
+          startCursor,
+          endCursor,
+          hasNextPage,
+          hasPrevPage: null
+        }
+      })
+
+      return {
+        totalCount: data.length,
+        edges,
+        pageInfo: {
+          startCursor,
+          endCursor,
+          hasNextPage,
+          hasPrevPage: null
+        }
+      }
+
     } catch (error) {
       throw new Error(error as string | undefined);
     }

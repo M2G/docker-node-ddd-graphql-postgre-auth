@@ -35,7 +35,8 @@
     "rootDirs": ["./src", "./tests"],
     "baseUrl": ".",
     "paths": {
-      "container": ["./src/container"],
+      "./*": ["./src"],
+      "container/*": ["./src/container"],
       "app/*": ["./src/app/*"],
       "core/*": ["./src/core/*"],
       "domain/*": ["./src/domain/*"],
