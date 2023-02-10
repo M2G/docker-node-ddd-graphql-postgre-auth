@@ -1,13 +1,11 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import gql from 'graphql-tag'
-import { comparePassword, encryptPassword } from 'infra/encryption';
+import gql from 'graphql-tag';
+import { encryptPassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
 
 export default ({ postUseCase, jwt, logger }: any) => {
-  const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'),
-  );
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
       signup: async (parent: any, args: any) => {
@@ -17,39 +15,20 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
         const hasPassword = encryptPassword(params.password);
         try {
-          const { _doc: data }: { _doc: { email: string; password: string } } = await postUseCase.register({
-              created_at: Math.floor(Date.now() / 1000),
-              deleted_at: 0,
-              email: params.email,
-              last_connected_at: null,
-              password: hasPassword,
-            });
+          const { _doc: data }: { _doc: IUser } = await postUseCase.register({
+            created_at: Math.floor(Date.now() / 1000),
+            deleted_at: 0,
+            email: params.email,
+            last_connected_at: null,
+            password: hasPassword,
+          });
 
           console.log('data data data data', data);
 
-          const { email, password } = data || {};
+          logger.info({ data });
 
-          const match = comparePassword(params.password, password);
-
-          console.log('match comparePassword', match);
-
-          if (!match) return null;
-          const payload = { email, password };
-
-          const options = {
-            audience: [],
-            expiresIn: 60 * 60,
-            subject: email,
-          };
-
-          // if user is found and password is right, create a token
-          const token: string = jwt.signin(options)(payload);
-
-          logger.info({ token });
-
-          return token;
+          return data;
         } catch (error: unknown) {
-
           console.log('error error', error);
 
           logger.error(error);

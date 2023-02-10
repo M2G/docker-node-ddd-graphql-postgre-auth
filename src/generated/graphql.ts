@@ -57,7 +57,7 @@ export type Mutation = {
   forgotPassword: Status;
   resetPassword: Status;
   signin: Scalars['String'];
-  signup: Scalars['String'];
+  signup: Users;
   updateUser?: Maybe<User>;
 };
 
@@ -312,7 +312,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   forgotPassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
   resetPassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'input'>>;
   signin?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationSigninArgs>>;
-  signup?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationSignupArgs>>;
+  signup?: Resolver<ResolversTypes['Users'], ParentType, ContextType, Partial<MutationSignupArgs>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'input'>>;
 }>;
 

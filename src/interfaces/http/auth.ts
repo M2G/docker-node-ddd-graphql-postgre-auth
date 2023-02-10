@@ -17,8 +17,8 @@ export default ({
   const bearerStrategy = new BearerStrategy(
     'bearer',
     (
-      token: any,
-      done: (arg0: any, arg1: { email: any; password: any } | null) => any
+      token: string,
+      done: (arg0: any, arg1: { email: string; password: string } | null) => any
     ) => {
       const { _id, ...args }: any | number = jwt.decode()(token);
 

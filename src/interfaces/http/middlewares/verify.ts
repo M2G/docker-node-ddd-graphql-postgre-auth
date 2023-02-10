@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import { GraphQLError } from 'graphql';
 import Status from 'http-status';
+import { Request } from 'express';
 
 const time =
   process.env.NODE_ENV === 'development'
@@ -10,12 +11,12 @@ const time =
 const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
 // const FAIL_AUTH = 'Failed to authenticate token is expired.';
 
-export default ({ jwt }: any) => {
+export default ({ jwt }: { jwt: any }) => {
   return {
-    authorization: ({ req }: any) => {
+    authorization: ({ req }: { req: Request }) => {
       const {
         headers: { authorization },
-        body: { query }
+        body: { query },
       } = req;
 
       if (!query?.includes('users')) return null;
@@ -49,6 +50,6 @@ export default ({ jwt }: any) => {
       }
 
       throw new Error('No token provided.');
-    }
+    },
   };
 };
