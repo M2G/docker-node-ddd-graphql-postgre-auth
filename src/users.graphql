@@ -65,7 +65,7 @@ type Mutation {
 }
 
 type Mutation {
-  updateUser(id: String!, input: CreateUserInput!): User
+  updateUser(id: String!, input: UpdateUserInput): User
 }
 
 input ResetPasswordInput {
@@ -78,14 +78,15 @@ type Status {
 }
 
 input CreateUserInput {
-  _id: String
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
   email: String
-  password: String
   first_name: String
   last_name: String
   username: String
-  created_at: Int
-  modified_at: Int
 }
 
 # ------------------------------------------------------

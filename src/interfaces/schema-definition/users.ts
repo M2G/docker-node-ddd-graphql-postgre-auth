@@ -1,10 +1,11 @@
 /*eslint-disable*/
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import gql from 'graphql-tag';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
 import type IUser from '../../core/IUser';
+import { encryptPassword } from 'infra/encryption';
 
 const libraries = [
   {
@@ -34,11 +35,44 @@ const data = [
   },
 ];
 */
-export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase }: any) => {
+export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, postUseCase }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
-
   const resolvers = {
     Mutation: {
+      createUser: async (parent: any, args: any) => {
+        const { input } = args;
+        const { ...params } = input as IUser;
+
+        const hasPassword = encryptPassword(params.password);
+        try {
+          const { _doc: data }: { _doc: IUser } = await postUseCase.register({
+            created_at: Math.floor(Date.now() / 1000),
+            deleted_at: 0,
+            email: params.email,
+            last_connected_at: null,
+            password: hasPassword,
+          });
+
+          console.log('data data data data', data);
+
+          logger.info({ data });
+
+          const user = {
+            created_at: Math.floor(Date.now() / 1000),
+            email: data?.email,
+            first_name: data?.first_name,
+            last_name: data?.last_name,
+            modified_at: Math.floor(Date.now() / 1000),
+          };
+
+          return user;
+        } catch (error: unknown) {
+          console.log('error error', error);
+
+          logger.error(error);
+          throw new Error(error as string | undefined);
+        }
+      },
       deleteUser: async (parent: any, args: any) => {
         const { id } = args;
 

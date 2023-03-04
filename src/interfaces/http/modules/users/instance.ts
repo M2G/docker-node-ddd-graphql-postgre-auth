@@ -1,6 +1,6 @@
 import container from 'container';
 import {
- get, getOne, put, remove,
+ get, getOne, put, remove, post,
 } from 'app/users';
 
 export default () => {
@@ -14,6 +14,7 @@ export default () => {
   const getUseCase = get({ redis, usersRepository });
   const getOneUseCase = getOne({ usersRepository });
   const putUseCase = put({ usersRepository });
+  const postUseCase = post({ usersRepository });
   const deleteUseCase = remove({ usersRepository });
 
   return {
@@ -21,6 +22,7 @@ export default () => {
     getOneUseCase,
     getUseCase,
     logger,
+    postUseCase,
     putUseCase,
   };
 };

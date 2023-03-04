@@ -3,7 +3,7 @@ import instance from './instance';
 
 export default () => {
   const {
- deleteUseCase, getOneUseCase, getUseCase, logger, putUseCase,
+ deleteUseCase, getOneUseCase, getUseCase, logger, putUseCase, postUseCase,
 } = instance();
   return {
     users: users({
@@ -11,6 +11,7 @@ export default () => {
       getOneUseCase,
       getUseCase,
       logger,
+      postUseCase,
       putUseCase,
     }),
   };

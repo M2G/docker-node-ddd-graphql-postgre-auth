@@ -44,16 +44,15 @@ export default ({ model, jwt }: any) => {
       }
 
       const m: IRead<any> = model;
-      const data: any[] = await m
-        .find(query)
-        .sort({ email: 1 })
-        .lean();
+      const data: any[] = await m.find(query).sort({ email: 1 }).lean();
 
       if (afterCursor) {
         /* Extracting nodeId from afterCursor */
         let nodeId = convertCursorToNodeId(afterCursor);
 
-        const nodeIndex = data?.findIndex((datum: { _id: string }) => datum._id.toString() === nodeId);
+        const nodeIndex = data?.findIndex(
+          (datum: { _id: string }) => datum._id.toString() === nodeId,
+        );
         if (nodeIndex === -1) {
           throw new Error('After does not exist');
         }
@@ -70,14 +69,18 @@ export default ({ model, jwt }: any) => {
         cursor: convertNodeToCursor(node),
       }));
 
-      let startCursor,
-        endCursor = null;
+      let startCursor = null;
+      let endCursor = null;
       if (edges.length > 0) {
         startCursor = convertNodeToCursor(edges[0].node);
         endCursor = convertNodeToCursor(edges[edges.length - 1].node);
       }
 
-      console.log('afterIndex afterIndex afterIndex', { afterIndex, first, length: (data.length - 1) })
+      console.log('afterIndex afterIndex afterIndex', {
+        afterIndex,
+        first,
+        length: data.length - 1,
+      });
 
       const hasNextPage = data.length > afterIndex + first;
       const hasPrevPage = afterIndex > 0;
@@ -89,7 +92,7 @@ export default ({ model, jwt }: any) => {
           startCursor,
           endCursor,
           hasNextPage,
-          hasPrevPage: hasPrevPage,
+          hasPrevPage,
         },
       };
     } catch (error) {
@@ -198,7 +201,13 @@ export default ({ model, jwt }: any) => {
     try {
       const m: IWrite<any> = model;
       const [{ _id, ...params }] = args;
-      const user = await m.findByIdAndUpdate({ _id } as any, { ...params }, { upsert: true, new: true }).lean();
+      const user = await m
+        .findByIdAndUpdate(
+          { _id } as any,
+          { ...params },
+          { upsert: true, new: true },
+        )
+        .lean();
 
       console.log('findByIdAndUpdate findByIdAndUpdate', user);
 

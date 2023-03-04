@@ -10,15 +10,14 @@ export default ({ postUseCase, jwt, logger }: any) => {
     Mutation: {
       signup: async (parent: any, args: any) => {
         const { input } = args;
-        const { ...params } = input as IUser;
-        console.log('------------------------>', { ...params });
+        const { email, password } = input as IUser;
 
-        const hasPassword = encryptPassword(params.password);
+        const hasPassword = encryptPassword(password);
         try {
           const { _doc: data }: { _doc: IUser } = await postUseCase.register({
             created_at: Math.floor(Date.now() / 1000),
             deleted_at: 0,
-            email: params.email,
+            email,
             last_connected_at: null,
             password: hasPassword,
           });
@@ -27,7 +26,15 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
           logger.info({ data });
 
-          return data;
+          const user = {
+            created_at: Math.floor(Date.now() / 1000),
+            email: data?.email,
+            first_name: data?.first_name,
+            last_name: data?.last_name,
+            modified_at: Math.floor(Date.now() / 1000),
+          };
+
+          return user;
         } catch (error: unknown) {
           console.log('error error', error);
 

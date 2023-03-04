@@ -28,14 +28,8 @@ export type Book = {
 };
 
 export type CreateUserInput = {
-  _id?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['Int']>;
-  email?: InputMaybe<Scalars['String']>;
-  first_name?: InputMaybe<Scalars['String']>;
-  last_name?: InputMaybe<Scalars['String']>;
-  modified_at?: InputMaybe<Scalars['Int']>;
-  password?: InputMaybe<Scalars['String']>;
-  username?: InputMaybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type Edge = {
@@ -57,7 +51,7 @@ export type Mutation = {
   forgotPassword: Status;
   resetPassword: Status;
   signin: Scalars['String'];
-  signup: Users;
+  signup: User;
   updateUser?: Maybe<User>;
 };
 
@@ -94,7 +88,7 @@ export type MutationSignupArgs = {
 
 export type MutationUpdateUserArgs = {
   id: Scalars['String'];
-  input: CreateUserInput;
+  input?: InputMaybe<UpdateUserInput>;
 };
 
 export type PageInfo = {
@@ -142,6 +136,13 @@ export type SignupInput = {
 export type Status = {
   __typename?: 'Status';
   success?: Maybe<Scalars['Boolean']>;
+};
+
+export type UpdateUserInput = {
+  email?: InputMaybe<Scalars['String']>;
+  first_name?: InputMaybe<Scalars['String']>;
+  last_name?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -257,6 +258,7 @@ export type ResolversTypes = ResolversObject<{
   SignupInput: SignupInput;
   Status: ResolverTypeWrapper<Status>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
   Users: ResolverTypeWrapper<Users>;
   sortOrder: SortOrder;
@@ -279,6 +281,7 @@ export type ResolversParentTypes = ResolversObject<{
   SignupInput: SignupInput;
   Status: Status;
   String: Scalars['String'];
+  UpdateUserInput: UpdateUserInput;
   User: User;
   Users: Users;
 }>;
@@ -312,8 +315,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   forgotPassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
   resetPassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'input'>>;
   signin?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationSigninArgs>>;
-  signup?: Resolver<ResolversTypes['Users'], ParentType, ContextType, Partial<MutationSignupArgs>>;
-  updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'input'>>;
+  signup?: Resolver<ResolversTypes['User'], ParentType, ContextType, Partial<MutationSignupArgs>>;
+  updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id'>>;
 }>;
 
 export type PageInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
