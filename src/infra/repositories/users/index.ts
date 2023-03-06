@@ -83,7 +83,7 @@ export default ({ model, jwt }: any) => {
       });
 
       const hasNextPage = data.length > afterIndex + first;
-      const hasPrevPage = afterIndex > 0;
+      const hasPrevPage = !!afterIndex;
 
       return {
         totalCount: data.length,
