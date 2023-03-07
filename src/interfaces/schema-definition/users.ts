@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import { readFileSync } from 'fs';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import gql from 'graphql-tag';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";

@@ -2,17 +2,10 @@
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
-
-const convertNodeToCursor = (node: { _id: string }) => {
-  return new Buffer(node._id, 'binary').toString('base64');
-};
-
-const convertCursorToNodeId = (cursor: string) => {
-  return new Buffer(cursor, 'base64').toString('binary');
-};
+import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
 
 export default ({ model, jwt }: any) => {
-  const getAll = async (...args: any[]) => {
+  const getAll = async (...args: any[]): Promise<any> => {
     try {
       const [{ filters, first, afterCursor }]: any = args;
       if (first < 0) {
@@ -100,7 +93,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const register = async (...args: any[]) => {
+  const register = async (...args: any[]): Promise<any> => {
     try {
       const [{ ...params }] = args;
       const m: IWrite<any> = model;
@@ -113,7 +106,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const forgotPassword = async (...args: any[]) => {
+  const forgotPassword = async (...args: any[]): Promise<unknown> => {
     try {
       const [{ ...params }] = args;
       const { ...user }: any = await findOne(params);
@@ -141,7 +134,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const resetPassword = async (...args: any[]) => {
+  const resetPassword = async (...args: any[]): Promise<any> => {
     try {
       const [{ ...params }] = args;
 
@@ -168,7 +161,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const findOne = async (...args: any[]) => {
+  const findOne = async (...args: any[]): Promise<unknown | null> => {
     try {
       const m: IRead<any> = model;
       const [{ ...params }] = args;
@@ -182,7 +175,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const remove = async (...args: any) => {
+  const remove = async (...args: any): Promise<unknown | null> => {
     try {
       const m: IWrite<any> = model;
 
@@ -217,7 +210,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const authenticate = async (...args: any[]) => {
+  const authenticate = async (...args: any[]): Promise<unknown | null> => {
     try {
       const [{ ...params }] = args;
 
