@@ -1,19 +1,19 @@
-import t from 'tcomb';
+import * as t from 'io-ts';
 
-const Users = t.struct({
-  _id: t.maybe(t.Any),
-  created_at: t.maybe(t.Number),
-  deleted_at: t.maybe(t.Number),
-  email: t.maybe(t.String),
-  first_name: t.maybe(t.String),
-  last_connected_at: t.maybe(t.Number),
-  last_name: t.maybe(t.String),
-  modified_at: t.maybe(t.Number),
-  password: t.maybe(t.String),
-  reset_password_expires: t.maybe(t.Number),
-  reset_password_token: t.maybe(t.String),
-  token: t.maybe(t.String),
-  username: t.maybe(t.String),
+const Users = t.type({
+  _id: t.string,
+  created_at: t.number,
+  deleted_at: t.number,
+  email: t.string,
+  first_name: t.string,
+  last_connected_at: t.number,
+  last_name: t.string,
+  modified_at: t.number,
+  password: t.string,
+  reset_password_expires: t.number,
+  reset_password_token: t.string,
+  token: t.string,
+  username: t.string,
 });
 
 export default Users;

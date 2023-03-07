@@ -15,7 +15,7 @@ export default ({ redis, usersRepository }: any) => {
     try {
       const user = Users({ ...args });
 
-      const authenticatedUser: any = await usersRepository.authenticate(
+      const authenticatedUser = await usersRepository.authenticate(
         cleanData(user),
       );
 

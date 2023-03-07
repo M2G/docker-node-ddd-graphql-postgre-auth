@@ -7,14 +7,6 @@ import gql from 'graphql-tag';
 import type IUser from '../../core/IUser';
 import { encryptPassword } from 'infra/encryption';
 
-const libraries = [
-  {
-    branch: 'downtown',
-  },
-  {
-    branch: 'riverside',
-  },
-];
 /*
 const data = [
   {
@@ -117,11 +109,6 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
       },
     },
     Query: {
-      libraries(parent: any, args: any) {
-        console.log('args args args', args);
-        // Return our hardcoded array of libraries
-        return libraries;
-      },
       getUser: async (parent: any, args: any) => {
         console.log('args args args', args);
 

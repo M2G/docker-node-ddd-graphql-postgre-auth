@@ -169,7 +169,7 @@ export default ({ model, jwt }: any) => {
 
       if (!user) return null;
 
-      return toEntity(user);
+      return toEntity.is(user) ? user : {};
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -184,7 +184,7 @@ export default ({ model, jwt }: any) => {
 
       if (!user) return null;
 
-      return toEntity(user);
+      return toEntity.is(user) ? user : {};
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -204,7 +204,7 @@ export default ({ model, jwt }: any) => {
 
       console.log('findByIdAndUpdate findByIdAndUpdate', user);
 
-      return toEntity(user);
+      return toEntity.is(user) ? user : {};
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -222,7 +222,7 @@ export default ({ model, jwt }: any) => {
       console.log('authenticate authenticate authenticate', user);
 
       if (!user) return null;
-      return toEntity(user);
+      return toEntity.is(user) ? user : {};
     } catch (error) {
       throw new Error(error as string | undefined);
     }
