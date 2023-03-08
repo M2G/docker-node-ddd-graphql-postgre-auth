@@ -25,7 +25,6 @@ export default ({ config, basePath, logger }: any) => {
         maxPoolSize: 20,
         socketTimeoutMS: 60000,
         serverSelectionTimeoutMS: 60000,
-        loggerLevel: 'error'
       } as ConnectOptions
     );
 

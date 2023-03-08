@@ -15,7 +15,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
         const { input } = args;
         const { email, password } = input as IUser;
 
-        console.log('input input input input', input);
+        console.log('input input input input', { email, password });
 
         try {
           const data: IUser = await postUseCase.authenticate({ email });
@@ -35,7 +35,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
               'Wrong username and password combination.',
             );
           }
-          const payload: IUser | any = {
+          const payload: IUser = {
             _id: data._id,
             email: data.email,
             password: data.password,

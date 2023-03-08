@@ -212,17 +212,20 @@ export default ({ model, jwt }: any) => {
 
   const authenticate = async (...args: any[]): Promise<unknown | null> => {
     try {
-      const [{ ...params }] = args;
 
-      console.log('authenticate params params', params);
+      console.log('args args args', args);
+
+      const [{ email }] = args;
+
+      console.log('authenticate params params', email);
 
       const m: IRead<any> = model;
-      const user = await m.findOne({ ...params }).lean();
+      const user = await m.findOne({ email }).lean();
 
       console.log('authenticate authenticate authenticate', user);
-
+      console.log('toEntity.is(user)', toEntity.is(user));
       if (!user) return null;
-      return toEntity.is(user) ? user : {};
+      return toEntity.is(user) ? user : null;
     } catch (error) {
       throw new Error(error as string | undefined);
     }
