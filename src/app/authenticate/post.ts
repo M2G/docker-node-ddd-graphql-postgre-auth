@@ -22,11 +22,6 @@ export default ({ redis, usersRepository }: any) => {
         cleanData({ email }),
       );
 
-      console.log(
-        'authenticatedUser authenticatedUser authenticatedUser',
-        authenticatedUser,
-      );
-
       await redis.set(
         `${KEY}:${authenticatedUser?._id}`,
         JSON.stringify({

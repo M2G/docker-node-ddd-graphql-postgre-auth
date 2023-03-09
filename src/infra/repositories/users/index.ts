@@ -169,7 +169,7 @@ export default ({ model, jwt }: any) => {
 
       if (!user) return null;
 
-      return toEntity.is(user) ? user : {};
+      return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -184,7 +184,7 @@ export default ({ model, jwt }: any) => {
 
       if (!user) return null;
 
-      return toEntity.is(user) ? user : {};
+      return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -204,7 +204,7 @@ export default ({ model, jwt }: any) => {
 
       console.log('findByIdAndUpdate findByIdAndUpdate', user);
 
-      return toEntity.is(user) ? user : {};
+      return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -223,9 +223,8 @@ export default ({ model, jwt }: any) => {
       const user = await m.findOne({ email }).lean();
 
       console.log('authenticate authenticate authenticate', user);
-      console.log('toEntity.is(user)', toEntity.is(user));
       if (!user) return null;
-      return toEntity.is(user) ? user : null;
+      return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
     }
