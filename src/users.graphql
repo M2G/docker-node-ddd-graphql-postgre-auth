@@ -88,28 +88,3 @@ input UpdateUserInput {
   last_name: String
   username: String
 }
-
-# ------------------------------------------------------
-# TESTS ONLY
-# ------------------------------------------------------
-
-# A book has a title and author
-type Book {
-  title: String!
-  author: Author!
-}
-
-# An author has a name
-type Author {
-  name: String!
-}
-
-type Library {
-  branch: String!
-  books: [Book!]
-}
-
-# Queries can fetch a list of libraries
-type Query {
-  libraries: [Library]
-}

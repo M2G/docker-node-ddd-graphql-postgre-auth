@@ -41,7 +41,7 @@ export default ({ postUseCase, logger, jwt }: any) => {
             to:
               process.env.NODE_ENV === 'test'
                 ? user.email
-                : 'm.pierrelouis@hotmail.fr',
+                : process.env.REAL_EMAIL,
           };
 
           const info = await smtpTransport.sendMail(mailOptions);

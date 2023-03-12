@@ -11,12 +11,9 @@ export default ({ usersRepository }: any) => {
 
   console.log('usersRepository');
 
-  const forgotPassword = ({ ...args }: any) => {
+  const forgotPassword = ({ email }: { readonly email: string }) => {
     try {
-
-      console.log('args args args', args);
-
-      const users = Users({ ...args });
+      const users = Users({ email });
       return usersRepository.forgotPassword(cleanData(users));
     } catch (error: any | unknown) {
       throw new Error(error as string | undefined);

@@ -10,7 +10,7 @@ const TTL = 60 * 60;
  * function for authenticate user.
  */
 export default ({ redis, usersRepository }: any) => {
-  const authenticate = async ({ email }: { email: string }) => {
+  const authenticate = async ({ email }: { readonly email: string }) => {
     try {
       const user = Users({ email });
       const authenticatedUser = await usersRepository.authenticate({
