@@ -5,7 +5,9 @@ import type IUser from 'core/IUser';
 import { template, smtpTransport } from '../../nodemailer';
 
 export default ({ postUseCase, logger }: any) => {
-  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
+  const typeDefs = gql(
+    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
+  );
 
   const resolvers = {
     Mutation: {
@@ -14,8 +16,6 @@ export default ({ postUseCase, logger }: any) => {
         try {
           const user: IUser = await postUseCase.forgotPassword({ email });
           logger.info({ ...user });
-
-          console.log('forgotPassword', { ...user })
 
           const htmlToSend = template({
             name: 'test',
@@ -28,17 +28,15 @@ export default ({ postUseCase, logger }: any) => {
             from: 'sendersemail@example.com',
             html: htmlToSend,
             subject: 'Password help has arrived!',
-            to: process.env.NODE_ENV === 'test' ? user.email : 'm.pierrelouis@hotmail.fr',
+            to:
+              process.env.NODE_ENV === 'test'
+                ? user.email
+                : 'm.pierrelouis@hotmail.fr',
             // to: "m.pierrelouis@hotmail.fr",
           };
 
-          console.log('TEST TEST');
-
           const info = await smtpTransport.sendMail(mailOptions);
-
-          console.log('info info', info);
-
-          console.log('Message sent successfully as %s', info.messageId);
+          logger.info('Message sent successfully as %s', info.messageId);
 
           const data = {
             success: true,

@@ -1,9 +1,9 @@
 /*eslint-disable*/
+import type { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
 import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
-import type { Types } from 'mongoose';
 
 export default ({ model, jwt }: any) => {
   const getAll = async (...args: any[]): Promise<any> => {
