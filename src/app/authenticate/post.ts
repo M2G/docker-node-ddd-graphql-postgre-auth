@@ -2,7 +2,6 @@
  * this file will hold all the get use-case for user domain
  */
 import Users from 'domain/users';
-import { cleanData } from 'interfaces/http/utils';
 
 const KEY = 'LAST_CONNECTED_AT';
 const TTL = 60 * 60;
@@ -11,16 +10,12 @@ const TTL = 60 * 60;
  * function for authenticate user.
  */
 export default ({ redis, usersRepository }: any) => {
-  const authenticate = async ({
-    email,
-  }: {
-    email: string;
-    password: string;
-  }) => {
+  const authenticate = async ({ email }: { email: string }) => {
     try {
-      const authenticatedUser = await usersRepository.authenticate(
-        cleanData({ email }),
-      );
+      const user = Users({ email });
+      const authenticatedUser = await usersRepository.authenticate({
+        email: user.email,
+      });
 
       await redis.set(
         `${KEY}:${authenticatedUser?._id}`,

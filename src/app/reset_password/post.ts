@@ -11,7 +11,6 @@ export default ({ usersRepository }: any) => {
   const resetPassword = ({ ...args }: any) => {
     try {
       const users = Users({ ...args });
-
       return usersRepository.resetPassword(cleanData(users));
     } catch (error: any | unknown) {
       throw new Error(error as string | undefined);

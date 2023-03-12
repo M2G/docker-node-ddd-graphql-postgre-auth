@@ -1,26 +1,34 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
+import { encryptPassword } from 'infra/encryption';
 // import type IUser from '../../core/IUser';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
 import { template, smtpTransport } from '../../nodemailer';
 
-export default ({ postUseCase, logger }: any) => {
-  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
+export default ({ postUseCase, logger, jwt }: any) => {
+  const typeDefs = gql(
+    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
+  );
 
   const resolvers = {
     Mutation: {
-      resetPassword: async (parent: any, args: any) => {
-        console.log('resolvers resetPassword', {
-          args,
-          parent,
-        });
-
+      resetPassword: async (
+        parent: any,
+        args: {
+          readonly input: { readonly password: string; readonly token: string };
+        },
+      ) => {
+        const { input } = args;
+        const { password, token } = input;
         try {
-          const user = postUseCase.resetPassword(args);
-
-          console.log('postUseCase.resetPassword', user);
+          jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
+          const hashPassword = encryptPassword(password);
+          const user = postUseCase.resetPassword({
+            password: hashPassword,
+            token,
+          });
 
           const htmlToSend = template({
             name: 'test',
@@ -29,17 +37,17 @@ export default ({ postUseCase, logger }: any) => {
           const mailOptions = {
             from: 'sendersemail@example.com',
             html: htmlToSend,
-            subject: 'Password Reset Confirmation',
-            to: process.env.NODE_ENV === 'test' ? user.email : 'm.pierrelouis@hotmail.fr',
+            subject: 'Password reset confirmation',
+            to:
+              process.env.NODE_ENV === 'test'
+                ? user.email
+                : 'm.pierrelouis@hotmail.fr',
           };
 
-          console.log('TEST TEST');
-
           const info = await smtpTransport.sendMail(mailOptions);
-          console.log('Successfully sent email.');
-          console.log('Message sent successfully as %s', info.messageId);
-          console.log('postUseCase resetPassword', user);
 
+          logger.info('Successfully sent email.');
+          logger.info('Message sent successfully as %s', info.messageId);
           logger.info({ ...user });
 
           const data = {

@@ -17,7 +17,6 @@ export default ({ usersRepository }: any) => {
       console.log('args args args', args);
 
       const users = Users({ ...args });
-
       return usersRepository.forgotPassword(cleanData(users));
     } catch (error: any | unknown) {
       throw new Error(error as string | undefined);

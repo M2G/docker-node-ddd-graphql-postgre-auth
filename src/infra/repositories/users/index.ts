@@ -3,6 +3,7 @@ import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
 import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
+import type { Types } from 'mongoose';
 
 export default ({ model, jwt }: any) => {
   const getAll = async (...args: any[]): Promise<any> => {
@@ -12,8 +13,6 @@ export default ({ model, jwt }: any) => {
         throw new Error('First must be positive');
       }
       let afterIndex = 0;
-
-      console.log('params params params params', args);
 
       const query: {
         $or?: (
@@ -69,12 +68,6 @@ export default ({ model, jwt }: any) => {
         endCursor = convertNodeToCursor(edges[edges.length - 1].node);
       }
 
-      console.log('afterIndex afterIndex afterIndex', {
-        afterIndex,
-        first,
-        length: data.length - 1,
-      });
-
       const hasNextPage = data.length > afterIndex + first;
       const hasPrevPage = !!afterIndex;
 
@@ -97,9 +90,6 @@ export default ({ model, jwt }: any) => {
     try {
       const [{ ...params }] = args;
       const m: IWrite<any> = model;
-
-      console.log('register register', { ...params });
-
       return m.create({ ...params });
     } catch (error) {
       throw new Error(error as string | undefined);
@@ -118,7 +108,7 @@ export default ({ model, jwt }: any) => {
       const options = {
         subject: email,
         audience: [],
-        expiresIn: 60 * 60,
+        expiresIn: '1h',
       };
       const token: string = jwt.signin(options)(payload);
 
@@ -128,34 +118,32 @@ export default ({ model, jwt }: any) => {
         reset_password_expires: Date.now() + 86400000,
       });
     } catch (error) {
-      console.log('forgotPassword error error ', error);
-
       throw new Error(error as string | undefined);
     }
   };
 
-  const resetPassword = async (...args: any[]): Promise<any> => {
+  const resetPassword = async ({
+    password,
+    token,
+  }: {
+    password: string;
+    token: string;
+  }): Promise<any> => {
     try {
-      const [{ ...params }] = args;
-
-      console.log('resetPassword resetPassword ', params);
-
-      const data: any = await findOne({
-        reset_password_token: params.token,
+      const { ...user } = await findOne({
+        reset_password_token: token,
         reset_password_expires: {
           $gt: Math.floor(Date.now() / 1000),
         },
       });
 
-      if (!data) return null;
+      if (!user) return null;
 
-      console.log('resetPassword resetPassword { ...data }', { data });
+      user.password = password;
+      user.reset_password_token = undefined;
+      user.reset_password_expires = undefined;
 
-      data.password = params.password;
-      data.reset_password_token = undefined;
-      data.reset_password_expires = undefined;
-
-      return update({ ...data });
+      return update({ ...user });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -196,13 +184,11 @@ export default ({ model, jwt }: any) => {
       const [{ _id, ...params }] = args;
       const user = await m
         .findByIdAndUpdate(
-          { _id } as any,
+          { _id } as unknown as Types.ObjectId,
           { ...params },
           { upsert: true, new: true },
         )
         .lean();
-
-      console.log('findByIdAndUpdate findByIdAndUpdate', user);
 
       return toEntity(user);
     } catch (error) {
@@ -212,17 +198,9 @@ export default ({ model, jwt }: any) => {
 
   const authenticate = async (...args: any[]): Promise<unknown | null> => {
     try {
-
-      console.log('args args args', args);
-
       const [{ email }] = args;
-
-      console.log('authenticate params params', email);
-
       const m: IRead<any> = model;
       const user = await m.findOne({ email }).lean();
-
-      console.log('authenticate authenticate authenticate', user);
       if (!user) return null;
       return toEntity(user);
     } catch (error) {

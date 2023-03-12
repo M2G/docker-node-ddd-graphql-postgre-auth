@@ -15,6 +15,8 @@ export default ({ postUseCase, logger }: any) => {
           const user: IUser = await postUseCase.forgotPassword({ email });
           logger.info({ ...user });
 
+          console.log('forgotPassword', { ...user })
+
           const htmlToSend = template({
             name: 'test',
             url: `http://localhost:3002/reset-password?token=${user.reset_password_token}`,
