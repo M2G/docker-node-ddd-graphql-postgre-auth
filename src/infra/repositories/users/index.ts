@@ -6,7 +6,18 @@ import toEntity from './transform';
 import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
 
 export default ({ model, jwt }: any) => {
-  const getAll = async (...args: any[]): Promise<any> => {
+  const getAll = async (
+    ...args: any[]
+  ): Promise<{
+    edges: { cursor: string; node: { _id: string } }[];
+    pageInfo: {
+      hasPrevPage: boolean;
+      hasNextPage: boolean;
+      endCursor: any;
+      startCursor: any;
+    };
+    totalCount: number;
+  }> => {
     try {
       const [{ filters, first, afterCursor }]: any = args;
       if (first < 0) {
@@ -108,7 +119,7 @@ export default ({ model, jwt }: any) => {
       const options = {
         subject: email,
         audience: [],
-        expiresIn: '1h',
+        expiresIn: process.env.JWT_TOKEN_EXPIRE_TIME,
       };
       const token: string = jwt.signin(options)(payload);
 
@@ -128,7 +139,7 @@ export default ({ model, jwt }: any) => {
   }: {
     password: string;
     token: string;
-  }): Promise<any> => {
+  }): Promise<unknown | null> => {
     try {
       const { ...user } = await findOne({
         reset_password_token: token,

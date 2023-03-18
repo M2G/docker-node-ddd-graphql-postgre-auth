@@ -12,7 +12,7 @@ interface IUser extends Document {
   reset_password_token?: string;
   reset_password_expires?: number;
   token?: string;
-  delete_at?: number;
+  deleted_at?: number;
   last_connected_at: number;
 }
 
