@@ -3,9 +3,22 @@ import type { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
-import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
+// import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
+
+interface IUserRepository {
+  remove: {};
+  update: {};
+  findOne: {};
+  authenticate: {};
+  resetPassword: {};
+  forgotPassword: {};
+  getAll: {};
+  register: {};
+}
 
 export default ({ model, jwt }: any) => {
+  //@TODO working but use in another context
+  /*
   const getAll = async (
     ...args: any[]
   ): Promise<{
@@ -51,6 +64,8 @@ export default ({ model, jwt }: any) => {
 
       if (afterCursor) {
         /* Extracting nodeId from afterCursor */
+
+  /*
         let nodeId = convertCursorToNodeId(afterCursor);
 
         const nodeIndex = data?.findIndex(
@@ -90,6 +105,65 @@ export default ({ model, jwt }: any) => {
           endCursor,
           hasNextPage,
           hasPrevPage,
+        },
+      };
+    } catch (error) {
+      throw new Error(error as string | undefined);
+    }
+  };*/
+
+  const getAll = async (...args: any[]) => {
+    try {
+      const [{ filters, pageSize, page }]: any = args;
+
+      console.log('args args args args', args);
+
+      const query: {
+        $or?: (
+          | { first_name: { $regex: string; $options: string } }
+          | { last_name: { $regex: string; $options: string } }
+          | { email: { $regex: string; $options: string } }
+        )[];
+        deleted_at: { $lte: number };
+      } = {
+        deleted_at: {
+          $lte: 0,
+        },
+      };
+
+      if (filters) {
+        query.$or = [
+          { first_name: { $regex: filters, $options: 'i' } },
+          { last_name: { $regex: filters, $options: 'i' } },
+          { email: { $regex: filters, $options: 'i' } },
+        ];
+      }
+
+      // size
+      // limit
+      // offset
+      const m: IRead<any> = model;
+      const users = await m
+        .find(query)
+        .skip(pageSize * (page - 1))
+        .limit(pageSize)
+        .sort({ email: 1 })
+        .lean();
+
+      console.log('users', users);
+
+      const count = await model.countDocuments();
+      const pages = Math.ceil(count / pageSize);
+      const prev = page > 1 ? page - 1 : null;
+      const next = page < pages ? page + 1 : null;
+
+      return {
+        results: (users || [])?.map((user) => toEntity(user)),
+        pageInfo: {
+          count,
+          pages,
+          prev,
+          next,
         },
       };
     } catch (error) {
