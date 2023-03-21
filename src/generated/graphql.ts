@@ -79,7 +79,7 @@ export type PageInfo = {
 export type Query = {
   __typename?: 'Query';
   getUser?: Maybe<User>;
-  users: Users;
+  users?: Maybe<Array<Users>>;
 };
 
 
@@ -89,9 +89,7 @@ export type QueryGetUserArgs = {
 
 
 export type QueryUsersArgs = {
-  afterCursor?: InputMaybe<Scalars['String']>;
   filters?: InputMaybe<Scalars['String']>;
-  first: Scalars['Int'];
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
 };
@@ -275,7 +273,7 @@ export type PageInfoResolvers<ContextType = Context, ParentType extends Resolver
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
-  users?: Resolver<ResolversTypes['Users'], ParentType, ContextType, RequireFields<QueryUsersArgs, 'first'>>;
+  users?: Resolver<Maybe<Array<ResolversTypes['Users']>>, ParentType, ContextType, Partial<QueryUsersArgs>>;
 }>;
 
 export type StatusResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Status'] = ResolversParentTypes['Status']> = ResolversObject<{

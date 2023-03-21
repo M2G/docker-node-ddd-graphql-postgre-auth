@@ -30,8 +30,9 @@ type Users {
 }
 
 type Query {
-  users(filters: String, pageSize: Int, page: Int): Users!
+  users(filters: String, pageSize: Int, page: Int): [Users!]
 }
+
 
 
 # type Edge {
@@ -57,9 +58,9 @@ enum sortOrder {
   DESC
 }
 
-type Query {
-  users(first: Int!, afterCursor: String, filters: String): Users!
-}
+# type Query {
+#   users(first: Int!, afterCursor: String, filters: String): Users!
+# }
 
 type Query {
   getUser(id: String!): User
