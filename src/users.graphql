@@ -30,7 +30,7 @@ type Users {
 }
 
 type Query {
-  users(filters: String, pageSize: Int, page: Int): [Users!]
+  users(filters: String, pageSize: Int, page: Int): Users!
 }
 
 

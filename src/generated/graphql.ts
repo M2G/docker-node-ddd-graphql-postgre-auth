@@ -16,32 +16,9 @@ export type Scalars = {
   Float: number;
 };
 
-export type Author = {
-  __typename?: 'Author';
-  name: Scalars['String'];
-};
-
-export type Book = {
-  __typename?: 'Book';
-  author: Author;
-  title: Scalars['String'];
-};
-
 export type CreateUserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
-};
-
-export type Edge = {
-  __typename?: 'Edge';
-  cursor?: Maybe<Scalars['String']>;
-  node?: Maybe<User>;
-};
-
-export type Library = {
-  __typename?: 'Library';
-  books?: Maybe<Array<Book>>;
-  branch: Scalars['String'];
 };
 
 export type Mutation = {
@@ -93,16 +70,15 @@ export type MutationUpdateUserArgs = {
 
 export type PageInfo = {
   __typename?: 'PageInfo';
-  endCursor?: Maybe<Scalars['String']>;
-  hasNextPage?: Maybe<Scalars['Boolean']>;
-  hasPrevPage?: Maybe<Scalars['Boolean']>;
-  startCursor?: Maybe<Scalars['String']>;
+  count?: Maybe<Scalars['Int']>;
+  next?: Maybe<Scalars['Int']>;
+  pages?: Maybe<Scalars['Int']>;
+  prev?: Maybe<Scalars['Int']>;
 };
 
 export type Query = {
   __typename?: 'Query';
   getUser?: Maybe<User>;
-  libraries?: Maybe<Array<Maybe<Library>>>;
   users: Users;
 };
 
@@ -116,6 +92,8 @@ export type QueryUsersArgs = {
   afterCursor?: InputMaybe<Scalars['String']>;
   filters?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
 };
 
 export type ResetPasswordInput = {
@@ -163,9 +141,8 @@ export type User = {
 
 export type Users = {
   __typename?: 'Users';
-  edges?: Maybe<Array<Maybe<Edge>>>;
   pageInfo?: Maybe<PageInfo>;
-  totalCount?: Maybe<Scalars['Int']>;
+  results?: Maybe<Array<Maybe<User>>>;
 };
 
 export enum SortOrder {
@@ -243,13 +220,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Author: ResolverTypeWrapper<Author>;
-  Book: ResolverTypeWrapper<Book>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateUserInput: CreateUserInput;
-  Edge: ResolverTypeWrapper<Edge>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Library: ResolverTypeWrapper<Library>;
   Mutation: ResolverTypeWrapper<{}>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
@@ -266,13 +239,9 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Author: Author;
-  Book: Book;
   Boolean: Scalars['Boolean'];
   CreateUserInput: CreateUserInput;
-  Edge: Edge;
   Int: Scalars['Int'];
-  Library: Library;
   Mutation: {};
   PageInfo: PageInfo;
   Query: {};
@@ -286,29 +255,6 @@ export type ResolversParentTypes = ResolversObject<{
   Users: Users;
 }>;
 
-export type AuthorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = ResolversObject<{
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type BookResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['Author'], ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type EdgeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Edge'] = ResolversParentTypes['Edge']> = ResolversObject<{
-  cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type LibraryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Library'] = ResolversParentTypes['Library']> = ResolversObject<{
-  books?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType>;
-  branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
@@ -320,16 +266,15 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 }>;
 
 export type PageInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
-  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  hasPrevPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  next?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  pages?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  prev?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
-  libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
   users?: Resolver<ResolversTypes['Users'], ParentType, ContextType, RequireFields<QueryUsersArgs, 'first'>>;
 }>;
 
@@ -355,17 +300,12 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 }>;
 
 export type UsersResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Users'] = ResolversParentTypes['Users']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['Edge']>>>, ParentType, ContextType>;
   pageInfo?: Resolver<Maybe<ResolversTypes['PageInfo']>, ParentType, ContextType>;
-  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  results?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
-  Author?: AuthorResolvers<ContextType>;
-  Book?: BookResolvers<ContextType>;
-  Edge?: EdgeResolvers<ContextType>;
-  Library?: LibraryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
