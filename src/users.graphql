@@ -33,8 +33,6 @@ type Query {
   users(filters: String, pageSize: Int, page: Int): [Users!]
 }
 
-
-
 # type Edge {
 #    node: User
 #    cursor: String
