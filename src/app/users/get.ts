@@ -7,9 +7,6 @@ const TTL = 1 * 60;
 export default ({ usersRepository, redis }: any) => {
   const all = async ({ ...arg }: ArrayLike<unknown> | Record<string, unknown>) => {
     try {
-
-      console.log('::::::', arg);
-
       if (arg && Object.values(arg).filter(Boolean).length) {
         return usersRepository.getAll({ ...arg });
       }

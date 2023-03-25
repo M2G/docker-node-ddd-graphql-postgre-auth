@@ -31,7 +31,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
-      createUser: async (parent: any, args: any) => {
+      createUser: async (_: any, args: any) => {
         const { input } = args;
         const { ...params } = input as IUser;
 
@@ -65,7 +65,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
           throw new Error(error as string | undefined);
         }
       },
-      deleteUser: async (parent: any, args: any) => {
+      deleteUser: async (_: any, args: any) => {
         const { id } = args;
 
         console.log('deleteUser', id);
@@ -109,7 +109,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
       },
     },
     Query: {
-      getUser: async (parent: any, args: any) => {
+      getUser: async (_: any, args: any) => {
         console.log('args args args', args);
 
         const { id } = args;
@@ -126,7 +126,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
           throw new Error(error as string | undefined);
         }
       },
-      users: async (parent: any, { ...args }: any) => {
+      users: async (_: any, { ...args }: any) => {
         try {
           const data = await getUseCase.all({ ...args });
           logger.info({ ...data });

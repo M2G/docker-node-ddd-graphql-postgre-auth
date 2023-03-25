@@ -5,17 +5,6 @@ import IUser from 'core/IUser';
 import toEntity from './transform';
 // import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
 
-interface IUserRepository {
-  remove: {};
-  update: {};
-  findOne: {};
-  authenticate: {};
-  resetPassword: {};
-  forgotPassword: {};
-  getAll: {};
-  register: {};
-}
-
 export default ({ model, jwt }: any) => {
   //@TODO working but use in another context
   /*
