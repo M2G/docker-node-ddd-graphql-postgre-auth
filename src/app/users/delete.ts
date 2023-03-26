@@ -7,9 +7,9 @@ import Users from 'domain/users';
  * function for remove user.
  */
 export default ({ usersRepository }: any) => {
-  const remove = ({ id }: { readonly id: string }) => {
+  const remove = ({ _id }: { readonly _id: string }) => {
     try {
-      const users = Users({ _id: id });
+      const users = Users({ _id });
 
       return usersRepository.remove(users);
     } catch (error: unknown) {

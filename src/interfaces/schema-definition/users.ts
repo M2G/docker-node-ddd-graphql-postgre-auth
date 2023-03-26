@@ -73,7 +73,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
         try {
           const data = await deleteUseCase.remove({ _id: id });
 
-          console.log('data', data);
+          console.log('deleteUser deleteUser deleteUser deleteUser', data);
 
           logger.info({ ...data });
           return data;

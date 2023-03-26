@@ -237,12 +237,11 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const remove = async (...args: any): Promise<unknown | null> => {
+  const remove = async ({ _id }: { _id: string }): Promise<unknown | null> => {
     try {
       const m: IWrite<any> = model;
 
-      const [{ ...params }] = args;
-      const user = await m.findByIdAndDelete({ ...params }).lean();
+      const user = await m.findByIdAndDelete({ _id }).lean();
 
       if (!user) return null;
 
