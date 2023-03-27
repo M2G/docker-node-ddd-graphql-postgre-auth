@@ -27,8 +27,17 @@ const data = [
   },
 ];
 */
-export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, postUseCase }: any) => {
-  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
+export default ({
+  getUseCase,
+  getOneUseCase,
+  deleteUseCase,
+  logger,
+  putUseCase,
+  postUseCase,
+}: any) => {
+  const typeDefs = gql(
+    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
+  );
   const resolvers = {
     Mutation: {
       createUser: async (_: any, args: any) => {
@@ -59,22 +68,14 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
 
           return user;
         } catch (error: unknown) {
-          console.log('error error', error);
-
           logger.error(error);
           throw new Error(error as string | undefined);
         }
       },
       deleteUser: async (_: any, args: any) => {
         const { id } = args;
-
-        console.log('deleteUser', id);
-
         try {
           const data = await deleteUseCase.remove({ _id: id });
-
-          console.log('deleteUser deleteUser deleteUser deleteUser', data);
-
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {
@@ -83,17 +84,20 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
         }
       },
       updateUser: async (
-        parent: any,
+        _: any,
         args: {
           readonly input: any;
           readonly id: string;
         },
       ) => {
         const { input, id } = args;
-        const { ...params } = input;
+        const { email, first_name, last_name, username } = input;
         try {
-          const updateValue: IUser = {
-            ...params,
+          const updateValue = {
+            email,
+            first_name,
+            last_name,
+            username,
             modified_at: Math.floor(Date.now() / 1000),
           };
           const data = await putUseCase.update({ _id: id, ...updateValue });

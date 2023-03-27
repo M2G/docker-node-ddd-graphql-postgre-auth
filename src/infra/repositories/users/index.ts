@@ -252,6 +252,9 @@ export default ({ model, jwt }: any) => {
   };
 
   const update = async (...args: any) => {
+
+    console.log('------------------------------', args)
+
     try {
       const m: IWrite<any> = model;
       const [{ _id, ...params }] = args;
