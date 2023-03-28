@@ -8,9 +8,6 @@ import { cleanData } from 'interfaces/http/utils';
  * function for forgot password user.
  */
 export default ({ usersRepository }: any) => {
-
-  console.log('usersRepository');
-
   const forgotPassword = ({ email }: { readonly email: string }) => {
     try {
       const users = Users({ email });

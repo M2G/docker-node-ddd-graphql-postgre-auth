@@ -8,7 +8,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
-      signup: async (parent: any, args: any) => {
+      signup: async (_: any, args: any) => {
         const { input } = args;
         const { email, password } = input as IUser;
 
@@ -21,8 +21,6 @@ export default ({ postUseCase, jwt, logger }: any) => {
             last_connected_at: null,
             password: hasPassword,
           });
-
-          console.log('data data data data', data);
 
           logger.info({ data });
 

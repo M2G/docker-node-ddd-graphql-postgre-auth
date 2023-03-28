@@ -2,14 +2,12 @@
  * this file will hold all the get use-case for user domain
  */
 import Users from 'domain/users';
-import type IUser from 'core/IUser';
 
 /**
  * function for create user.
  */
 export default ({ usersRepository }) => {
   const register = ({
-    input: {
       email,
       password,
       first_name,
@@ -18,9 +16,16 @@ export default ({ usersRepository }) => {
       created_at,
       deleted_at,
       last_connected_at,
-    },
-  }: {
-    readonly input: IUser;
+    }: {
+    readonly _id: string;
+    readonly email: string;
+    readonly password: string;
+    readonly first_name: string;
+    readonly last_name: string;
+    readonly username: string;
+    readonly created_at: number;
+    readonly deleted_at: number;
+    readonly last_connected_at: number;
   }) => {
     try {
       const users = Users({
