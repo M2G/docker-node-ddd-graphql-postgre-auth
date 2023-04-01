@@ -12,7 +12,7 @@ export default ({ usersRepository }: any) => {
     try {
       const users = Users({ ...args });
       return usersRepository.register(users);
-    } catch (error: any | unknown) {
+    } catch (error) {
       throw new Error(error as string | undefined);
     }
   };

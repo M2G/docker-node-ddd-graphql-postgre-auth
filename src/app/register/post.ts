@@ -2,21 +2,37 @@
  * this file will hold all the get use-case for user domain
  */
 import Users from 'domain/users';
+import IUser from 'core/IUser';
 
 /**
  * function for create user.
  */
-export default ({ usersRepository }) => {
+interface IUsersRepository {
+  usersRepository: {
+    register: (users: IUser) => {
+      email: any;
+      password: any;
+      first_name: any;
+      last_nameany: any;
+      username: any;
+      created_at: any;
+      deleted_at: any;
+      last_connected_at: any;
+    };
+  };
+}
+
+export default ({ usersRepository }: IUsersRepository) => {
   const register = ({
-      email,
-      password,
-      first_name,
-      last_name,
-      username,
-      created_at,
-      deleted_at,
-      last_connected_at,
-    }: {
+    email,
+    password,
+    first_name,
+    last_name,
+    username,
+    created_at,
+    deleted_at,
+    last_connected_at,
+  }: {
     readonly _id: string;
     readonly email: string;
     readonly password: string;
@@ -38,8 +54,8 @@ export default ({ usersRepository }) => {
         password,
         username,
       });
-      return usersRepository.register(users);
-    } catch (error: any | unknown) {
+      return usersRepository.register(users as unknown as IUser);
+    } catch (error) {
       throw new Error(error as string | undefined);
     }
   };

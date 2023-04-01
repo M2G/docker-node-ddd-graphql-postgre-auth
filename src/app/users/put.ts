@@ -39,7 +39,7 @@ export default ({ usersRepository }: any) => {
       });
 
       return usersRepository.update(users);
-    } catch (error: unknown) {
+    } catch (error) {
       throw new Error(error as string | undefined);
     }
   };

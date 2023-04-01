@@ -5,7 +5,7 @@ const TTL = 1 * 60;
  * function for get users.
  */
 export default ({ usersRepository, redis }: any) => {
-  const all = async ({ ...arg }: ArrayLike<unknown> | Record<string, unknown>) => {
+  const all = async ({ ...arg }) => {
     try {
       if (arg && Object.values(arg).filter(Boolean).length) {
         return usersRepository.getAll({ ...arg });
@@ -20,7 +20,7 @@ export default ({ usersRepository, redis }: any) => {
       await redis.set(KEY, JSON.stringify(userList), TTL);
 
       return userList;
-    } catch (error: unknown) {
+    } catch (error) {
       throw new Error(error as string | undefined);
     }
   };
