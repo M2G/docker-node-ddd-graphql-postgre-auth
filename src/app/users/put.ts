@@ -2,11 +2,13 @@
  * this file will hold all the get use-case for user domain
  */
 import Users from 'domain/users';
+import type IUsersRepository from 'types/IUsersRepository';
+import IUser from 'core/IUser';
 
 /**
  * function for update user.
  */
-export default ({ usersRepository }: any) => {
+export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
   const update = ({
     _id,
     email,
@@ -38,7 +40,7 @@ export default ({ usersRepository }: any) => {
         username,
       });
 
-      return usersRepository.update(users);
+      return usersRepository.update(users as IUser);
     } catch (error) {
       throw new Error(error as string | undefined);
     }

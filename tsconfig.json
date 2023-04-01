@@ -36,14 +36,15 @@
     "baseUrl": ".",
     "paths": {
       "./*": ["./src"],
-      "container/*": ["./src/container"],
       "app/*": ["./src/app/*"],
       "core/*": ["./src/core/*"],
       "domain/*": ["./src/domain/*"],
+      "container/*": ["./src/container"],
+      "generated/*": ["./src/generated/*"],
       "infra/*": ["./src/infra/*"],
       "interfaces/*": ["./src/interfaces/*"],
+      "types/*": ["./src/types/*"],
       "schema/*": ["./src/interfaces/schema-definition/*"],
-      "generated/*": ["./src/generated/*"]
     }
   },
   "include": ["src/**/*"],

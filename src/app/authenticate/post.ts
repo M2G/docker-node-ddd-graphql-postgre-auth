@@ -2,6 +2,7 @@
  * this file will hold all the get use-case for user domain
  */
 import Users from 'domain/users';
+import type IUsersRepository from 'types/IUsersRepository';
 
 const KEY = 'LAST_CONNECTED_AT';
 const TTL = 60 * 60;
@@ -9,15 +10,23 @@ const TTL = 60 * 60;
 /**
  * function for authenticate user.
  */
-export default ({ redis, usersRepository }: any) => {
-  const authenticate = async ({ email }: { readonly email: string }) => {
+export default ({
+  redis,
+  usersRepository,
+}: {
+  redis: {
+    set: (key: string, value: any, ttlInSeconds?: number) => boolean;
+  };
+  usersRepository: IUsersRepository;
+}) => {
+  const authenticate = ({ email }: { readonly email: string }) => {
     try {
       const user = Users({ email });
-      const authenticatedUser = await usersRepository.authenticate({
-        email: user.email,
+      const authenticatedUser = usersRepository.authenticate({
+        email: (user as any).email,
       });
 
-      await redis.set(
+      redis.set(
         `${KEY}:${authenticatedUser?._id}`,
         JSON.stringify({
           _id: authenticatedUser?._id,
@@ -27,7 +36,7 @@ export default ({ redis, usersRepository }: any) => {
       );
 
       return authenticatedUser;
-    } catch (error: any | unknown) {
+    } catch (error) {
       throw new Error(error as string | undefined);
     }
   };
