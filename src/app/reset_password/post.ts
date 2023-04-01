@@ -3,7 +3,7 @@
  */
 import Users from 'domain/users';
 import { cleanData } from 'interfaces/http/utils';
-import IUsersRepository from 'types/IUsersRepository';
+import type IUsersRepository from 'types/IUsersRepository';
 
 /**
  * function for reset password user.
