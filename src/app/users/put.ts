@@ -3,7 +3,7 @@
  */
 import Users from 'domain/users';
 import type IUsersRepository from 'types/IUsersRepository';
-import IUser from 'core/IUser';
+import type IUser from 'core/IUser';
 
 /**
  * function for update user.
