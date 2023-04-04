@@ -117,6 +117,7 @@
     "passport-http-bearer": "^1.0.1",
     "prettier": "^2.8.4",
     "redis": "^3.1.2",
+    "sequelize": "^6.30.0",
     "supertest": "^6.3.3",
     "tcomb": "^3.2.29",
     "ts-jest": "^29.0.5",

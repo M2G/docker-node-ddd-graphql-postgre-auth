@@ -1,5 +1,5 @@
 #
-# Docker NodeJS Typescript Starter
+# Docker NodeJS
 # Example Docker Compose file
 #
 
@@ -7,13 +7,12 @@
 # https://docs.docker.com/compose/compose-file/
 
 # Docker compose file version
-version: "3.8"
+version: "3.7"
 
 services:
   app:
     build: .
     working_dir: /app
-    restart: unless-stopped
     env_file:
       - .env
     ports:
@@ -23,10 +22,8 @@ services:
       - /app/node_modules/bcrypt
     command: npm run watch
     depends_on:
-      - db
+      - postgres
       - redis
-    stdin_open: true
-#    tty: true
 
   redis:
     image: redis:alpine
@@ -36,24 +33,33 @@ services:
     volumes:
       - ./redis-data:/data
 
-  db:
-    image: mongo:6.0.2
-    container_name: mongodb
+  postgres:
+    image: postgres:13.2
+    restart: always
+    environment:
+      - POSTGRES_DB=test_db2
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - DB_SCHEMA=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=postgres
+      - SECRET=SECRET
+    logging:
+      options:
+        max-size: 10m
+        max-file: '10' # good
     ports:
       - ${HOST_PORT}:${CONTAINER_PORT}
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
-    env_file:
-      - .env
-    restart: always
-    command: mongod --auth --setParameter diagnosticDataCollectionEnabled=false
     volumes:
-      #add persistent storage
-      - db:/data/db
-      #add path to startup script
-      - ./entrypoint/:/docker-entrypoint-initdb.d/
-
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      # copy the sql script to fill tables
+      - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_NICE
 volumes:
-  db:
+  postgres-data:

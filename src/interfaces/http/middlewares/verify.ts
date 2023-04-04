@@ -16,10 +16,12 @@ export default ({ jwt }: { jwt: any }) => {
     authorization: ({ req }: { req: Request }) => {
       const {
         headers: { authorization },
-        body: { query },
+        body: { query, operationName },
       } = req;
 
-      if (!query?.includes('users')) return null;
+      console.log('authorization query query query query query', operationName)
+
+      if (!query?.includes('GetUsers')) return null;
 
       const extractToken = authorization?.startsWith('Bearer ');
 
