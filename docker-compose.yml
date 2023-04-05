@@ -7,7 +7,7 @@
 # https://docs.docker.com/compose/compose-file/
 
 # Docker compose file version
-version: "3.7"
+version: "3.8"
 
 services:
   app:
@@ -34,10 +34,10 @@ services:
       - ./redis-data:/data
 
   postgres:
-    image: postgres:13.2
+    image: postgres:15.2-alpine
     restart: always
     environment:
-      - POSTGRES_DB=test_db2
+      - POSTGRES_DB=test_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - DB_SCHEMA=postgres
