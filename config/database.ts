@@ -1,31 +1,37 @@
 export default {
   development: {
-    host: process.env.CONTAINER_PORT || 27017,
-    port: process.env.PORT || 8080,
-    user: process.env.MONGO_INITDB_ROOT_USERNAME,
-    password: process.env.MONGO_INITDB_ROOT_PASSWORD,
-    database: process.env.MONGO_INITDB_DATABASE,
+    version: 'v1',
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
   },
   staging: {
-    host: process.env.CONTAINER_PORT || 27017,
-    port: process.env.PORT || 8080,
-    user: process.env.MONGO_INITDB_ROOT_USERNAME,
-    password: process.env.MONGO_INITDB_ROOT_PASSWORD,
-    database: process.env.MONGO_INITDB_DATABASE,
+    version: 'v1',
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true
+      }
+    }
   },
   production: {
-    host: process.env.CONTAINER_PORT || 27017,
-    port: process.env.PORT || 8080,
-    user: process.env.MONGO_INITDB_ROOT_USERNAME,
-    password: process.env.MONGO_INITDB_ROOT_PASSWORD,
-    database: process.env.MONGO_INITDB_DATABASE,
+    version: 'v1',
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true
+      }
+    }
   },
   test: {
-    host: process.env.CONTAINER_PORT || 27017,
-    port: process.env.PORT || 8080,
-    user: process.env.MONGO_INITDB_ROOT_USERNAME,
-    password: process.env.MONGO_INITDB_ROOT_PASSWORD,
-    database: process.env.MONGO_INITDB_DATABASE,
-  },
+    version: 'v1',
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    logging: console.log,
+  }
 };
-

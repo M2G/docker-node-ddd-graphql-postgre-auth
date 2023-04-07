@@ -7,7 +7,7 @@ export default {
     maxFiles: 2,
     colorize: false
   },
-  authSecret: process.env.SECRET,
+  authSecret: process.env.SECRET || 'secret',
   authSession: {
     session: false
   }

@@ -1,4 +1,5 @@
 /*eslint-disable*/
+import { QueryTypes, UniqueConstraintError } from 'sequelize';
 import type { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';

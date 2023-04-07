@@ -1,12 +1,11 @@
-/* eslint-disable */
-import mongoose from '../mongoose';
+import sequelize from '../sequelize';
 
-export default ({ logger, config }: any) => {
+export default ({ logger, config }) => {
   const { db = null } = config;
   if (!db) {
     logger.error('Database config file log not found, disabling database.');
     return false;
   }
 
-  return mongoose({ config, basePath: __dirname, logger });
+  return sequelize({ config, basePath: __dirname });
 };

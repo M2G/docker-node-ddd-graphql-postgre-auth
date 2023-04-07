@@ -115,6 +115,7 @@
     "nodemailer-mailgun-transport": "^2.1.5",
     "passport": "^0.6.0",
     "passport-http-bearer": "^1.0.1",
+    "pg": "^8.10.0",
     "prettier": "^2.8.4",
     "redis": "^3.1.2",
     "sequelize": "^6.30.0",
