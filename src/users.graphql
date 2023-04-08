@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type User {
-  _id: String
+  id: Int
   email: String
   password: String
   first_name: String

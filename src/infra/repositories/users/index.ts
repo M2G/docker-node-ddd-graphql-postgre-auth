@@ -104,11 +104,11 @@ export default ({ model, jwt }: any) => {
 
   const getAll = async (...args: any[]) => {
     try {
-      const [{ filters, pageSize, page }]: any = args;
+      const [{ filters, pageSize, page, attributes }]: any = args;
 
       console.log('args args args args', args);
 
-      const query: {
+      /* const query: {
         $or?: (
           | { first_name: { $regex: string; $options: string } }
           | { last_name: { $regex: string; $options: string } }
@@ -127,11 +127,13 @@ export default ({ model, jwt }: any) => {
           { last_name: { $regex: filters, $options: 'i' } },
           { email: { $regex: filters, $options: 'i' } },
         ];
-      }
+      }*/
 
       // size
       // limit
       // offset
+
+      /*
       const m: IRead<any> = model;
       const users = await m
         .find(query)
@@ -151,6 +153,33 @@ export default ({ model, jwt }: any) => {
         results: (users || [])?.map((user) => toEntity(user)),
         pageInfo: {
           count,
+          pages,
+          prev,
+          next,
+        },
+      };*/
+
+      const [total, data] = await Promise.all([
+        model.count(),
+        model.findAndCountAll({
+          attributes,
+          offset: pageSize * (page - 1),
+          limit: pageSize,
+        }),
+      ]);
+
+      const count = await model.count();
+
+      const pages = Math.ceil(count / pageSize);
+      const prev = page > 1 ? page - 1 : null;
+      const next = page < pages ? page + 1 : null;
+
+      return {
+        results: (data.rows || [])?.map((data: { dataValues: any }) =>
+          toEntity({ ...data.dataValues }),
+        ),
+        pageInfo: {
+          count: total,
           pages,
           prev,
           next,
@@ -253,8 +282,7 @@ export default ({ model, jwt }: any) => {
   };
 
   const update = async (...args: any) => {
-
-    console.log('------------------------------', args)
+    console.log('------------------------------', args);
 
     try {
       const m: IWrite<any> = model;

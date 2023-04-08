@@ -1,11 +1,11 @@
 import t from 'tcomb';
 
 const Users = t.struct({
-  _id: t.maybe(t.Any),
   created_at: t.maybe(t.Number),
   deleted_at: t.maybe(t.Number),
   email: t.maybe(t.String),
   first_name: t.maybe(t.String),
+  id: t.maybe(t.Number),
   last_connected_at: t.maybe(t.Number),
   last_name: t.maybe(t.String),
   modified_at: t.maybe(t.Number),
