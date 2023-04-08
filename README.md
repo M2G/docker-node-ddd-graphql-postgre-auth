@@ -46,7 +46,6 @@ $ npm run test
 - [TypeScript](https://www.typescriptlang.org/) - TypeScript is a superset of JavaScript that compiles to clean JavaScript output.
 - [Express](https://expressjs.com/) - Node Framweork.
 - [Awilix](https://github.com/jeffijoe/awilix) - dependency resolution support powered by `Proxy`.
-- [Nodemon](https://nodemon.io/) - Use for development file reload.
 - [Tcomb](https://github.com/gcanti/tcomb) - s a library for Node.js and the browser which allows you to check the types of JavaScript values at runtime with a simple and concise syntax.
 - [CORS](https://github.com/expressjs/cors) - a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
 - [Body-parser](https://github.com/expressjs/body-parser) - Node.js body parsing middleware.
