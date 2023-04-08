@@ -5,7 +5,7 @@
 * Docker
 * NodeJS (+14)
 * Typescript
-* MongoDB
+* PostgreSQL
 
 ## Getting Started
 
@@ -52,7 +52,7 @@ $ npm run test
 - [Body-parser](https://github.com/expressjs/body-parser) - Node.js body parsing middleware.
 - [Http-status](https://github.com/adaltas/node-http-status) - Utility to interact with HTTP status code.
 - [Winston](https://github.com/winstonjs/winston) - A multi-transport async logging library for node.js.
-- [Sequelize](https://mongoosejs.com/) - mongoDB object modeling designed to work in an asynchronous environment.
+- [Sequelize](https://sequelize.org/) - Sequelize is a modern TypeScript and Node.js ORM for Postgres and more.
 - [Faker](https://github.com/marak/Faker.js/) - generate massive amounts of fake data in the browser and node.js
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Lib to help you hash passwords
 - [Passport](https://github.com/jaredhanson/passport) - is Express-compatible authentication middleware for Node.js.
