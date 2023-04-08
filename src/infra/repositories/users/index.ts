@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import { QueryTypes, UniqueConstraintError } from 'sequelize';
+import { QueryTypes, UniqueConstraintError, Op } from 'sequelize';
 import type { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
@@ -159,9 +159,39 @@ export default ({ model, jwt }: any) => {
         },
       };*/
 
+      const query: {
+        $or?: (
+          | { first_name: { $regex: string; $options: string } }
+          | { last_name: { $regex: string; $options: string } }
+          | { email: { $regex: string; $options: string } }
+        )[];
+        where: {
+          [Op.or]: [{ deleted_at: number }];
+        };
+      } = {
+        where: {
+          [Op.or]: [{ deleted_at: 0 }],
+        },
+      };
+
+      if (filters) {
+        query.$or = [
+          { first_name: { $regex: filters, $options: 'i' } },
+          { last_name: { $regex: filters, $options: 'i' } },
+          { email: { $regex: filters, $options: 'i' } },
+        ];
+      }
+
       const [total, data] = await Promise.all([
         model.count(),
         model.findAndCountAll({
+          where: {
+            [Op.or]: [
+              { first_name: 'B974687AA2' },
+              { last_name: 'B974687AA2' },
+              { email: 'B974687AA2' },
+            ],
+          },
           attributes,
           offset: pageSize * (page - 1),
           limit: pageSize,
