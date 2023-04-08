@@ -1,5 +1,5 @@
-# Docker, NodeJS, Typescript, DDD, MongoDB, Auth
-> RESTful api with Domain Driven Design
+# Docker, NodeJS, Typescript, DDD, PostgreSQL, Auth
+> GRAPHQL api with Domain Driven Design
 
 ## Features
 * Docker
