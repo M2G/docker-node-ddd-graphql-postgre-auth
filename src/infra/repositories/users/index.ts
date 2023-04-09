@@ -4,6 +4,7 @@ import type { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
+import * as console from 'console';
 // import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
 
 export default ({ model, jwt }: any) => {
@@ -102,11 +103,24 @@ export default ({ model, jwt }: any) => {
     }
   };*/
 
-  const getAll = async (...args: any[]) => {
+  const getAll = async ({
+    filters,
+    pageSize,
+    page,
+    attributes,
+  }: {
+    filters: string;
+    pageSize: number;
+    page: number;
+    attributes: string[] | undefined;
+  }): Promise<IUser[]> => {
     try {
-      const [{ filters, pageSize, page, attributes }]: any = args;
-
-      console.log('args args args args', args);
+      console.log('args args args args', {
+        filters,
+        pageSize,
+        page,
+        attributes,
+      });
 
       /* const query: {
         $or?: (
@@ -160,13 +174,15 @@ export default ({ model, jwt }: any) => {
       };*/
 
       const query: {
-        $or?: (
-          | { first_name: { $regex: string; $options: string } }
-          | { last_name: { $regex: string; $options: string } }
-          | { email: { $regex: string; $options: string } }
-        )[];
         where: {
-          [Op.or]: [{ deleted_at: number }];
+          [Op.or]: [
+            {
+              deleted_at: number;
+              first_name?: string;
+              last_name?: string;
+              email?: string;
+            },
+          ];
         };
       } = {
         where: {
@@ -175,37 +191,33 @@ export default ({ model, jwt }: any) => {
       };
 
       if (filters) {
-        query.$or = [
-          { first_name: { $regex: filters, $options: 'i' } },
-          { last_name: { $regex: filters, $options: 'i' } },
-          { email: { $regex: filters, $options: 'i' } },
-        ];
+        query.where = {
+          [Op.or]: query.where[Op.or].concat([
+            { first_name: filters },
+            { last_name: filters },
+            { email: filters },
+          ]),
+        };
       }
+
+      console.log('query', query);
 
       const [total, data] = await Promise.all([
         model.count(),
         model.findAndCountAll({
-          where: {
-            [Op.or]: [
-              { first_name: 'B974687AA2' },
-              { last_name: 'B974687AA2' },
-              { email: 'B974687AA2' },
-            ],
-          },
+          ...query,
           attributes,
           offset: pageSize * (page - 1),
           limit: pageSize,
         }),
       ]);
 
-      const count = await model.count();
-
-      const pages = Math.ceil(count / pageSize);
+      const pages = Math.ceil(total / pageSize);
       const prev = page > 1 ? page - 1 : null;
       const next = page < pages ? page + 1 : null;
 
       return {
-        results: (data.rows || [])?.map((data: { dataValues: any }) =>
+        results: (data.rows || [])?.map((data: { dataValues }) =>
           toEntity({ ...data.dataValues }),
         ),
         pageInfo: {
@@ -220,13 +232,31 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const register = async (...args: any[]): Promise<any> => {
+  const register = async ({
+    created_at,
+    email,
+    password,
+  }: {
+    created_at: number;
+    email: string;
+    password: string;
+  }): Promise<any> => {
+
     try {
-      const [{ ...params }] = args;
-      const m: IWrite<any> = model;
-      return m.create({ ...params });
+      const { dataValues } = model.create({ email, password });
+
+      return toEntity({
+        id: dataValues.id,
+        email: dataValues.email,
+        password: dataValues.password,
+        created_at: dataValues.created_at,
+      });
     } catch (error) {
-      throw new Error(error as string | undefined);
+      if (error instanceof UniqueConstraintError) {
+        throw new Error('Duplicate error');
+      }
+
+      throw new Error(error);
     }
   };
 
