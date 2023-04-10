@@ -324,16 +324,9 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const remove = async ({ id }: { id: number }): Promise<unknown | null> => {
+  const remove = ({ id }: { id: number }): number => {
     try {
-      console.log('remove', id);
-     /* const m: IWrite<any> = model;
-
-      const user = await m.findByIdAndDelete({ _id }).lean();
-
-      if (!user) return null;
-
-      return toEntity(user);*/
+      return model.destroy({ where: { id: id } });
     } catch (error) {
       throw new Error(error as string | undefined);
     }

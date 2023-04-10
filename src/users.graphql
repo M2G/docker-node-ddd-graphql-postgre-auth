@@ -77,7 +77,7 @@ type Mutation {
 }
 
 type Mutation {
-  deleteUser(id: String!): User
+  deleteUser(id: Int!): Status!
 }
 
 type Mutation {

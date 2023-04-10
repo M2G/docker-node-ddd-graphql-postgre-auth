@@ -76,7 +76,7 @@ export default ({
       deleteUser: async (_: any, args: any) => {
         const { id } = args;
         try {
-          const data = await deleteUseCase.remove({ _id: id });
+          const data = await deleteUseCase.remove({ id });
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {
