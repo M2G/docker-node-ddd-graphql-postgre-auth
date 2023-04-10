@@ -4,66 +4,61 @@ const table = 'users';
 
 // eslint-disable-next-line func-names
 module.exports = function (
-  /** @type {{ define: (arg0: string, arg1: { id: { type: any; autoIncrement: boolean; primaryKey: boolean; }; username: { type: any; allowNull: boolean; }; email: { type: any; allowNull: boolean; }; first_name: { type: any; allowNull: boolean; }; last_name: { type: any; allowNull: boolean; }; password: { type: any; allowNull: boolean; }; created_at: { type: any; allowNull: boolean; }; modified_at: { type: any; allowNull: boolean; }; reset_password_token: { type: any; allowNull: boolean; }; reset_password_expires: { type: any; allowNull: boolean; }; deleted_at: { type: any; allowNull: boolean; }; last_connected_at: { type: any; allowNull: boolean; }; }, arg2: { hooks: { beforeCreate: (user: { password_hash: string; dataValues: { password_hash: any; }; }) => void; }; freezeTableName: boolean; timestamps: boolean; classMethods: { associate(): void; }; }) => any; }} */ sequelize,
+  /** @type {{ define: (arg0: string, arg1: { created_at: { allowNull: boolean; type: any; }; deleted_at: { allowNull: boolean; type: any; }; email: { allowNull: boolean; type: any; unique: boolean; }; first_name: { allowNull: boolean; type: any; }; id: { autoIncrement: boolean; primaryKey: boolean; type: any; }; last_connected_at: { allowNull: boolean; type: any; }; last_name: { allowNull: boolean; type: any; }; modified_at: { allowNull: boolean; type: any; }; password: { allowNull: boolean; type: any; }; username: { allowNull: boolean; type: any; }; reset_password_expires: { allowNull: boolean; type: any; }; reset_password_token: { allowNull: boolean; type: any; }; }, arg2: { hooks: { beforeCreate: (user: { password_hash: string; dataValues: { password_hash: any; }; }) => void; }; freezeTableName: boolean; timestamps: boolean; classMethods: { associate(): void; }; }) => any; }} */ sequelize,
   /** @type {{ INTEGER: any; STRING: any; }} */ DataTypes,
 ) {
   const User = sequelize.define(
     table,
     {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-
-      first_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      last_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       created_at: {
+        allowNull: false,
         type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      modified_at: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      reset_password_token: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      reset_password_expires: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       deleted_at: {
-        type: DataTypes.STRING,
         allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      email: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      first_name: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      id: {
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
       },
       last_connected_at: {
+        allowNull: true,
         type: DataTypes.STRING,
+      },
+      last_name: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      modified_at: {
+        allowNull: true,
+        type: DataTypes.INTEGER,
+      },
+      password: {
         allowNull: false,
+        type: DataTypes.STRING,
+      },
+      username: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      reset_password_expires: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      reset_password_token: {
+        allowNull: true,
+        type: DataTypes.STRING,
       },
     },
     {
@@ -73,7 +68,7 @@ module.exports = function (
         ) => {
           console.log('beforeCreate dataValues', user);
 
-          user.password_hash = encryptPassword(user.dataValues.password_hash);
+          user.password = encryptPassword(user.dataValues.password);
         },
       },
       freezeTableName: true,

@@ -30,6 +30,9 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
         password,
         username,
       });
+
+      console.log("users", users);
+
       return usersRepository.register(users as IUser);
     } catch (error) {
       throw new Error(error as string | undefined);

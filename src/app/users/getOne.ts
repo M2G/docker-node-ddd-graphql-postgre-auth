@@ -6,11 +6,12 @@ import type IUsersRepository from 'types/IUsersRepository';
  * function for get one user.
  */
 export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
-  const getOne = ({ id }: { readonly id: string }) => {
+  const getOne = ({ id }: { readonly id: number }) => {
     try {
-      const users = Users({ _id: id });
-
-      return usersRepository.findOne(cleanData(users));
+      console.log('getOne getOne', id)
+      const user = Users({ id });
+      console.log('user user', user)
+      return usersRepository.findOne(cleanData(user));
     } catch (error: unknown) {
       throw new Error(error as string | undefined);
     }

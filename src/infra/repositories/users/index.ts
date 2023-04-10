@@ -4,7 +4,7 @@ import type { Types } from 'mongoose';
 import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
-import * as console from 'console';
+import { comparePassword } from '../../encryption';
 // import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
 
 export default ({ model, jwt }: any) => {
@@ -217,8 +217,8 @@ export default ({ model, jwt }: any) => {
       const next = page < pages ? page + 1 : null;
 
       return {
-        results: (data.rows || [])?.map((data: { dataValues }) =>
-          toEntity({ ...data.dataValues }),
+        results: (data.rows || [])?.map(
+          (data: { dataValues }) => toEntity({ ...data.dataValues }) as IUser,
         ),
         pageInfo: {
           count: total,
@@ -236,27 +236,28 @@ export default ({ model, jwt }: any) => {
     created_at,
     email,
     password,
+    deleted_at,
   }: {
     created_at: number;
+    deleted_at: number;
     email: string;
     password: string;
-  }): Promise<any> => {
-
+  }): Promise<IUser> => {
     try {
-      const { dataValues } = model.create({ email, password });
-
-      return toEntity({
-        id: dataValues.id,
-        email: dataValues.email,
-        password: dataValues.password,
-        created_at: dataValues.created_at,
+      const { dataValues } = await model.create({
+        created_at,
+        deleted_at,
+        email,
+        password,
       });
+
+      return toEntity({ ...dataValues }) as IUser;
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw new Error('Duplicate error');
       }
 
-      throw new Error(error);
+      throw new Error(error as string | undefined);
     }
   };
 
@@ -313,29 +314,26 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const findOne = async (...args: any[]): Promise<unknown | null> => {
+  const findOne = async ({ id }: { id: number }): Promise<unknown | null> => {
     try {
-      const m: IRead<any> = model;
-      const [{ ...params }] = args;
-      const user = await m.findOne({ ...params }).lean();
-
-      if (!user) return null;
-
-      return toEntity(user);
+      const { dataValues } = await model.findByPk(id);
+      if (!dataValues) return [];
+      return toEntity({ ...dataValues });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
   };
 
-  const remove = async ({ _id }: { _id: string }): Promise<unknown | null> => {
+  const remove = async ({ id }: { id: number }): Promise<unknown | null> => {
     try {
-      const m: IWrite<any> = model;
+      console.log('remove', id);
+     /* const m: IWrite<any> = model;
 
       const user = await m.findByIdAndDelete({ _id }).lean();
 
       if (!user) return null;
 
-      return toEntity(user);
+      return toEntity(user);*/
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -363,15 +361,22 @@ export default ({ model, jwt }: any) => {
 
   const authenticate = async (...args: any[]): Promise<unknown | null> => {
     try {
-      const [{ email }] = args;
+      console.log('authenticate', args);
+      /* const [{ email }] = args;
       const m: IRead<any> = model;
       const user = await m.findOne({ email }).lean();
       if (!user) return null;
-      return toEntity(user);
+      return toEntity(user);*/
     } catch (error) {
       throw new Error(error as string | undefined);
     }
   };
+
+  const validatePassword = (endcodedPassword: any) => (
+    password: any,
+  ) => comparePassword(password, endcodedPassword);
+
+  const destroy = (...args: any[]) => model.destroy(...args);
 
   return {
     remove,

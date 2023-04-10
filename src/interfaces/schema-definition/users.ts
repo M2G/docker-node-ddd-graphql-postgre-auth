@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 // import type IUser from "core/IUser";
 import type IUser from '../../core/IUser';
 import { encryptPassword } from 'infra/encryption';
+import console from 'console';
 
 /*
 const data = [
@@ -114,15 +115,9 @@ export default ({
     },
     Query: {
       getUser: async (_: any, args: any) => {
-        console.log('args args args', args);
-
         const { id } = args;
-
         try {
-          const data = await getOneUseCase.getOne({ _id: id });
-
-          console.log('------->', data);
-
+          const data = await getOneUseCase.getOne({ id });
           logger.info({ ...data });
           return data;
         } catch (error: unknown) {
