@@ -10,7 +10,7 @@ import type IUser from 'core/IUser';
  */
 export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
   const update = ({
-    _id,
+    id,
     email,
     password,
     first_name,
@@ -19,7 +19,7 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
     created_at,
     deleted_at,
  }: {
-    readonly _id: string;
+    readonly id: string;
     readonly email: string;
     readonly password: string;
     readonly first_name: string;
@@ -30,11 +30,11 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
   }) => {
     try {
       const users = Users({
-        _id,
         created_at,
         deleted_at,
         email,
         first_name,
+        id,
         last_name,
         password,
         username,

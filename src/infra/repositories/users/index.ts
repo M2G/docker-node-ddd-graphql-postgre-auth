@@ -1,7 +1,5 @@
 /*eslint-disable*/
 import { QueryTypes, UniqueConstraintError, Op } from 'sequelize';
-import type { Types } from 'mongoose';
-import { IRead, IWrite } from 'core/IRepository';
 import IUser from 'core/IUser';
 import toEntity from './transform';
 import { comparePassword } from '../../encryption';
@@ -295,6 +293,9 @@ export default ({ model, jwt }: any) => {
     token: string;
   }): Promise<unknown | null> => {
     try {
+      /*
+     const { dataValues } = model.findOne({ where: { email } });
+
       const { ...user } = await findOne({
         reset_password_token: token,
         reset_password_expires: {
@@ -308,7 +309,7 @@ export default ({ model, jwt }: any) => {
       user.reset_password_token = undefined;
       user.reset_password_expires = undefined;
 
-      return update({ ...user });
+      return update({ ...user });*/
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -326,48 +327,36 @@ export default ({ model, jwt }: any) => {
 
   const remove = ({ id }: { id: number }): number => {
     try {
-      return model.destroy({ where: { id: id } });
+      return model.destroy({ where: { id } });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
   };
 
-  const update = async (...args: any) => {
-    console.log('------------------------------', args);
-
+  const update = ({ id, ...params }: { id: number; params: any }) => {
     try {
-      const m: IWrite<any> = model;
-      const [{ _id, ...params }] = args;
-      const user = await m
-        .findByIdAndUpdate(
-          { _id } as unknown as Types.ObjectId,
-          { ...params },
-          { upsert: true, new: true },
-        )
-        .lean();
+      return model.update({ ...params }, { where: { id } });
+    } catch (error) {
+      throw new Error(error as string | undefined);
+    }
+  };
 
+  const authenticate = async ({
+    email,
+  }: {
+    email: string;
+  }): Promise<unknown | null> => {
+    try {
+      console.log('authenticate', email);
+      const user = await model.findOne({ where: { email } });
       return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);
     }
   };
 
-  const authenticate = async (...args: any[]): Promise<unknown | null> => {
-    try {
-      console.log('authenticate', args);
-      /* const [{ email }] = args;
-      const m: IRead<any> = model;
-      const user = await m.findOne({ email }).lean();
-      if (!user) return null;
-      return toEntity(user);*/
-    } catch (error) {
-      throw new Error(error as string | undefined);
-    }
-  };
-
-  const validatePassword = (endcodedPassword: any) => (
-    password: any,
-  ) => comparePassword(password, endcodedPassword);
+  const validatePassword = (endcodedPassword: any) => (password: any) =>
+    comparePassword(password, endcodedPassword);
 
   const destroy = (...args: any[]) => model.destroy(...args);
 

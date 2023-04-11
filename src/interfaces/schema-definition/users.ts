@@ -59,15 +59,12 @@ export default ({
 
           logger.info({ data });
 
-          const user = {
+          return {
             created_at: Math.floor(Date.now() / 1000),
             email: data?.email,
             first_name: data?.first_name,
             last_name: data?.last_name,
-            modified_at: Math.floor(Date.now() / 1000),
           };
-
-          return user;
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);
@@ -93,6 +90,7 @@ export default ({
       ) => {
         const { input, id } = args;
         const { email, first_name, last_name, username } = input;
+
         try {
           const updateValue = {
             email,
@@ -101,7 +99,10 @@ export default ({
             username,
             modified_at: Math.floor(Date.now() / 1000),
           };
-          const data = await putUseCase.update({ _id: id, ...updateValue });
+
+          console.log('updateValue', { id, ...updateValue })
+
+          const data = await putUseCase.update({ id, ...updateValue });
           logger.info({ ...data });
 
           if (!data) throw new Error("User doesn't exist");

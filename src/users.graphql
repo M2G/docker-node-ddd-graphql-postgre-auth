@@ -81,7 +81,7 @@ type Mutation {
 }
 
 type Mutation {
-  updateUser(id: String!, input: UpdateUserInput): User
+  updateUser(id: Int!, input: UpdateUserInput): User
 }
 
 input ResetPasswordInput {
