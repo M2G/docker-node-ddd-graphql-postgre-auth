@@ -259,30 +259,31 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const forgotPassword = async (...args: any[]): Promise<unknown> => {
+  const forgotPassword = async ({ email }: { email: string }): Promise<unknown> => {
     try {
-      const [{ ...params }] = args;
-      const { ...user }: any = await findOne(params);
+      const { dataValues } = await model.findOne({ where: { email } });
 
-      console.log('forgotPassword', user)
+      console.log('forgotPassword', dataValues)
 
-      if (!user) return null;
+      if (!dataValues) return null;
 
-      /*
-      const { id, email, password } = <IUser>user;
-      const payload = { id, email, password };
+      const payload = {
+        id: dataValues.id,
+        email: dataValues.email,
+        password: dataValues.password,
+      };
       const options = {
-        subject: email,
+        subject: dataValues.email,
         audience: [],
         expiresIn: process.env.JWT_TOKEN_EXPIRE_TIME,
       };
       const token: string = jwt.signin(options)(payload);
 
       return update({
-        id,
+        id: dataValues.id,
         reset_password_token: token,
         reset_password_expires: Date.now() + 86400000,
-      });*/
+      });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -337,6 +338,7 @@ export default ({ model, jwt }: any) => {
   };
 
   const update = ({ id, ...params }: { id: number; params: any }) => {
+    console.log('update', id);
     try {
       return model.update({ ...params }, { where: { id } });
     } catch (error) {

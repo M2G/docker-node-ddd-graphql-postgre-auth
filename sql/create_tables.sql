@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255) NOT NULL,
   created_at INTEGER NOT NULL,
   modified_at INTEGER,
-  reset_password_token VARCHAR(255),
+  reset_password_token TEXT,
   reset_password_expires INTEGER DEFAULT 0,
   deleted_at INTEGER DEFAULT 0,
   last_connected_at INTEGER DEFAULT 0,
