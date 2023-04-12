@@ -264,10 +264,13 @@ export default ({ model, jwt }: any) => {
       const [{ ...params }] = args;
       const { ...user }: any = await findOne(params);
 
+      console.log('forgotPassword', user)
+
       if (!user) return null;
 
-      const { _id, email, password } = <IUser>user;
-      const payload = { _id, email, password };
+      /*
+      const { id, email, password } = <IUser>user;
+      const payload = { id, email, password };
       const options = {
         subject: email,
         audience: [],
@@ -276,10 +279,10 @@ export default ({ model, jwt }: any) => {
       const token: string = jwt.signin(options)(payload);
 
       return update({
-        _id,
+        id,
         reset_password_token: token,
         reset_password_expires: Date.now() + 86400000,
-      });
+      });*/
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -347,7 +350,6 @@ export default ({ model, jwt }: any) => {
     email: string;
   }): Promise<unknown | null> => {
     try {
-      console.log('authenticate', email);
       const user = await model.findOne({ where: { email } });
       return toEntity(user);
     } catch (error) {
@@ -355,7 +357,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const validatePassword = (endcodedPassword: any) => (password: any) =>
+  const validatePassword = (endcodedPassword: string) => (password: string) =>
     comparePassword(password, endcodedPassword);
 
   const destroy = (...args: any[]) => model.destroy(...args);
@@ -369,5 +371,7 @@ export default ({ model, jwt }: any) => {
     forgotPassword,
     getAll,
     register,
+    validatePassword,
+    destroy
   };
 };
