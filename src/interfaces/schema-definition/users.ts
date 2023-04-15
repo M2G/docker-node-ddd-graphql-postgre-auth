@@ -48,7 +48,7 @@ export default ({
         const hasPassword = encryptPassword(params.password);
         try {
           const { _doc: data }: { _doc: IUser } = await postUseCase.register({
-            created_at: Math.floor(Date.now() / 1000),
+            created_at: Date.now(),
             deleted_at: 0,
             email: params.email,
             last_connected_at: null,
@@ -60,7 +60,7 @@ export default ({
           logger.info({ data });
 
           return {
-            created_at: Math.floor(Date.now() / 1000),
+            created_at: Date.now(),
             email: data?.email,
             first_name: data?.first_name,
             last_name: data?.last_name,
@@ -97,7 +97,7 @@ export default ({
             first_name,
             last_name,
             username,
-            modified_at: Math.floor(Date.now() / 1000),
+            modified_at: Date.now(),
           };
 
           console.log('updateValue', { id, ...updateValue })

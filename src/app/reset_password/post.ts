@@ -2,7 +2,6 @@
  * this file will hold all the get use-case for user domain
  */
 import Users from 'domain/users';
-import { cleanData } from 'interfaces/http/utils';
 import type IUsersRepository from 'types/IUsersRepository';
 
 /**
@@ -18,8 +17,7 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
   }) => {
     try {
       const users = Users({ password, reset_password_token });
-      console.log('------------------', users);
-      return usersRepository.resetPassword(cleanData(users));
+      return usersRepository.resetPassword(users);
     } catch (error) {
       throw new Error(error as string | undefined);
     }

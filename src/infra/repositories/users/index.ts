@@ -210,6 +210,8 @@ export default ({ model, jwt }: any) => {
         }),
       ]);
 
+      console.log('data data data data data data', data)
+
       const pages = Math.ceil(total / pageSize);
       const prev = page > 1 ? page - 1 : null;
       const next = page < pages ? page + 1 : null;
@@ -285,8 +287,8 @@ export default ({ model, jwt }: any) => {
 
       return update({
         id: dataValues.id,
-        reset_password_token: token,
         reset_password_expires: Date.now() + 86400000,
+        reset_password_token: token,
       });
     } catch (error) {
       throw new Error(error as string | undefined);
@@ -301,7 +303,7 @@ export default ({ model, jwt }: any) => {
     reset_password_token: string;
   }): Promise<unknown | null> => {
     try {
-      const user = await model.findOne({
+      const { dataValues } = await model.findOne({
         where: {
           reset_password_token,
           reset_password_expires: {
@@ -310,15 +312,15 @@ export default ({ model, jwt }: any) => {
         },
       });
 
-      console.log('resetPassword', user);
+      console.log('resetPassword', dataValues);
 
-      if (!user) return null;
+      if (!dataValues) return null;
 
-      user.password = password;
-      user.reset_password_token = undefined;
-      user.reset_password_expires = undefined;
+      dataValues.password = password;
+      dataValues.reset_password_token = null;
+      dataValues.reset_password_expires = Date.now();
 
-      return update({ ...user });
+      return update({ ...dataValues });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -342,7 +344,7 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const update = ({ id, ...params }: { id: number; params: any }) => {
+  const update = ({ id, ...params }: { id: number; params: IUser }) => {
     console.log('update', { id, ...params });
     try {
       return model.update({ ...params }, { where: { id } });
