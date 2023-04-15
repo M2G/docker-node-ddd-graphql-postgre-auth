@@ -10,12 +10,15 @@ import type IUsersRepository from 'types/IUsersRepository';
  */
 export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
   const resetPassword = ({
-    input: { email },
+    password,
+    reset_password_token,
   }: {
-    readonly input: { readonly email: string };
+      readonly reset_password_token: string;
+      readonly password: string;
   }) => {
     try {
-      const users = Users({ email });
+      const users = Users({ password, reset_password_token });
+      console.log('------------------', users);
       return usersRepository.resetPassword(cleanData(users));
     } catch (error) {
       throw new Error(error as string | undefined);

@@ -15,22 +15,24 @@ export default ({ postUseCase, logger, jwt }: any) => {
   const resolvers = {
     Mutation: {
       resetPassword: async (
-        parent: any,
+        _: any,
         args: {
           readonly input: { readonly password: string; readonly token: string };
         },
       ) => {
         const { input } = args;
         const { password, token } = input;
+
+        console.log('input', { password, token } )
         try {
-          jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
+         // jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
           const hashPassword = encryptPassword(password);
-          const user = postUseCase.resetPassword({
+          const user = await postUseCase.resetPassword({
             password: hashPassword,
-            token,
+            reset_password_token: token,
           });
 
-          const htmlToSend = template({
+          /*const htmlToSend = template({
             name: 'test',
           });
 
@@ -54,7 +56,7 @@ export default ({ postUseCase, logger, jwt }: any) => {
             success: true,
           };
 
-          return data;
+          return data;*/
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);

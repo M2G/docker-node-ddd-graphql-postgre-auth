@@ -3,16 +3,14 @@ const { encryptPassword } = require('../../encryption');
 const table = 'users';
 
 // eslint-disable-next-line func-names
-module.exports = function (
-  /** @type {{ define: (arg0: string, arg1: { created_at: { allowNull: boolean; type: any; }; deleted_at: { allowNull: boolean; type: any; }; email: { allowNull: boolean; type: any; unique: boolean; }; first_name: { allowNull: boolean; type: any; }; id: { autoIncrement: boolean; primaryKey: boolean; type: any; }; last_connected_at: { allowNull: boolean; type: any; }; last_name: { allowNull: boolean; type: any; }; modified_at: { allowNull: boolean; type: any; }; password: { allowNull: boolean; type: any; }; username: { allowNull: boolean; type: any; }; reset_password_expires: { allowNull: boolean; type: any; }; reset_password_token: { allowNull: boolean; type: any; }; }, arg2: { hooks: { beforeCreate: (user: { password_hash: string; dataValues: { password_hash: any; }; }) => void; }; freezeTableName: boolean; timestamps: boolean; classMethods: { associate(): void; }; }) => any; }} */ sequelize,
-  /** @type {{ INTEGER: any; STRING: any; }} */ DataTypes,
+module.exports = function (sequelize, DataTypes,
 ) {
   const User = sequelize.define(
     table,
     {
       created_at: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.DATE,
       },
       deleted_at: {
         allowNull: false,
@@ -42,21 +40,21 @@ module.exports = function (
       },
       modified_at: {
         allowNull: true,
-        type: DataTypes.INTEGER,
+        type: DataTypes.DATE,
       },
       password: {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      username: {
-        allowNull: true,
-        type: DataTypes.STRING,
-      },
       reset_password_expires: {
         allowNull: true,
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
       },
       reset_password_token: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      username: {
         allowNull: true,
         type: DataTypes.STRING,
       },
@@ -68,8 +66,14 @@ module.exports = function (
         ) => {
           console.log('beforeCreate dataValues', user);
 
-          user.password = encryptPassword(user.dataValues.password);
+          /*user.dataValues.created_at = sequelize.fn('statement_timestamp');
+          user.dataValues.modified_at = sequelize.fn('statement_timestamp');
+          user.password = encryptPassword(user.dataValues.password);*/
         },
+        beforeUpdate : (user, options) => {
+          console.log('beforeCreate dataValues', user);
+          // user.dataValues.modified_at = sequelize.fn('statement_timestamp');
+        }
       },
       freezeTableName: true,
       timestamps: false,

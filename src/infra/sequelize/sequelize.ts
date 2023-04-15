@@ -6,7 +6,6 @@ const { DB_FORCE_RESTART } = process.env;
 
 export default ({ config, basePath }: any) => {
   console.log(':::::::', config);
-
   const sequelize = new Sequelize(
     process.env.POSTGRES_DB ?? '',
     process.env.DB_USER ?? '',

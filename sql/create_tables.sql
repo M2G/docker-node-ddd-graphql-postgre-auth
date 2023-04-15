@@ -6,10 +6,10 @@ CREATE TABLE IF NOT EXISTS users (
   first_name VARCHAR(255),
   last_name VARCHAR(255),
   password VARCHAR(255) NOT NULL,
-  created_at INTEGER NOT NULL,
-  modified_at INTEGER,
+  created_at timestamp without time zone NOT NULL DEFAULT statement_timestamp(),
+  modified_at timestamp without time zone NOT NULL DEFAULT statement_timestamp(),
   reset_password_token TEXT,
-  reset_password_expires INTEGER DEFAULT 0,
+  reset_password_expires timestamp without time zone NOT NULL DEFAULT statement_timestamp(),
   deleted_at INTEGER DEFAULT 0,
   last_connected_at INTEGER DEFAULT 0,
   UNIQUE (email)

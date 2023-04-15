@@ -259,11 +259,15 @@ export default ({ model, jwt }: any) => {
     }
   };
 
-  const forgotPassword = async ({ email }: { email: string }): Promise<unknown> => {
+  const forgotPassword = async ({
+    email,
+  }: {
+    email: string;
+  }): Promise<unknown> => {
     try {
       const { dataValues } = await model.findOne({ where: { email } });
 
-      console.log('forgotPassword', dataValues)
+      console.log('forgotPassword', dataValues);
 
       if (!dataValues) return null;
 
@@ -291,21 +295,22 @@ export default ({ model, jwt }: any) => {
 
   const resetPassword = async ({
     password,
-    token,
+    reset_password_token,
   }: {
     password: string;
-    token: string;
+    reset_password_token: string;
   }): Promise<unknown | null> => {
     try {
-      /*
-     const { dataValues } = model.findOne({ where: { email } });
-
-      const { ...user } = await findOne({
-        reset_password_token: token,
-        reset_password_expires: {
-          $gt: Math.floor(Date.now() / 1000),
+      const user = await model.findOne({
+        where: {
+          reset_password_token,
+          reset_password_expires: {
+            [Op.gt]: Date.now(),
+          }
         },
       });
+
+      console.log('resetPassword', user);
 
       if (!user) return null;
 
@@ -313,7 +318,7 @@ export default ({ model, jwt }: any) => {
       user.reset_password_token = undefined;
       user.reset_password_expires = undefined;
 
-      return update({ ...user });*/
+      return update({ ...user });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -338,7 +343,7 @@ export default ({ model, jwt }: any) => {
   };
 
   const update = ({ id, ...params }: { id: number; params: any }) => {
-    console.log('update', id);
+    console.log('update', { id, ...params });
     try {
       return model.update({ ...params }, { where: { id } });
     } catch (error) {
@@ -374,6 +379,6 @@ export default ({ model, jwt }: any) => {
     getAll,
     register,
     validatePassword,
-    destroy
+    destroy,
   };
 };

@@ -18,4 +18,4 @@ $$;
 
 -- Filling of users
 INSERT INTO users(id, username, password, email, first_name, last_name, created_at, modified_at, reset_password_token, reset_password_expires, deleted_at, last_connected_at)
-VALUES(DEFAULT, random_text(10), crypt('password', gen_salt('bf')), random_text(10) || '@' || random_text(10) || '.com', random_text(10), random_text(10), 0, 0, random_text(10), 0, 0, 0);
+VALUES(DEFAULT, random_text(10), crypt('password', gen_salt('bf')), random_text(10) || '@' || random_text(10) || '.com', random_text(10), random_text(10), statement_timestamp(), statement_timestamp(), random_text(10), statement_timestamp(), 0, 0);
