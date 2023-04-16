@@ -96,6 +96,7 @@
     "express-handlebars": "^7.0.1",
     "faker": "^6.6.6",
     "graphql": "^16.6.0",
+    "graphql-scalars": "^1.21.3",
     "graphql-tag": "^2.12.6",
     "graphql-tools": "^8.3.19",
     "handlebars": "^4.7.7",

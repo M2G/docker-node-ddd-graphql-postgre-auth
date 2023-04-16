@@ -2,6 +2,8 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+scalar Date
+
 type User {
   id: Int
   email: String
@@ -9,10 +11,10 @@ type User {
   first_name: String
   last_name: String
   username: String
-  created_at: Int
-  modified_at: Int
+  created_at: Date
+  modified_at: Date
   reset_password_token: String
-  reset_password_expires: String
+  reset_password_expires: Date
   deleted_at: Int
   last_connected_at: Int
 }

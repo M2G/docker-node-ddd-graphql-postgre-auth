@@ -173,32 +173,53 @@ export default ({ model, jwt }: any) => {
 
       const query: {
         where: {
-          [Op.or]: [
+          deleted_at: number,
+          [Op.or]?: [
             {
-              deleted_at: number;
-              first_name?: string;
-              last_name?: string;
-              email?: string;
+              email: {
+                [Op.like]: string
+              }
             },
-          ];
+            {
+              first_name: {
+                [Op.like]: string
+              }
+            },
+            {
+              last_name: {
+                [Op.like]: string
+              }
+            }
+          ]
         };
       } = {
         where: {
-          [Op.or]: [{ deleted_at: 0 }],
+          deleted_at: 0,
         },
       };
 
       if (filters) {
         query.where = {
-          [Op.or]: query.where[Op.or].concat([
-            { first_name: filters },
-            { last_name: filters },
-            { email: filters },
-          ]),
+          deleted_at: 0,
+          [Op.or]: [
+            {
+              email: {
+                [Op.like]: `%${filters}%`
+              }
+            },
+            {
+              first_name: {
+                [Op.like]: `%${filters}%`
+              }
+            },
+            {
+              last_name: {
+                [Op.like]: `%${filters}%`
+              }
+            }
+          ]
         };
       }
-
-      console.log('query', query);
 
       const [total, data] = await Promise.all([
         model.count(),
@@ -209,8 +230,6 @@ export default ({ model, jwt }: any) => {
           limit: pageSize,
         }),
       ]);
-
-      console.log('data data data data data data', data)
 
       const pages = Math.ceil(total / pageSize);
       const prev = page > 1 ? page - 1 : null;
