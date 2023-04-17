@@ -36,7 +36,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
             );
           }
           const payload: IUser = {
-            _id: data._id,
+            id: data.id,
             email: data.email,
             password: data.password,
           };

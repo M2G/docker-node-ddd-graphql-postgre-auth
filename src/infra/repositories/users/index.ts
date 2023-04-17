@@ -173,24 +173,24 @@ export default ({ model, jwt }: any) => {
 
       const query: {
         where: {
-          deleted_at: number,
+          deleted_at: number;
           [Op.or]?: [
             {
               email: {
-                [Op.like]: string
-              }
+                [Op.like]: string;
+              };
             },
             {
               first_name: {
-                [Op.like]: string
-              }
+                [Op.like]: string;
+              };
             },
             {
               last_name: {
-                [Op.like]: string
-              }
-            }
-          ]
+                [Op.like]: string;
+              };
+            },
+          ];
         };
       } = {
         where: {
@@ -204,20 +204,20 @@ export default ({ model, jwt }: any) => {
           [Op.or]: [
             {
               email: {
-                [Op.like]: `%${filters}%`
-              }
+                [Op.like]: `%${filters}%`,
+              },
             },
             {
               first_name: {
-                [Op.like]: `%${filters}%`
-              }
+                [Op.like]: `%${filters}%`,
+              },
             },
             {
               last_name: {
-                [Op.like]: `%${filters}%`
-              }
-            }
-          ]
+                [Op.like]: `%${filters}%`,
+              },
+            },
+          ],
         };
       }
 
@@ -228,7 +228,7 @@ export default ({ model, jwt }: any) => {
           attributes,
           offset: pageSize * (page - 1),
           limit: pageSize,
-        }),
+        }, { raw: true }),
       ]);
 
       const pages = Math.ceil(total / pageSize);
@@ -270,6 +270,8 @@ export default ({ model, jwt }: any) => {
         password,
       });
 
+      console.log('::::::::::::::::::::::::::::::::::', dataValues)
+
       return toEntity({ ...dataValues }) as IUser;
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
@@ -286,7 +288,7 @@ export default ({ model, jwt }: any) => {
     email: string;
   }): Promise<unknown> => {
     try {
-      const { dataValues } = await model.findOne({ where: { email } });
+      const { dataValues } = await model.findOne({ where: { email } }, { raw: true });
 
       console.log('forgotPassword', dataValues);
 
@@ -322,14 +324,17 @@ export default ({ model, jwt }: any) => {
     reset_password_token: string;
   }): Promise<unknown | null> => {
     try {
-      const { dataValues } = await model.findOne({
-        where: {
-          reset_password_token,
-          reset_password_expires: {
-            [Op.gt]: Date.now(),
-          }
+      const dataValues = await model.findOne(
+        {
+          where: {
+            reset_password_token,
+            reset_password_expires: {
+              [Op.gt]: Date.now(),
+            },
+          },
         },
-      });
+        { raw: true },
+      );
 
       console.log('resetPassword', dataValues);
 
@@ -347,9 +352,9 @@ export default ({ model, jwt }: any) => {
 
   const findOne = async ({ id }: { id: number }): Promise<unknown | null> => {
     try {
-      const { dataValues } = await model.findByPk(id);
-      if (!dataValues) return [];
-      return toEntity({ ...dataValues });
+      const data = await model.findByPk(id, { raw: true });
+      if (!data) return null;
+      return toEntity({ ...data });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -366,7 +371,7 @@ export default ({ model, jwt }: any) => {
   const update = ({ id, ...params }: { id: number; params: IUser }) => {
     console.log('update', { id, ...params });
     try {
-      return model.update({ ...params }, { where: { id } });
+      return model.update({ ...params }, { where: { id } }, { raw: true });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
@@ -378,7 +383,7 @@ export default ({ model, jwt }: any) => {
     email: string;
   }): Promise<unknown | null> => {
     try {
-      const user = await model.findOne({ where: { email } });
+      const user = await model.findOne({ where: { email } }, { raw: true });
       return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);

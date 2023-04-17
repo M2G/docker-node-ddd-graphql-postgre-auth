@@ -63,7 +63,7 @@ enum sortOrder {
 # }
 
 type Query {
-  getUser(id: String!): User
+  getUser(id: Int!): User
 }
 
 type Mutation {
@@ -83,7 +83,7 @@ type Mutation {
 }
 
 type Mutation {
-  updateUser(id: Int!, input: UpdateUserInput): User
+  updateUser(id: Int!, input: UpdateUserInput): Status!
 }
 
 input ResetPasswordInput {

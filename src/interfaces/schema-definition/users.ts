@@ -47,7 +47,7 @@ export default ({
 
         const hasPassword = encryptPassword(params.password);
         try {
-          const { _doc: data }: { _doc: IUser } = await postUseCase.register({
+          const data = await postUseCase.register({
             created_at: Date.now(),
             deleted_at: 0,
             email: params.email,
@@ -59,12 +59,7 @@ export default ({
 
           logger.info({ data });
 
-          return {
-            created_at: Date.now(),
-            email: data?.email,
-            first_name: data?.first_name,
-            last_name: data?.last_name,
-          };
+          return data;
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);
@@ -88,8 +83,11 @@ export default ({
           readonly id: string;
         },
       ) => {
+
+        console.log('args', args)
+
         const { input, id } = args;
-        const { email, first_name, last_name, username } = input;
+        const { email, first_name, last_name, username } = input || {};
 
         try {
           const updateValue = {
@@ -102,12 +100,17 @@ export default ({
 
           console.log('updateValue', { id, ...updateValue })
 
-          const data = await putUseCase.update({ id, ...updateValue });
+          const [data] = await putUseCase.update({ id, ...updateValue });
+
+          console.log('updateValue 2', data)
+
           logger.info({ ...data });
 
           if (!data) throw new Error("User doesn't exist");
 
-          return data;
+          return {
+            success: !!data,
+          };
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);

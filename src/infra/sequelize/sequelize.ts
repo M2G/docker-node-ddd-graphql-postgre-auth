@@ -45,9 +45,9 @@ export default ({ config, basePath }: any) => {
   fs.readdirSync(dir)
     ?.filter(
       (file) =>
-        !file.startsWith('.') &&
-        file !== 'index.js' &&
-        file.endsWith('.js'),
+        !file.startsWith('.')
+        && file !== 'index.js'
+        && file.endsWith('.js'),
     )
     ?.forEach((file) => {
       const modelDir = path.join(dir, file);
@@ -62,8 +62,8 @@ export default ({ config, basePath }: any) => {
       db.models[model.name] = model;
     });
 
-  db.models &&
-  Object.keys(db.models)?.forEach((key) => {
+  db.models
+  && Object.keys(db.models)?.forEach((key) => {
     if ('associate' in db.models[key]) {
       db.models[key].associate(db.models);
     }
@@ -71,8 +71,8 @@ export default ({ config, basePath }: any) => {
 
   // Removes all tables and recreates them (only available if env is not in production)
   if (
-    DB_FORCE_RESTART === 'true' &&
-    process.env.ENV !== 'production'
+    DB_FORCE_RESTART === 'true'
+    && process.env.ENV !== 'production'
   ) {
     sequelizeOptions.force = true;
   }
