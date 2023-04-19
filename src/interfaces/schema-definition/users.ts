@@ -35,7 +35,7 @@ export default ({
   logger,
   putUseCase,
   postUseCase,
-}: any) => {
+}) => {
   const typeDefs = gql(
     readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
   );
@@ -68,9 +68,11 @@ export default ({
       deleteUser: async (_: any, args: any) => {
         const { id } = args;
         try {
-          const data = await deleteUseCase.remove({ id });
+          const [data] = await deleteUseCase.remove({ id });
           logger.info({ ...data });
-          return data;
+          return {
+            success: !!data,
+          };
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);
@@ -83,9 +85,6 @@ export default ({
           readonly id: string;
         },
       ) => {
-
-        console.log('args', args)
-
         const { input, id } = args;
         const { email, first_name, last_name, username } = input || {};
 
@@ -98,11 +97,7 @@ export default ({
             modified_at: Date.now(),
           };
 
-          console.log('updateValue', { id, ...updateValue })
-
           const [data] = await putUseCase.update({ id, ...updateValue });
-
-          console.log('updateValue 2', data)
 
           logger.info({ ...data });
 
