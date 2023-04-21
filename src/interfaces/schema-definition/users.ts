@@ -41,7 +41,7 @@ export default ({
   );
   const resolvers = {
     Mutation: {
-      createUser: async (_: any, args: any) => {
+      createUser: async (_: any, args: { input: any; }) => {
         const { input } = args;
         const { ...params } = input as IUser;
 
@@ -65,7 +65,7 @@ export default ({
           throw new Error(error as string | undefined);
         }
       },
-      deleteUser: async (_: any, args: any) => {
+      deleteUser: async (_: any, args: { id: any; }) => {
         const { id } = args;
         try {
           const [data] = await deleteUseCase.remove({ id });
@@ -113,7 +113,7 @@ export default ({
       },
     },
     Query: {
-      getUser: async (_: any, args: any) => {
+      getUser: async (_: any, args: { id: any; }) => {
         const { id } = args;
         try {
           const data = await getOneUseCase.getOne({ id });
@@ -124,7 +124,7 @@ export default ({
           throw new Error(error as string | undefined);
         }
       },
-      users: async (_: any, { ...args }: any) => {
+      users: async (_: any, { ...args }) => {
         try {
           const data = await getUseCase.all({ ...args });
           logger.info({ ...data });
