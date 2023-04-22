@@ -2,7 +2,7 @@
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
-import container from 'src/container';
+import container from '../../../src/container';
 
 const containerServer: any = container.resolve('server');
 const jwt = container.resolve('jwt') as any;
@@ -14,43 +14,48 @@ const signIn = jwt.signin();
 let token: string;
 const createdAt = Math.floor(Date.now() / 1000);
 
-import { clear, close, connect } from 'tests/dbHandler';
+// import { clear, close, connect } from 'tests/dbHandler';
 
 // this is the query for our test
 beforeEach((done) => {
-  usersRepository
-    .register({
-      email: randomEmail,
-      username: randomUserName,
-      password: password,
-      created_at: createdAt,
-      deleted_at: 0,
-      last_connected_at: null,
-    })
-    .then((user: { _id: any; email: any; username: any; password: any }) => {
-      token = signIn({
-        _id: user._id,
-        email: user.email,
-        username: user.username,
-        password: user.password,
+
+  /* usersRepository
+   .destroy({ where: {} })
+    .then(() =>*/
+    usersRepository
+      .register({
+        email: randomEmail,
+        username: randomUserName,
+        password: password,
+        created_at: createdAt,
+        deleted_at: 0,
+        last_connected_at: null,
+      })
+      .then((user: { id: any; email: any; username: any; password: any }) => {
+        token = signIn({
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          password: user.password,
+        });
+        console.log('token', token);
+        done();
       });
-      console.log('token', token);
-      done();
-    });
+  //);
 });
-afterEach(async () => await clear());
+// afterEach(async () => await clear());
 
 describe('e2e demo', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
-    await connect();
+    //await connect();
     ({ server, serverStandalone } = await containerServer);
     ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
-    await close();
+    //await close();
     await server?.stop();
   });
 

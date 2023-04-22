@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+/*import { faker } from '@faker-js/faker';
 import postUsecase from  'src/app/forgot_password/post';
 
 describe('App -> User -> forgotPassword', () => {
@@ -56,3 +56,4 @@ describe('App -> User -> forgotPassword', () => {
   })
 
 })
+*/

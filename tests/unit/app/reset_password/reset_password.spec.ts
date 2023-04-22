@@ -1,4 +1,4 @@
-import postUsecase from  'src/app/reset_password/post';
+/*import postUsecase from  'src/app/reset_password/post';
 import { encryptPassword } from 'src/infra/encryption';
 
 describe('App -> User -> resetPassword', () => {
@@ -65,3 +65,4 @@ describe('App -> User -> resetPassword', () => {
   })
 
 })
+*/

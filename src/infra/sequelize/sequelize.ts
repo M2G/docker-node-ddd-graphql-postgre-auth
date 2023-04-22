@@ -2,15 +2,24 @@ import fs from 'fs';
 import path from 'path';
 import { Sequelize, DataTypes } from 'sequelize';
 
-const { DB_FORCE_RESTART } = process.env;
-
 export default ({ config, basePath }: any) => {
   console.log(':::::::', config);
   const sequelize = new Sequelize(
+    /*
     process.env.POSTGRES_DB ?? '',
     process.env.DB_USER ?? '',
     process.env.DB_PASSWORD ?? '',
     { ...config.db },
+    */
+    'test_db',
+    'postgres',
+    'postgres',
+    {
+      dialect: 'postgres',
+      host: 'localhost',
+      logging: process.env.ENV === 'production' ? false : console.log,
+      port: 5432,
+    },
   );
 
   /*
@@ -45,9 +54,7 @@ export default ({ config, basePath }: any) => {
   fs.readdirSync(dir)
     ?.filter(
       (file) =>
-        !file.startsWith('.')
-        && file !== 'index.js'
-        && file.endsWith('.js'),
+        !file.startsWith('.') && file !== 'index.js' && file.endsWith('.js'),
     )
     ?.forEach((file) => {
       const modelDir = path.join(dir, file);
@@ -62,20 +69,12 @@ export default ({ config, basePath }: any) => {
       db.models[model.name] = model;
     });
 
-  db.models
-  && Object.keys(db.models)?.forEach((key) => {
-    if ('associate' in db.models[key]) {
-      db.models[key].associate(db.models);
-    }
-  });
-
-  // Removes all tables and recreates them (only available if env is not in production)
-  if (
-    DB_FORCE_RESTART === 'true'
-    && process.env.ENV !== 'production'
-  ) {
-    sequelizeOptions.force = true;
-  }
+  db.models &&
+    Object.keys(db.models)?.forEach((key) => {
+      if ('associate' in db.models[key]) {
+        db.models[key].associate(db.models);
+      }
+    });
 
   sequelize
     .sync(sequelizeOptions as object)

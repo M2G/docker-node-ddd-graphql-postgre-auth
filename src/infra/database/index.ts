@@ -1,5 +1,6 @@
+/* eslint-disable */
 import sequelize from '../sequelize';
-
+//@ts-ignore
 export default ({ logger, config }) => {
   const { db = null } = config;
   if (!db) {
@@ -7,5 +8,5 @@ export default ({ logger, config }) => {
     return false;
   }
 
-  return sequelize({ config, basePath: __dirname });
+  return sequelize({ basePath: __dirname, config });
 };

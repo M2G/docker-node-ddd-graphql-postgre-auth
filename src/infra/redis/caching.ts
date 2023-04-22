@@ -1,4 +1,5 @@
 /*eslint-disable*/
+// @ts-ignore
 import redis, { ClientOpts as RedisOptions } from 'redis';
 import validatedTtl from './validatedTtl';
 
@@ -10,7 +11,7 @@ const createClient = (redisOptions: RedisOptions) => {
   console.log('Start redis createClient', redisOptions);
   const client = redis.createClient(redisOptions);
 
-  client.on('error', (err) => {
+  client.on('error', (err: any) => {
     console.log('Failed redis createClient', err);
   });
   client.on('connect', () => {

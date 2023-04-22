@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /**
  * this file will hold all the get use-case for user domain
  */
@@ -17,6 +18,8 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
   }) => {
     try {
       const users = Users({ password, reset_password_token });
+
+      // @ts-ignore
       return usersRepository.resetPassword(users);
     } catch (error) {
       throw new Error(error as string | undefined);

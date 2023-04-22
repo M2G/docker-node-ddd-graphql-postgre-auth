@@ -1,11 +1,12 @@
+/*eslint-disable*/
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
-import { encryptPassword } from 'infra/encryption';
+// import { encryptPassword } from 'infra/encryption';
 // import type IUser from '../../core/IUser';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
-import { template, smtpTransport } from '../../nodemailer';
+// import { template, smtpTransport } from '../../nodemailer';
 
 export default ({ postUseCase, logger, jwt }: any) => {
   const typeDefs = gql(
@@ -23,40 +24,41 @@ export default ({ postUseCase, logger, jwt }: any) => {
         const { input } = args;
         const { password, token } = input;
 
-        console.log('input', { password, token } )
+        console.log('input', { password, token });
         try {
          // jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
-          const hashPassword = encryptPassword(password);
-          const user = await postUseCase.resetPassword({
-            password: hashPassword,
-            reset_password_token: token,
-          });
+          /*
+         const hashPassword = encryptPassword(password);
+         const user = await postUseCase.resetPassword({
+           password: hashPassword,
+           reset_password_token: token,
+         });
 
-          /*const htmlToSend = template({
-            name: 'test',
-          });
+        const htmlToSend = template({
+           name: 'test',
+         });
 
-          const mailOptions = {
-            from: 'sendersemail@example.com',
-            html: htmlToSend,
-            subject: 'Password reset confirmation',
-            to:
-              process.env.NODE_ENV === 'test'
-                ? user.email
-                : process.env.REAL_EMAIL,
-          };
+         const mailOptions = {
+           from: 'sendersemail@example.com',
+           html: htmlToSend,
+           subject: 'Password reset confirmation',
+           to:
+             process.env.NODE_ENV === 'test'
+               ? user.email
+               : process.env.REAL_EMAIL,
+         };
 
-          const info = await smtpTransport.sendMail(mailOptions);
+         const info = await smtpTransport.sendMail(mailOptions);
 
-          logger.info('Successfully sent email.');
-          logger.info('Message sent successfully as %s', info.messageId);
-          logger.info({ ...user });
+         logger.info('Successfully sent email.');
+         logger.info('Message sent successfully as %s', info.messageId);
+         logger.info({ ...user });
 
-          const data = {
-            success: true,
-          };
+         const data = {
+           success: true,
+         };
 
-          return data;*/
+         return data; */
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);

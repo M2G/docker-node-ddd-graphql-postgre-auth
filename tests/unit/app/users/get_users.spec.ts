@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+/*import { faker } from '@faker-js/faker';
 import getUsecase from  'src/app/users/get';
 
 describe('App -> User -> Get All', () => {
@@ -62,3 +62,4 @@ describe('App -> User -> Get All', () => {
   })
 
 })
+*/

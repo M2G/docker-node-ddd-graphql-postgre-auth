@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import { QueryTypes, UniqueConstraintError, Op } from 'sequelize';
+import { UniqueConstraintError, Op } from 'sequelize';
 import IUser from 'core/IUser';
 import toEntity from './transform';
 import { comparePassword } from '../../encryption';
@@ -236,7 +236,9 @@ export default ({ model, jwt }: any) => {
       const next = page < pages ? page + 1 : null;
 
       return {
+        //@ts-ignore
         results: (data.rows || [])?.map(
+          //@ts-ignore
           (data: { dataValues }) => toEntity({ ...data.dataValues }) as IUser,
         ),
         pageInfo: {
@@ -308,6 +310,7 @@ export default ({ model, jwt }: any) => {
 
       return update({
         id: dataValues.id,
+        //@ts-ignore
         reset_password_expires: Date.now() + 86400000,
         reset_password_token: token,
       });

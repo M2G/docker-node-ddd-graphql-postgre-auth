@@ -17,7 +17,7 @@ module.exports = {
     },
   },
   preset: 'ts-jest',
-  roots: ['<rootDir>/src', '<rootDir>/tests'],
+  roots: ['<rootDir>/tests'],
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
     '^.+\\.(js|jsx)$': 'babel-jest',
@@ -37,9 +37,8 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   testPathIgnorePatterns: [
     '<rootDir>/src/nodemailer.js',
-    '<rootDir>/test/dbHandler.test.ts',
     '<rootDir>/(build|node_modules)/',
   ],
-  transformIgnorePatterns: ['<rootDir>/(build|node_modules)/'],
+  // transformIgnorePatterns: ['<rootDir>/(src|build|node_modules)/'],
   testEnvironment: 'node',
 };

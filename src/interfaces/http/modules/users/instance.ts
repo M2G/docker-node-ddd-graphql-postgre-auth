@@ -1,4 +1,5 @@
-import container from 'container';
+/*eslint-disable */
+import container from 'src/container';
 import {
  get, getOne, put, remove, post,
 } from 'app/users';

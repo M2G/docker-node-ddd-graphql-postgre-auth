@@ -1,4 +1,4 @@
-const { encryptPassword } = require('../../encryption');
+// const { encryptPassword } = require('../../encryption');
 
 const table = 'users';
 

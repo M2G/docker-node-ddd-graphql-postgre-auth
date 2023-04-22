@@ -2,48 +2,20 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
-// import { comparePassword } from "infra/encryption";
-// import type IUser from "core/IUser";
 import type IUser from '../../core/IUser';
 import { encryptPassword } from 'infra/encryption';
 import console from 'console';
 
-/*
-const data = [
-  {
-    _id: '1325166e24edff96de6bf90b',
-    first_name: 'Mick',
-    last_name: 'Tayson',
-    email: 'mick.tayson@university.com',
-    created_at: 1658098356,
-    modified_at: 1658098356,
-  },
-  {
-    _id: '1325166e24edff96de6bf90b',
-    first_name: 'Mick',
-    last_name: 'Tayson',
-    email: 'mick.tayson@university.com',
-    created_at: 1658098356,
-    modified_at: 1658098356,
-  },
-];
-*/
-export default ({
-  getUseCase,
-  getOneUseCase,
-  deleteUseCase,
-  logger,
-  putUseCase,
-  postUseCase,
-}) => {
+// @ts-ignore
+export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, postUseCase }) => {
   const typeDefs = gql(
     readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
   );
   const resolvers = {
     Mutation: {
-      createUser: async (_: any, args: { input: any; }) => {
+      createUser: async (_: any, args: { input: IUser }) => {
         const { input } = args;
-        const { ...params } = input as IUser;
+        const { ...params } = input;
 
         const hasPassword = encryptPassword(params.password);
         try {
@@ -60,12 +32,12 @@ export default ({
           logger.info({ data });
 
           return data;
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string | undefined);
         }
       },
-      deleteUser: async (_: any, args: { id: any; }) => {
+      deleteUser: async (_: any, args: { id: any }) => {
         const { id } = args;
         try {
           const [data] = await deleteUseCase.remove({ id });
@@ -73,7 +45,7 @@ export default ({
           return {
             success: !!data,
           };
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string | undefined);
         }
@@ -106,20 +78,20 @@ export default ({
           return {
             success: !!data,
           };
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string | undefined);
         }
       },
     },
     Query: {
-      getUser: async (_: any, args: { id: any; }) => {
+      getUser: async (_: any, args: { id: any }) => {
         const { id } = args;
         try {
           const data = await getOneUseCase.getOne({ id });
           logger.info({ ...data });
           return data;
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string | undefined);
         }
@@ -129,7 +101,7 @@ export default ({
           const data = await getUseCase.all({ ...args });
           logger.info({ ...data });
           return data;
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string | undefined);
         }

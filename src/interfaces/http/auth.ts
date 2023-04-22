@@ -42,7 +42,7 @@ export default ({
   return {
     initialize: () => passport.initialize(),
     authenticate: (req: Request, res: Response, next: NextFunction) => {
-      return passport.authenticate('bearer', { session: false }, (err, _) => {
+      return passport.authenticate('bearer', { session: false }, (err: string, _: any) => {
         console.log('passport.authenticate', err);
 
         if (err === Status[Status.NOT_FOUND])

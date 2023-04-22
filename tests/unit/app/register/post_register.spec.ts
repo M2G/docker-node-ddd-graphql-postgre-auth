@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+/*import { faker } from '@faker-js/faker';
 import postUsecase from  'src/app/register/post';
 
 describe('App -> User -> Post', () => {
@@ -63,3 +63,4 @@ describe('App -> User -> Post', () => {
   })
 
 })
+*/

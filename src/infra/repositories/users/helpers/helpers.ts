@@ -1,3 +1,4 @@
+/*
 const convertNodeToCursor = (node: { _id: string }) => {
   return new Buffer(node._id, 'binary').toString('base64');
 };
@@ -10,3 +11,4 @@ export {
   convertNodeToCursor,
   convertCursorToNodeId
 }
+*/

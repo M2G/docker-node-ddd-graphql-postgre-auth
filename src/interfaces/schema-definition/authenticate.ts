@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
@@ -35,6 +36,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
               'Wrong username and password combination.',
             );
           }
+          //@ts-ignore
           const payload: IUser = {
             id: data.id,
             email: data.email,

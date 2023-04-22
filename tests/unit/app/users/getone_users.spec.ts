@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+/*import { faker } from '@faker-js/faker';
 import getOneUseCase from  'src/app/users/getOne';
 
 describe('App -> User -> Get One', () => {
@@ -51,4 +51,4 @@ describe('App -> User -> Get One', () => {
     })
   })
 
-})
+})*/

@@ -1,4 +1,4 @@
-import container from 'container';
+import container from 'src/container';
 import post from 'app/reset_password';
 
 export default () => {

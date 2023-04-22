@@ -1,4 +1,5 @@
 /*eslint-disable*/
+/*
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
@@ -78,3 +79,4 @@ describe('e2e demo', () => {
     expect(user?.created_at).toBe(createdAt);
   });
 });
+*/

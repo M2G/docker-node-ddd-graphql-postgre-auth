@@ -1,4 +1,5 @@
-import container from 'container';
+/* eslint-disable */
+import container from '../../../../container';
 import post from 'app/register';
 
 export default () => {
@@ -7,6 +8,7 @@ export default () => {
  redis, repository, jwt, logger,
 } = cradle;
   const { usersRepository } = repository;
+  //@ts-ignore
   const postUseCase = post({ redis, usersRepository });
 
   return {

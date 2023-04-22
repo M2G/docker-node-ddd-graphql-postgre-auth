@@ -1,4 +1,4 @@
-import container from 'container';
+import container from 'src/container';
 import post from 'app/forgot_password';
 
 export default () => {
@@ -8,6 +8,8 @@ export default () => {
     logger,
   } = cradle;
 
+  // eslint-disable-next-line
+  // @ts-ignore
   const postUseCase = post({ usersRepository });
 
   return {

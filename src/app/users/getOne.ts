@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Users from 'domain/users';
 import type IUsersRepository from 'types/IUsersRepository';
 
@@ -10,6 +11,7 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
       console.log('getOne getOne', id);
       const user = Users({ id });
       console.log('user user', user);
+      // @ts-ignore
       return usersRepository.findOne(user);
     } catch (error: unknown) {
       throw new Error(error as string | undefined);
