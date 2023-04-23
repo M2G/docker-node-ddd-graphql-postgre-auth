@@ -1,24 +1,27 @@
 /*eslint-disable*/
-/*
+
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
 import container from 'src/container';
 import { smtpTransport } from 'src/nodemailer';
-import { clear, close, connect } from 'tests/dbHandler';
-
+//const jwt = container.resolve('jwt') as any;
 const containerServer: any = container.resolve('server');
 const { usersRepository } = container.resolve('repository');
 const randomEmail = faker.internet.email();
 const randomUserName = faker.internet.userName();
 const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
+let userId: number;
 let user: any;
+let token: string;
 const createdAt = Math.floor(Date.now() / 1000);
+
+function sleep(time: number | undefined) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 // this is the query for our test
 beforeEach((done) => {
-  console.log('usersRepository usersRepository usersRepository', usersRepository);
-
   usersRepository
     .register({
       email: randomEmail,
@@ -28,20 +31,20 @@ beforeEach((done) => {
       deleted_at: 0,
       last_connected_at: null,
     })
-    .then(() => {
-      usersRepository
-        .forgotPassword({
-          email: randomEmail,
-        })
-        .then((data: any) => {
-          user = data;
-          console.log('forgotPassword forgotPassword forgotPassword', data);
-          done();
-        });
-    });
+    .then((user: { id: number; }) => {
+      userId = user.id;
+      usersRepository.forgotPassword({ email: randomEmail });
+      sleep(2000).then(async () => {
+        const data = await usersRepository.findOne({ id: userId });
+        token = data?.reset_password_token;
+        done();
+      });
+    })
 });
 
-afterEach(async () => await clear());
+afterEach(() => {
+  usersRepository.remove({ id: userId });
+});
 
 const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
   return {
@@ -52,19 +55,15 @@ describe('e2e demo', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
-    await connect();
     ({ server, serverStandalone } = await containerServer);
     ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
-    await close();
     await server?.stop();
   });
 
   it('says hello', async () => {
-    console.log('user?.reset_password_token', user);
-
     const queryData = {
       query: `mutation ResetPassword($input: ResetPasswordInput!) {
         resetPassword(input: $input) {
@@ -73,7 +72,7 @@ describe('e2e demo', () => {
       }`,
       variables: {
         input: {
-          token: user?.reset_password_token || '',
+          token,
           password: 'password',
         },
       },
@@ -85,4 +84,3 @@ describe('e2e demo', () => {
     expect(spy).toBeCalledTimes(1);
   });
 });
-*/

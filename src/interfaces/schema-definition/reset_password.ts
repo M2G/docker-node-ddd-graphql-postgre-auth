@@ -2,11 +2,11 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
-// import { encryptPassword } from 'infra/encryption';
+import { encryptPassword } from 'infra/encryption';
 // import type IUser from '../../core/IUser';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
-// import { template, smtpTransport } from '../../nodemailer';
+import { template, smtpTransport } from '../../nodemailer';
 
 export default ({ postUseCase, logger, jwt }: any) => {
   const typeDefs = gql(
@@ -26,8 +26,7 @@ export default ({ postUseCase, logger, jwt }: any) => {
 
         console.log('input', { password, token });
         try {
-         // jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
-          /*
+         jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
          const hashPassword = encryptPassword(password);
          const user = await postUseCase.resetPassword({
            password: hashPassword,
@@ -54,11 +53,9 @@ export default ({ postUseCase, logger, jwt }: any) => {
          logger.info('Message sent successfully as %s', info.messageId);
          logger.info({ ...user });
 
-         const data = {
+         return {
            success: true,
          };
-
-         return data; */
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);

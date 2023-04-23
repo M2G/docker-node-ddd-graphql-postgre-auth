@@ -327,6 +327,12 @@ export default ({ model, jwt }: any) => {
     password: string;
     reset_password_token: string;
   }): Promise<unknown | null> => {
+
+    console.log('resetPassword 1', {
+      password,
+      reset_password_token,
+    });
+
     try {
       const dataValues = await model.findOne(
         {
@@ -340,7 +346,7 @@ export default ({ model, jwt }: any) => {
         { raw: true },
       );
 
-      console.log('resetPassword', dataValues);
+      console.log('resetPassword 2', dataValues);
 
       if (!dataValues) return null;
 
