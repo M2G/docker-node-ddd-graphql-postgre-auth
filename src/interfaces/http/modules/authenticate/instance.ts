@@ -1,5 +1,5 @@
 import post from 'app/authenticate';
-import container from "../../../../container";
+import container from "src/container";
 
 export default () => {
   const { cradle } = container;

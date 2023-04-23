@@ -41,7 +41,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
 
   return {
     server: apolloServer,
-    serverStandalone: process.env.NODE_ENV === 'test' && startStandaloneServer(apolloServer, { listen: config.port }),
+    serverStandalone: startStandaloneServer(apolloServer, { listen: config.port }),
     app,
     start: (): Promise<unknown> =>
       new Promise(() => {

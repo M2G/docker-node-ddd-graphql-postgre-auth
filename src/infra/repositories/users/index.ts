@@ -304,7 +304,8 @@ export default ({ model, jwt }: any) => {
       const options = {
         subject: dataValues.email,
         audience: [],
-        expiresIn: process.env.JWT_TOKEN_EXPIRE_TIME,
+        expiresIn: 5 * 60,
+        //process.env.JWT_TOKEN_EXPIRE_TIME,
       };
       const token: string = jwt.signin(options)(payload);
 

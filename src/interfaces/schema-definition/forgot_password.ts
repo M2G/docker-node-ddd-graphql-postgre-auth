@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
 import type IUser from 'core/IUser';
-// import { template, smtpTransport } from '../../nodemailer';
+import { template, smtpTransport } from '../../nodemailer';
 
 export default ({ postUseCase, logger }: any) => {
   const typeDefs = gql(
@@ -17,7 +17,6 @@ export default ({ postUseCase, logger }: any) => {
           const user: IUser = await postUseCase.forgotPassword({ email });
           logger.info({ ...user });
 
-          /*
           const htmlToSend = template({
             name: 'test',
             url: `http://localhost:3002/reset-password?token=${user.reset_password_token}`,
@@ -38,7 +37,6 @@ export default ({ postUseCase, logger }: any) => {
 
           const info = await smtpTransport.sendMail(mailOptions);
           logger.info('Message sent successfully as %s', info.messageId);
-          */
 
           return {
             success: true,

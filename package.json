@@ -38,7 +38,7 @@
     "watch2": "NODE_ENV=test concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run build:watch\" \"npm run watch-node\"",
     "watch:test": "NODE_ENV=test concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run build:watch\" \"npm run watch-node\"",
     "watch-test": "npm run test -- --watchAll",
-    "test": "npm run test:integration && npm run test:unit",
+    "test": "npm run test:integration -- --runInBand --verbose --t && npm run test:unit -- --runInBand --verbose --t",
     "test:unit": "NODE_ENV=test jest unit --forceExit --passWithNoTests",
     "test:integration": "NODE_ENV=test jest --forceExit --passWithNoTests",
     "build-ts": "tsc",

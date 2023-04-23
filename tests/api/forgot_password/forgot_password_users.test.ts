@@ -1,11 +1,9 @@
 /*eslint-disable*/
-/*
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
 import container from 'src/container';
 import { smtpTransport } from 'src/nodemailer';
-import { clear, close, connect } from 'tests/dbHandler';
 
 const containerServer: any = container.resolve('server');
 const { usersRepository } = container.resolve('repository');
@@ -13,6 +11,7 @@ const randomEmail = faker.internet.email();
 const randomUserName = faker.internet.userName();
 const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
 const createdAt = Math.floor(Date.now() / 1000);
+let userId: number;
 
 beforeEach((done) => {
   usersRepository
@@ -23,9 +22,15 @@ beforeEach((done) => {
       created_at: createdAt,
       deleted_at: 0,
       last_connected_at: null,
-    }).then(() => done());
+    }).then((user: { id: any; }) => {
+    userId = user.id;
+    done();
+  });
 });
-afterEach(async () => await clear());
+afterEach( () => {
+  usersRepository.remove({ id: userId });
+});
+
 
 const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
   return {
@@ -37,13 +42,11 @@ describe('e2e demo', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
-    await connect();
     ({ server, serverStandalone } = await containerServer);
     ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
-    await close();
     await server?.stop();
   });
 
@@ -60,9 +63,12 @@ describe('e2e demo', () => {
     };
 
     const response: any = await request(url).post('/').send(queryData);
+
+    console.log('response', response);
+
     expect(response?.body?.data?.forgotPassword?.success).toBeTruthy();
     expect(response.errors).toBeUndefined();
     expect(spy).toBeCalledTimes(1);
   });
 });
-*/
+

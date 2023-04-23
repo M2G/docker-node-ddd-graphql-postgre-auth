@@ -39,7 +39,7 @@
       "app/*": ["./src/app/*"],
       "core/*": ["./src/core/*"],
       "domain/*": ["./src/domain/*"],
-      "container/*": ["./src/container"],
+      "container": ["./src/container"],
       "generated/*": ["./src/generated/*"],
       "infra/*": ["./src/infra/*"],
       "interfaces/*": ["./src/interfaces/*"],
