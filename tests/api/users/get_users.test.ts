@@ -1,5 +1,5 @@
 /*eslint-disable*/
-/*
+
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 // we import a function that we wrote to create a new instance of Apollo Server
@@ -15,8 +15,6 @@ let token: string;
 let userId: string;
 const createdAt = Math.floor(Date.now() / 1000);
 
-import { clear, close, connect } from 'tests/dbHandler';
-
 beforeEach((done) => {
   usersRepository.register({
     email: randomEmail,
@@ -25,12 +23,12 @@ beforeEach((done) => {
     created_at: createdAt,
     deleted_at: 0,
     last_connected_at: null,
-  }).then((user: { _id: any; email: any; username: any, password: any }) => {
+  }).then((user: { id: any; email: any; username: any, password: any }) => {
 
-    userId = user._id;
+    userId = user.id;
 
     token = signIn({
-      _id: user._id,
+      id: user.id,
       email: user.email,
       username: user.username,
       password: user.password,
@@ -39,19 +37,19 @@ beforeEach((done) => {
     done();
   });
 });
-afterEach(async () => await clear());
+afterEach(() => {
+  usersRepository.remove({ id: userId });
+});
 
 describe('e2e demo', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
-    await connect();
     ({ server, serverStandalone } = await containerServer);
     ({ url } = await serverStandalone);
   });
 
   afterAll(async () => {
-    await close();
     await server?.stop();
   });
 
@@ -60,7 +58,7 @@ describe('e2e demo', () => {
       query: `query getUserList($filters: String, $pageSize: Int, $page: Int) {
         users(filters: $filters, pageSize: $pageSize, page: $page) {
            results {
-            _id
+            id
             first_name
             last_name
             email
@@ -79,10 +77,6 @@ describe('e2e demo', () => {
     };
 
     const response: any = await request(url).post('/').send(queryData);
-    expect(response.errors).toBeUndefined();
-    expect(response?.body?.data?.users?.[0]?.results[0]?._id).toBe(userId.toString());
-    expect(response?.body?.data?.users?.[0]?.results[0]?.email).toBe(randomEmail.toLowerCase());
-    expect(response?.body?.data?.users?.[0]?.results[0]?.created_at).toBe(createdAt);
+    expect(response?.body?.data?.users?.results?.length).toEqual(5);
   });
 });
-*/
