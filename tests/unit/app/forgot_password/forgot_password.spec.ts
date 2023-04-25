@@ -1,4 +1,4 @@
-/*import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import postUsecase from  'src/app/forgot_password/post';
 
 describe('App -> User -> forgotPassword', () => {
@@ -13,7 +13,7 @@ describe('App -> User -> forgotPassword', () => {
 
       useCase = postUsecase({
         usersRepository: MockRepository
-      })
+      } as any)
     })
 
     it('test', async () => {
@@ -38,7 +38,7 @@ describe('App -> User -> forgotPassword', () => {
 
       useCase = postUsecase({
         usersRepository: MockRepository
-      })
+      } as any)
     })
 
     it('should display error on rejection', async () => {
@@ -56,4 +56,4 @@ describe('App -> User -> forgotPassword', () => {
   })
 
 })
-*/
+

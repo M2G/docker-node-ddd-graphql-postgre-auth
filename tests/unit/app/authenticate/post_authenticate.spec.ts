@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { faker } from '@faker-js/faker';
 import postUsecase from  'src/app/authenticate/post';
 
