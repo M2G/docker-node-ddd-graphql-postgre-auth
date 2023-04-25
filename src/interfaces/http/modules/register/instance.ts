@@ -1,6 +1,6 @@
 /* eslint-disable */
 import post from 'app/register';
-import container from "src/container";
+import container from "../../../../container";
 
 export default () => {
   const { cradle } = container;

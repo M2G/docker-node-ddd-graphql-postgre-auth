@@ -1,8 +1,8 @@
 /*eslint-disable */
-import container from 'src/container';
 import {
  get, getOne, put, remove, post,
 } from 'app/users';
+import container from "../../../../container";
 
 export default () => {
   const { cradle } = container;

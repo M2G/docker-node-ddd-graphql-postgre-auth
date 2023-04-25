@@ -37,7 +37,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
           throw new Error(error as string | undefined);
         }
       },
-      deleteUser: async (_: any, args: { id: any }) => {
+      deleteUser: async (_: any, args: { id: number }) => {
         const { id } = args;
         try {
           const data = await deleteUseCase.remove({ id });

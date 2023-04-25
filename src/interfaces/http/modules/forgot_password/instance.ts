@@ -1,5 +1,5 @@
 import post from 'app/forgot_password';
-import container from "src/container";
+import container from "../../../../container";
 
 export default () => {
   const { cradle } = container;

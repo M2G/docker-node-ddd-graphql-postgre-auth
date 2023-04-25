@@ -40,7 +40,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
   //app.use(auth.authenticate);
 
   return {
-    server: apolloServer,
+    // server: apolloServer,
     serverStandalone: startStandaloneServer(apolloServer, { listen: config.port }),
     app,
     start: (): Promise<unknown> =>
