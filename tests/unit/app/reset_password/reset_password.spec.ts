@@ -1,4 +1,4 @@
-/*import postUsecase from  'src/app/reset_password/post';
+import postUsecase from  'src/app/reset_password/post';
 import { encryptPassword } from 'src/infra/encryption';
 
 describe('App -> User -> resetPassword', () => {
@@ -16,25 +16,25 @@ describe('App -> User -> resetPassword', () => {
 
       useCase = postUsecase({
         usersRepository: MockRepository
-      })
+      } as any)
     })
 
     it('test', async () => {
       const body = {
         password: hashPassword,
-        token,
+        reset_password_token: token,
       }
 
       const lists = await useCase.resetPassword({ ...body });
       expect(lists.password).toEqual(body.password);
-      expect(lists.token).toEqual(body.token);
+      expect(lists.reset_password_token).toEqual(body.reset_password_token);
     })
   })
 
   describe('Fail path', () => {
     const body = {
       password: hashPassword,
-      token,
+      reset_password_token: token,
     }
 
     beforeEach(() => {
@@ -44,7 +44,7 @@ describe('App -> User -> resetPassword', () => {
 
       useCase = postUsecase({
         usersRepository: MockRepository
-      })
+      } as any)
     })
 
     it('should display error on rejection', async () => {
@@ -64,5 +64,4 @@ describe('App -> User -> resetPassword', () => {
     })
   })
 
-})
-*/
+});
