@@ -1,4 +1,4 @@
-/*import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import getUsecase from  'src/app/users/get';
 
 describe('App -> User -> Get All', () => {
@@ -26,7 +26,7 @@ describe('App -> User -> Get All', () => {
       useCase = getUsecase({
         usersRepository: MockRepository,
         redis: MockRedis
-      })
+      } as any)
     });
 
     it('should display all the user on success', async () => {
@@ -47,7 +47,7 @@ describe('App -> User -> Get All', () => {
       useCase = getUsecase({
         usersRepository: MockRepository,
         redis: MockRedis
-      })
+      } as any)
     })
 
     it('should display error on rejection', async () => {
@@ -62,4 +62,3 @@ describe('App -> User -> Get All', () => {
   })
 
 })
-*/
