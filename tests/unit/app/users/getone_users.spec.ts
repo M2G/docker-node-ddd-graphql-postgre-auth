@@ -1,11 +1,11 @@
-/*import { faker } from '@faker-js/faker';
 import getOneUseCase from  'src/app/users/getOne';
+import IUser from '../../../../src/core/IUser';
 
 describe('App -> User -> Get One', () => {
-  const randomUUID = faker.datatype.uuid();
-  let useCase: { getOne: ({ ...args }: any) => Promise<void> };
+  const randomUUID = 1;
+  let useCase: { getOne: ({ id }: { readonly id: number }) => IUser };
   const mockData = [{
-    _id: randomUUID,
+    id: randomUUID,
   }]
 
   describe('Success path', () => {
@@ -17,12 +17,12 @@ describe('App -> User -> Get One', () => {
 
       useCase = getOneUseCase({
         usersRepository: MockRepository,
-      })
+      } as any)
     });
 
     it('should display the user on success', async () => {
       // @ts-ignore
-      const user = await useCase.getOne({ randomUUID });
+      const user = await useCase.getOne({ id: randomUUID });
       expect(user).toEqual(mockData);
     })
   });
@@ -35,14 +35,14 @@ describe('App -> User -> Get One', () => {
 
       useCase = getOneUseCase({
         usersRepository: MockRepository,
-      })
+      } as any)
     })
 
     it('should display error on rejection', async () => {
 
       let error;
       try {
-        await useCase.getOne({ randomUUID });
+        await useCase.getOne({ id: randomUUID });
       } catch (e) {
         // error = e.message;
         error = e;
@@ -51,4 +51,5 @@ describe('App -> User -> Get One', () => {
     })
   })
 
-})*/
+});
+
