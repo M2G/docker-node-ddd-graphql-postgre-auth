@@ -64,6 +64,4 @@ $ npm run test
 
 ### Tests
 - [supertest](https://github.com/visionmedia/supertest) - HTTP assertions made easy via superagent.
-- [mongodb-memory-server](https://github.com/nodkz/mongodb-memory-server) - Spinning up mongod in memory for fast tests. If you run tests in parallel this lib helps to spin up dedicated mongodb servers for every test file in MacOS, *nix, Windows or CI environments (in most cases with zero-config).
-
 
