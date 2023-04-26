@@ -1,12 +1,11 @@
-/*
-import { faker } from '@faker-js/faker';
 import deleteUseCase from  'app/users/delete';
+import IUser from '../../../../src/core/IUser';
 
 describe('App -> User -> Delete', () => {
-  const randomUUID = faker.datatype.uuid();
-  let useCase: { remove: ({ ...args }: any) => Promise<void> };
+  const randomUUID = 1;
+  let useCase: { remove: ({ id }: { readonly id: number }) => IUser };
   const mockData = [{
-    _id: randomUUID,
+    id: randomUUID,
   }]
 
   describe('Success path', () => {
@@ -19,12 +18,12 @@ describe('App -> User -> Delete', () => {
 
       useCase = deleteUseCase({
         usersRepository: MockRepository,
-      })
+      } as any)
     });
 
     it('should display the user on success', async () => {
       // @ts-ignore
-      const user = await useCase.remove({ randomUUID });
+      const user = await useCase.remove({ id: randomUUID });
       expect(user).toEqual(mockData);
     })
   });
@@ -37,14 +36,14 @@ describe('App -> User -> Delete', () => {
 
       useCase = deleteUseCase({
         usersRepository: MockRepository,
-      })
+      } as any)
     })
 
     it('should display error on rejection', async () => {
 
       let error;
       try {
-        await useCase.remove({ randomUUID });
+        await useCase.remove({ id: randomUUID });
       } catch (e) {
         // error = e.message;
         error = e;
@@ -54,4 +53,3 @@ describe('App -> User -> Delete', () => {
   })
 
 })
-*/
