@@ -1,8 +1,8 @@
-/*import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import updateUsecase from  'src/app/users/put';
 
 describe('App -> User -> Put', () => {
-  const randomUUID = faker.datatype.uuid();
+  const randomUUID = 1;
   const randomEmail = faker.internet.email();
   const randomUserName = faker.internet.userName();
   const randomPassword = faker.internet.password();
@@ -16,7 +16,7 @@ describe('App -> User -> Put', () => {
 
       useCase = updateUsecase({
         usersRepository: MockRepository
-      })
+      } as any)
     })
 
     it('test', async () => {
@@ -26,7 +26,7 @@ describe('App -> User -> Put', () => {
         password: randomPassword,
       }
 
-      const lists = await useCase.update({ _id: randomUUID, ...body });
+      const lists = await useCase.update({ id: randomUUID, ...body });
       expect(lists.email).toEqual(body.email);
       expect(lists.username).toEqual(body.username);
       expect(lists.password).toEqual(body.password);
@@ -47,14 +47,14 @@ describe('App -> User -> Put', () => {
 
       useCase = updateUsecase({
         usersRepository: MockRepository
-      })
+      } as any)
     })
 
     it('should display error on rejection', async () => {
 
       let error
       try {
-        await useCase.update({ _id: randomUUID, ...body })
+        await useCase.update({ id: randomUUID, ...body })
       } catch (e) {
         // error = e.message;
         error = e;
@@ -63,4 +63,5 @@ describe('App -> User -> Put', () => {
     })
   })
 
-})*/
+});
+
