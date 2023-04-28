@@ -35,11 +35,11 @@
     "rootDirs": ["./src", "./tests"],
     "baseUrl": ".",
     "paths": {
-      "./*": ["./src"],
+      "./*": ["./src/*"],
+      "src/*": ["./src/*"],
       "app/*": ["./src/app/*"],
       "core/*": ["./src/core/*"],
       "domain/*": ["./src/domain/*"],
-      "container": ["./src/container"],
       "generated/*": ["./src/generated/*"],
       "infra/*": ["./src/infra/*"],
       "interfaces/*": ["./src/interfaces/*"],

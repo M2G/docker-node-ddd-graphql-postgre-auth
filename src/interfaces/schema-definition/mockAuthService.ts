@@ -13,7 +13,7 @@ const users = {
         created_at: 1658098622,
         modified_at: 1671941336,
         last_connected_at: 1671941336,
-        deleted_at: 0
+        deleted_at: 0,
       },
       {
         __typename: 'User',
@@ -26,17 +26,17 @@ const users = {
         created_at: 1658098356,
         modified_at: 1663988936,
         last_connected_at: 1663988936,
-        deleted_at: 0
-      }
+        deleted_at: 0,
+      },
     ],
     pageInfo: {
       __typename: 'PageInfo',
       count: 7,
       pages: 4,
       next: 2,
-      prev: null
-    }
-  }
+      prev: null,
+    },
+  },
 };
 
 const allUsers = () => users;

@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
+import { encryptPassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
 
 export default ({ postUseCase, logger }: any) => {
@@ -10,15 +11,18 @@ export default ({ postUseCase, logger }: any) => {
   const resolvers = {
     Mutation: {
       signup: async (_: any, args: any) => {
+
         const { input } = args;
         const { email, password } = input as IUser;
+
+        const hashPassword = encryptPassword(password);
         try {
-          const { _doc: data }: { _doc: IUser } = await postUseCase.register({
+          const data = await postUseCase.register({
             created_at: Date.now(),
             deleted_at: 0,
             email,
             last_connected_at: null,
-            password,
+            password: hashPassword,
           });
 
           logger.info({ data });

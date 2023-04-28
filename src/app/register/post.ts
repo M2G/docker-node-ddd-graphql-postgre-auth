@@ -19,6 +19,7 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
     deleted_at,
     last_connected_at,
   }: IUser) => {
+
     try {
       const users = Users({
         created_at,
@@ -30,8 +31,6 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
         password,
         username,
       });
-
-      console.log("users", users);
 
       return usersRepository.register(users as IUser);
     } catch (error) {

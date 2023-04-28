@@ -35,13 +35,12 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     }),
   );
   app.disable('x-powered-by');
-
-  // app.use(auth.initialize());
-  //app.use(auth.authenticate);
+  app.use(auth.initialize());
+  app.use(auth.authenticate);
 
   return {
-    // server: apolloServer,
-    serverStandalone: startStandaloneServer(apolloServer, { listen: config.port }),
+    server: apolloServer,
+    serverStandalone: process.env.NODE_ENV === 'test' && startStandaloneServer(apolloServer, { listen: config.port }),
     app,
     start: (): Promise<unknown> =>
       new Promise(() => {
@@ -54,7 +53,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
               cors<cors.CorsRequest>(),
               json(),
               expressMiddleware(apolloServer, {
-                // context: verify.authorization,
+                context: verify.authorization,
               }),
             );
             logger.info(`🚀 Server ready at http://localhost:8181/graphql`);

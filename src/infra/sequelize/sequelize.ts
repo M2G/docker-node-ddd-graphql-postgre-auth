@@ -5,12 +5,12 @@ import { Sequelize, DataTypes } from 'sequelize';
 export default ({ config, basePath }: any) => {
   console.log(':::::::', config);
   const sequelize = new Sequelize(
-    /*
     process.env.POSTGRES_DB ?? '',
     process.env.DB_USER ?? '',
     process.env.DB_PASSWORD ?? '',
     { ...config.db },
-    */
+
+    /*
     'test_db',
     'postgres',
     'postgres',
@@ -19,7 +19,7 @@ export default ({ config, basePath }: any) => {
       host: 'localhost',
       logging: process.env.ENV === 'production' ? false : console.log,
       port: 5432,
-    },
+    }, */
   );
 
   /*
@@ -69,8 +69,8 @@ export default ({ config, basePath }: any) => {
       db.models[model.name] = model;
     });
 
-  db.models &&
-    Object.keys(db.models)?.forEach((key) => {
+  db.models
+    && Object.keys(db.models)?.forEach((key) => {
       if ('associate' in db.models[key]) {
         db.models[key].associate(db.models);
       }

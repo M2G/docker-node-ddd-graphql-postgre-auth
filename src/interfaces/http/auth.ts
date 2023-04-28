@@ -20,12 +20,12 @@ export default ({
       token: string,
       done: (arg0: any, arg1: { email: string; password: string } | null) => any
     ) => {
-      const { _id, ...args }: any | number = jwt.decode()(token);
+      const { id, ...args }: any | number = jwt.decode()(token);
 
       console.log('bearerStrategy', { args, token });
 
       usersRepository
-        .findOne({ _id })
+        .findOne({ id })
         .then((user: any) => {
           console.log('user', user);
           if (!user) return done(Status[Status.NOT_FOUND], null);
