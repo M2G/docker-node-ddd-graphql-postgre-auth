@@ -19,9 +19,10 @@ export default ({ jwt }: { jwt: any }) => {
         body: { query, operationName },
       } = req;
 
-      console.log('authorization query query query query query', operationName)
+      console.log('authorization query query query query query', operationName);
 
-      if (!query?.includes('GetUsers')) return null;
+      if (query?.includes('ResetPassword') || query?.includes('ForgotPassword'))
+        return null;
 
       const extractToken = authorization?.startsWith('Bearer ');
 

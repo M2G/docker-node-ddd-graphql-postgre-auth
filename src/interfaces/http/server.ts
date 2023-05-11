@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
@@ -10,12 +9,12 @@ import cors from 'cors';
 import http from 'http';
 import { json } from 'body-parser';
 
-export default ({ config, logger, auth, schema, verify }: any) => {
+export default ({
+ config, logger, auth, schema, verify }: any) => {
   const app = express();
 
   const httpServer = http.createServer(app);
-  // @ts-ignore
-  const apolloServer: any = new ApolloServer<any>({
+  const apolloServer = new ApolloServer({
     cache: 'bounded',
     csrfPrevention: true,
     introspection: true,
@@ -42,7 +41,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     server: apolloServer,
     serverStandalone: process.env.NODE_ENV === 'test' && startStandaloneServer(apolloServer, { listen: config.port }),
     app,
-    start: (): Promise<unknown> =>
+    start: async (): Promise<unknown> =>
       new Promise(() => {
         if (process.env.NODE_ENV === 'development') {
           return app.listen(config.port, async () => {
@@ -50,7 +49,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
             await apolloServer.start();
             app.use(
               '/graphql',
-              cors<cors.CorsRequest>(),
+              cors(),
               json(),
               expressMiddleware(apolloServer, {
                 context: verify.authorization,
