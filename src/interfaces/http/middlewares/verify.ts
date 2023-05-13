@@ -16,12 +16,15 @@ export default ({ jwt }: { jwt: any }) => {
     authorization: ({ req }: { req: Request }) => {
       const {
         headers: { authorization },
-        body: { query, operationName },
+        body: { query },
       } = req;
 
-      console.log('authorization query query query query query', operationName);
+      console.log('authorization query query query query query', query);
 
-      if (query?.includes('ResetPassword') || query?.includes('ForgotPassword'))
+      if (query?.includes('resetPassword')
+        || query?.includes('forgotPassword')
+        || query?.includes('signin')
+        || query?.includes('signup'))
         return null;
 
       const extractToken = authorization?.startsWith('Bearer ');

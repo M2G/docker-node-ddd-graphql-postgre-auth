@@ -1,4 +1,5 @@
 import sequelize from '../sequelize';
+
 export default ({ logger, config }) => {
   const { db = null } = config;
   if (!db) {

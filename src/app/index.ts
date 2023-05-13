@@ -1,4 +1,3 @@
-/*eslint-disable*/
 /**
  * We want to start here so we can manage other infrastructure
  * database

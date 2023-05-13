@@ -107,8 +107,6 @@
     "lodash": "^4.17.21",
     "mailgun-js": "^0.22.0",
     "module-alias": "^2.2.2",
-    "mongodb-memory-server": "^8.11.5",
-    "mongoose": "^7.0.1",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.1",
