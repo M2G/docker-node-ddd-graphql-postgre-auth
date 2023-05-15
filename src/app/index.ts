@@ -5,5 +5,5 @@
  * express server
  */
 export default ({ server }: any) => ({
-  start: () => Promise.resolve().then(server.start)
+  start: async () => Promise.resolve().then(server.start),
 });

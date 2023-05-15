@@ -1,4 +1,4 @@
-import sequelize from '../sequelize';
+import sequelize from 'infra/sequelize';
 
 export default ({ logger, config }) => {
   const { db = null } = config;

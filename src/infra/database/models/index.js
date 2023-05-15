@@ -1,11 +1,3 @@
-import sequelize from 'infra/sequelize';
+import users from './users';
 
-export default ({ logger, config }) => {
-  const { db = null } = config;
-  if (!db) {
-    logger.error('Database config file log not found, disabling database.');
-    return false;
-  }
-
-  return sequelize({ config, basePath: __dirname });
-};
+export default users;

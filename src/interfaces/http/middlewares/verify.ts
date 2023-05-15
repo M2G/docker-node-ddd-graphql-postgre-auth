@@ -3,10 +3,7 @@ import { GraphQLError } from 'graphql';
 import Status from 'http-status';
 import { Request } from 'express';
 
-const time =
-  process.env.NODE_ENV === 'development'
-    ? process.env.JWT_TOKEN_EXPIRE_TIME
-    : '2s';
+const time = process.env.NODE_ENV === 'development' ? process.env.JWT_TOKEN_EXPIRE_TIME : '2s';
 
 const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
 // const FAIL_AUTH = 'Failed to authenticate token is expired.';
@@ -21,10 +18,13 @@ export default ({ jwt }: { jwt: any }) => {
 
       console.log('authorization query query query query query', query);
 
-      if (query?.includes('resetPassword')
-        || query?.includes('forgotPassword')
-        || query?.includes('signin')
-        || query?.includes('signup'))
+      if (
+        query?.includes('resetPassword') ||
+        query?.includes('forgotPassword') ||
+        query?.includes('signin') ||
+        query?.includes('signup') ||
+        query?.includes('IntrospectionQuery')
+      )
         return null;
 
       const extractToken = authorization?.startsWith('Bearer ');

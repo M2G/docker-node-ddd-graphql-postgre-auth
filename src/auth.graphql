@@ -9,6 +9,6 @@ input SigninInput {
 }
 
 type Mutation {
-  signup(input: SignupInput): User!
-  signin(input: SigninInput): String!
+  signup(input: SignupInput!): User!
+  signin(input: SigninInput!): String!
 }

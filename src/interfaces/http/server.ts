@@ -10,7 +10,8 @@ import http from 'http';
 import { json } from 'body-parser';
 
 export default ({
- config, logger, auth, schema, verify }: any) => {
+ config, logger, auth, schema, verify,
+}: any) => {
   const app = express();
 
   const httpServer = http.createServer(app);
