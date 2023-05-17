@@ -3,8 +3,7 @@
 const table = 'users';
 
 // eslint-disable-next-line func-names
-module.exports = function (sequelize, DataTypes,
-) {
+module.exports = function (sequelize, DataTypes) {
   const User = sequelize.define(
     table,
     {
@@ -66,14 +65,14 @@ module.exports = function (sequelize, DataTypes,
         ) => {
           console.log('beforeCreate dataValues', user);
 
-          /*user.dataValues.created_at = sequelize.fn('statement_timestamp');
+          /* user.dataValues.created_at = sequelize.fn('statement_timestamp');
           user.dataValues.modified_at = sequelize.fn('statement_timestamp');
-          user.password = encryptPassword(user.dataValues.password);*/
+          user.password = encryptPassword(user.dataValues.password); */
         },
-        beforeUpdate : (user, options) => {
+        beforeUpdate: (user, options) => {
           console.log('beforeCreate dataValues', user);
           // user.dataValues.modified_at = sequelize.fn('statement_timestamp');
-        }
+        },
       },
       freezeTableName: true,
       timestamps: false,
