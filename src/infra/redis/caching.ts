@@ -5,7 +5,7 @@ import validatedTtl from './validatedTtl';
 
 const HOST = process.env.NODE_ENV === 'development' ? 'redis' : 'localhost';
 
-const portRedis = process.env.HOST_PORT_REDIS || 6379;
+const portRedis = process.env.CONTAINER_PORT_REDIS || 6379;
 
 const createClient = (redisOptions: RedisOptions) => {
   console.log('Start redis createClient', redisOptions);
@@ -23,7 +23,7 @@ const createClient = (redisOptions: RedisOptions) => {
 
 const redisOptions: RedisOptions = {
   port: Number(portRedis),
-  host: HOST
+  host: HOST,
 };
 
 const redisClient = createClient(redisOptions) as any;
@@ -85,7 +85,7 @@ export default ({ config }: any) => {
     pattern: string,
     options: object,
     eachScanCallback: Function,
-    callback: Function
+    callback: Function,
   ) => {
     if (!callback) {
       callback = eachScanCallback;
@@ -201,7 +201,7 @@ export default ({ config }: any) => {
         } else {
           callback(null, keys);
         }
-      }
+      },
     );
   };
 
@@ -251,7 +251,7 @@ export default ({ config }: any) => {
   const getset = async (
     key: string,
     value: any,
-    ttlInSeconds: number | undefined
+    ttlInSeconds: number | undefined,
   ): Promise<any> => {
     const str = Array.isArray(value) ? JSON.stringify(value) : value;
 
@@ -279,8 +279,7 @@ export default ({ config }: any) => {
    * @returns 'PONG'/string passed
    */
 
-  const ping = (str?: string | any): boolean =>
-    redisClient.ping(str ? str : []);
+  const ping = (str?: string | any): boolean => redisClient.ping(str ? str : []);
 
   /**
    * Returns 1 if the timeout was set/ 0 if key does not exist or the timeout could not be set - See [redis expire]{@link https://redis.io/commands/expire}
@@ -344,6 +343,6 @@ export default ({ config }: any) => {
     keys,
     unsetDefaultTtlInS,
     getDefaultTtlInS,
-    setDefaultTtlInS
+    setDefaultTtlInS,
   };
 };
