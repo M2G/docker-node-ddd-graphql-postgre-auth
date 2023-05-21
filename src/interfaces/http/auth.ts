@@ -11,11 +11,10 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
   const bearerStrategy: any = new BearerStrategy(
     'bearer',
     (token: string, done: (arg0: any, arg1: { email: string; password: string } | null) => any) => {
-      const { id, ...args }: number = jwt.decode()(token);
+      const { id }: number = jwt.decode()(token);
 
       console.log('bearerStrategy', {
         id,
-        args,
         token,
         usersRepository,
       });
