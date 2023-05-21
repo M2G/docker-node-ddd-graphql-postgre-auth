@@ -1,7 +1,7 @@
 import { UniqueConstraintError, Op } from 'sequelize';
-import IUser from 'core/IUser';
+import type IUser from 'core/IUser';
+import { comparePassword } from 'infra/encryption';
 import toEntity from './transform';
-import { comparePassword } from '../../encryption';
 
 export default ({ model, jwt }: any) => {
   const getAll = async ({
