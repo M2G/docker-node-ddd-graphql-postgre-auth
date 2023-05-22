@@ -8,9 +8,7 @@ import console from 'console';
 
 // @ts-ignore
 export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, postUseCase }) => {
-  const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
-  );
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
       createUser: async (_: any, args: { input: IUser }) => {
@@ -26,8 +24,6 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
             last_connected_at: null,
             password: hasPassword,
           });
-
-          console.log('data data data data', data);
 
           logger.info({ data });
 

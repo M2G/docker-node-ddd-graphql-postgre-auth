@@ -72,8 +72,8 @@ export default ({ model, jwt }: any) => {
           {
             ...query,
             attributes,
-            offset: pageSize * (page - 1),
             limit: pageSize,
+            offset: pageSize * (page - 1),
           },
           { raw: true },
         ),
@@ -167,10 +167,10 @@ export default ({ model, jwt }: any) => {
       const dataValues = await model.findOne(
         {
           where: {
-            reset_password_token,
             reset_password_expires: {
               [Op.gt]: Date.now(),
             },
+            reset_password_token,
           },
         },
         { raw: true },

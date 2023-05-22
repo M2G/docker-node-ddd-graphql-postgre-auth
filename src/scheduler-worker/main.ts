@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import container from 'container';
+import container from '../container';
 
 const { cradle } = container;
 const { redis, repository, logger } = cradle;
@@ -22,16 +22,14 @@ function lastConnectedUser() {
       // matchingKeys will be an array of strings if matches were found
       // otherwise it will be an empty array.
       matchingKeys?.map(async (userKey) => {
-        const usersInfo: { _id: string; last_connected_at: number } = await redis.get(userKey);
+        const usersInfo: { id: number; last_connected_at: number } = await redis.get(userKey);
+
         const updatedUser: any = await usersRepository.update({
-          _id: usersInfo?._id,
+          id: usersInfo?.id,
           last_connected_at: usersInfo?.last_connected_at,
         });
 
-        logger.info(
-          '[Users.updateLastConnectedAt] users updated in mongo',
-          updatedUser?._id,
-        );
+        logger.info('[Users.updateLastConnectedAt] users updated in mongo', updatedUser?._id);
       });
     });
   } catch (error: unknown) {
@@ -56,7 +54,7 @@ async function anonymizeUser(userId: any): Promise<any> {
     };
 
     const updatedUser: any = await usersRepository.update({
-      _id: user?._id,
+      id: user?.id,
       ...userDataToUpdate,
     });
 
@@ -73,6 +71,14 @@ async function anonymizeUser(userId: any): Promise<any> {
 
 async function deleteInactiveUser() {
   try {
+    // query.where = {
+    //         where: {
+    //           datetime: {
+    //             [Op.and]: [{ [Op.gte]: new Date() }],
+    //           },
+    //         },
+    //       },
+
     const users: any = await usersRepository.getAll({
       last_connected_at: {
         $gt: 0,
@@ -81,8 +87,8 @@ async function deleteInactiveUser() {
     });
 
     await Promise.all(
-      users?.map(async (user: { readonly _id: string }) => {
-        await anonymizeUser(user._id);
+      users?.map(async (user: { readonly id: number }) => {
+        await anonymizeUser(user.id);
       }),
     );
 

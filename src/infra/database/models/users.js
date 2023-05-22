@@ -1,4 +1,4 @@
-// const { encryptPassword } = require('../../encryption');
+const { encryptPassword } = require('infra/encryption');
 
 const table = 'users';
 
@@ -60,27 +60,19 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       hooks: {
-        beforeCreate: (
-          /** @type {{ password_hash: string; dataValues: { password_hash: any; }; }} */ user,
-        ) => {
+        beforeCreate: (user) => {
           console.log('beforeCreate dataValues', user);
 
-          /* user.dataValues.created_at = sequelize.fn('statement_timestamp');
+          user.dataValues.created_at = sequelize.fn('statement_timestamp');
           user.dataValues.modified_at = sequelize.fn('statement_timestamp');
-          user.password = encryptPassword(user.dataValues.password); */
+          user.password = encryptPassword(user.dataValues.password);
         },
         beforeUpdate: (user, options) => {
           console.log('beforeCreate dataValues', user);
           // user.dataValues.modified_at = sequelize.fn('statement_timestamp');
         },
       },
-      freezeTableName: true,
       timestamps: false,
-      classMethods: {
-        associate() {
-          // associations can be defined here
-        },
-      },
     },
   );
 
