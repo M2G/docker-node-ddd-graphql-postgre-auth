@@ -8,6 +8,8 @@ const time = process.env.NODE_ENV === 'development' ? process.env.JWT_TOKEN_EXPI
 const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
 // const FAIL_AUTH = 'Failed to authenticate token is expired.';
 
+const whiteList = ['resetPassword', 'forgotPassword', 'signin', 'signup', 'IntrospectionQuery'];
+
 export default ({ jwt }: { jwt: any }) => {
   return {
     authorization: ({ req }: { req: Request }) => {
@@ -18,14 +20,7 @@ export default ({ jwt }: { jwt: any }) => {
 
       console.log('authorization query query query query query', query);
 
-      if (
-        query?.includes('resetPassword') ||
-        query?.includes('forgotPassword') ||
-        query?.includes('signin') ||
-        query?.includes('signup') ||
-        query?.includes('IntrospectionQuery')
-      )
-        return null;
+      if (whiteList?.includes(query)) return null;
 
       const extractToken = authorization?.startsWith('Bearer ');
 
