@@ -74,7 +74,7 @@ async function deleteInactiveUser() {
     // query.where = {
     //         where: {
     //           datetime: {
-    //             [Op.and]: [{ [Op.gte]: new Date() }],
+    //             [Op.and]: [{ [Op.gt]: 0 }, { [Op.lte]: subtractMonths(3, new Date()) }],
     //           },
     //         },
     //       },

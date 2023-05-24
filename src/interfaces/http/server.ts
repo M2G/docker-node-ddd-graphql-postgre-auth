@@ -9,9 +9,7 @@ import cors from 'cors';
 import http from 'http';
 import { json } from 'body-parser';
 
-export default ({
- config, logger, auth, schema, verify,
-}: any) => {
+export default ({ config, logger, auth, schema, verify }: any) => {
   const app = express();
 
   const httpServer = http.createServer(app);
@@ -40,7 +38,9 @@ export default ({
 
   return {
     server: apolloServer,
-    serverStandalone: process.env.NODE_ENV === 'test' && startStandaloneServer(apolloServer, { listen: config.port }),
+    serverStandalone:
+      process.env.NODE_ENV === 'test' &&
+      startStandaloneServer(apolloServer, { listen: config.port }),
     app,
     start: async (): Promise<unknown> =>
       new Promise(() => {

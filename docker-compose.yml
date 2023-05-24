@@ -24,6 +24,8 @@ services:
     depends_on:
       - postgres
       - redis
+#    networks:
+#      - common_network
 
   redis:
     image: redis:alpine
@@ -32,6 +34,8 @@ services:
       - ${HOST_PORT_REDIS}:${CONTAINER_PORT_REDIS}
     volumes:
       - ./redis-data:/data
+#    networks:
+#      - common_network
 
   postgres:
     image: postgres:15.2-alpine
@@ -63,5 +67,11 @@ services:
       - seccomp:unconfined
     cap_add:
       - SYS_NICE
+#    networks:
+#      - common_network
+
+#networks:
+#  common_network:
+
 volumes:
   postgres-data:

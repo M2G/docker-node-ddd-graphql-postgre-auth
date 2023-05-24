@@ -10,6 +10,13 @@ export default ({ config, basePath }: any) => {
     process.env.DB_PASSWORD ?? '',
     { ...config.db },
 
+    console.log(
+      'ccccccccccccc',
+      process.env.POSTGRES_DB ?? '',
+      process.env.DB_USER ?? '',
+      process.env.DB_PASSWORD ?? '',
+      { ...config.db },
+    ),
     /*
     'test_db',
     'postgres',
@@ -52,10 +59,7 @@ export default ({ config, basePath }: any) => {
   const dir = path.join(basePath as string, './models');
 
   fs.readdirSync(dir)
-    ?.filter(
-      (file) =>
-        !file.startsWith('.') && file !== 'index.js' && file.endsWith('.js'),
-    )
+    ?.filter((file) => !file.startsWith('.') && file !== 'index.js' && file.endsWith('.js'))
     ?.forEach((file) => {
       const modelDir = path.join(dir, file);
 
@@ -69,8 +73,8 @@ export default ({ config, basePath }: any) => {
       db.models[model.name] = model;
     });
 
-  db.models
-    && Object.keys(db.models)?.forEach((key) => {
+  db.models &&
+    Object.keys(db.models)?.forEach((key) => {
       if ('associate' in db.models[key]) {
         db.models[key].associate(db.models);
       }
