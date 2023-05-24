@@ -24,12 +24,14 @@ function lastConnectedUser() {
       matchingKeys?.map(async (userKey) => {
         const usersInfo: { id: number; last_connected_at: number } = await redis.get(userKey);
 
-        const updatedUser: any = await usersRepository.update({
+        console.log('usersInfo', usersInfo);
+
+        /* const updatedUser: any = await usersRepository.update({
           id: usersInfo?.id,
           last_connected_at: usersInfo?.last_connected_at,
-        });
+        }); */
 
-        logger.info('[Users.updateLastConnectedAt] users updated in mongo', updatedUser?._id);
+        // logger.info('[Users.updateLastConnectedAt] users updated in database', updatedUser?.id);
       });
     });
   } catch (error: unknown) {
@@ -43,6 +45,7 @@ async function anonymizeUser(userId: any): Promise<any> {
     const user = await usersRepository.findOne(userId);
     if (!user) throw new Error('User not found');
 
+    /*
     const userDataToUpdate = {
       address: `anonym-address${userId}`,
       deleted_at: Math.floor(Date.now() / 1000),
@@ -52,17 +55,16 @@ async function anonymizeUser(userId: any): Promise<any> {
       phone: `anonym-phone-${userId}`,
       updated_at: Math.floor(Date.now() / 1000),
     };
+    */
 
     const updatedUser: any = await usersRepository.update({
       id: user?.id,
-      ...userDataToUpdate,
+      // ...userDataToUpdate,
     });
 
-    logger.info('[Users.anonymizeInactivity]', userDataToUpdate);
+    // logger.info('[Users.anonymizeInactivity]', userDataToUpdate);
 
-    logger.info(
-      `[AnonymizeUser]: user with email ${updatedUser.email} anonymized to ${userDataToUpdate.email}`,
-    );
+    // logger.info(`[AnonymizeUser]: user with email ${updatedUser.email} anonymized to ${userDataToUpdate.email}`,);
   } catch (error: unknown) {
     logger.error(`[AnonymizeUser]: Error while anonymizing user`);
     throw error;
@@ -79,18 +81,20 @@ async function deleteInactiveUser() {
     //         },
     //       },
 
-    const users: any = await usersRepository.getAll({
-      last_connected_at: {
-        $gt: 0,
-        $lte: subtractMonths(3, new Date()).getTime(),
-      },
-    });
+    /*
+      const users: any = await usersRepository.getAll({
+        last_connected_at: {
+          $gt: 0,
+          $lte: subtractMonths(3, new Date()).getTime(),
+        },
+      });
 
-    await Promise.all(
-      users?.map(async (user: { readonly id: number }) => {
-        await anonymizeUser(user.id);
-      }),
-    );
+      await Promise.all(
+        users?.map(async (user: { readonly id: number }) => {
+          await anonymizeUser(user.id);
+        }),
+      );
+    */
 
     logger.info('[Users.anonymizeInactivity] users anonymized successfully');
   } catch (error: unknown) {
@@ -100,7 +104,7 @@ async function deleteInactiveUser() {
 
 cron.schedule('* * * * *', () => {
   void (async () => {
-    // lastConnectedUser();
-    // await deleteInactiveUser();
+    lastConnectedUser();
+    await deleteInactiveUser();
   })();
 });

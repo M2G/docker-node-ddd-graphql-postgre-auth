@@ -29,7 +29,7 @@ export default ({
       redis.set(
         `${KEY}:${authenticatedUser?.id}`,
         JSON.stringify({
-          _id: authenticatedUser?.id,
+          id: authenticatedUser?.id,
           last_connected_at: Math.floor(Date.now() / 1000),
         }),
         TTL,

@@ -9,14 +9,6 @@ export default ({ config, basePath }: any) => {
     process.env.DB_USER ?? '',
     process.env.DB_PASSWORD ?? '',
     { ...config.db },
-
-    console.log(
-      'ccccccccccccc',
-      process.env.POSTGRES_DB ?? '',
-      process.env.DB_USER ?? '',
-      process.env.DB_PASSWORD ?? '',
-      { ...config.db },
-    ),
     /*
     'test_db',
     'postgres',
@@ -80,13 +72,10 @@ export default ({ config, basePath }: any) => {
       }
     });
 
-  sequelize
-    .sync(sequelizeOptions as object)
-    .then(async () => {})
-    .catch((err) => {
-      console.log(err);
-      // process.exit();
-    });
+  sequelize.sync(sequelizeOptions as object).catch((err) => {
+    console.log(err);
+    // process.exit();
+  });
 
   return db;
 };

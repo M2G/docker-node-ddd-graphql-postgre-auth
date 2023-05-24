@@ -14,7 +14,7 @@ export default ({ model, jwt }: any) => {
     pageSize: number;
     page: number;
     attributes: string[] | undefined;
-  }): Promise<IUser[]> => {
+  }): Promise<unknown> => {
     try {
       const query: {
         where: {
@@ -90,8 +90,8 @@ export default ({ model, jwt }: any) => {
           pages,
           prev,
         },
-        results: (data.rows || [])?.map(
-          (data: { dataValues }) => toEntity({ ...data.dataValues }) as IUser,
+        results: (data.rows || [])?.map((data: { dataValues: unknown }) =>
+          toEntity({ ...(data.dataValues as any) }),
         ),
       };
     } catch (error) {

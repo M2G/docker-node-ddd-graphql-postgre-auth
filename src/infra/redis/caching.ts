@@ -10,7 +10,7 @@ const createClient = (redisOptions: { port: number; host: string }) => {
   console.log('Start redis createClient', redisOptions);
   const client = redis.createClient(redisOptions as any);
 
-  client.on('error', (err) => {
+  client.on('error', (err: any) => {
     console.log('Failed redis createClient', err);
   });
   client.on('connect', () => {
