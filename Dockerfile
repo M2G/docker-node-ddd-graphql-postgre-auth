@@ -2,7 +2,7 @@
 # Docker NodeJS Typescript Starter
 # Example Dockerfile
 #
-FROM node:19.4-alpine3.16 AS build
+FROM node:20.2.0-alpine3.16 AS build
 
 ## Install build toolchain, install node deps and compile native add-ons
 RUN apk add --no-cache \
@@ -26,7 +26,7 @@ RUN cp .env.example .env
 # Install dependencies
 RUN npm install
 
-FROM node:19.4-alpine3.16 as app
+FROM node:20.2.0-alpine3.16 as app
 
 ## Copy built node modules and binaries without including the toolchain
 COPY --from=build /app .
