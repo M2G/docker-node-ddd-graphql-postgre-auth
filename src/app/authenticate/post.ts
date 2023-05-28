@@ -3,6 +3,7 @@
  */
 import Users from 'domain/users';
 import type IUsersRepository from 'types/IUsersRepository';
+import type IUser from 'core/IUser';
 
 const KEY = 'LAST_CONNECTED_AT';
 const TTL = 60 * 60;
@@ -19,12 +20,14 @@ export default ({
   };
   usersRepository: IUsersRepository;
 }) => {
-  const authenticate = ({ email }: { readonly email: string }) => {
+  const authenticate = async ({ email }: { readonly email: string }): Promise<IUser> => {
     try {
       const user = Users({ email });
-      const authenticatedUser = usersRepository.authenticate({
+      const authenticatedUser = await usersRepository.authenticate({
         email: (user as any).email,
       });
+
+      console.log('authenticatedUser', authenticatedUser);
 
       redis.set(
         `${KEY}:${authenticatedUser?.id}`,

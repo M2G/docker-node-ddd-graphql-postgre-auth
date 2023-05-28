@@ -18,6 +18,9 @@ function subtractMonths(numOfMonths: number, date: Date = new Date()) {
 function lastConnectedUser() {
   try {
     redis.scan(KEY, (err: any, matchingKeys: readonly any[]) => {
+      console.log('redis.scan err', err);
+      console.log('redis.scan matchingKeys', matchingKeys);
+
       if (err) throw err;
       // matchingKeys will be an array of strings if matches were found
       // otherwise it will be an empty array.
