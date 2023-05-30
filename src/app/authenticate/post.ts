@@ -27,8 +27,6 @@ export default ({
         email: (user as any).email,
       });
 
-      console.log('authenticatedUser', authenticatedUser);
-
       redis.set(
         `${KEY}:${authenticatedUser?.id}`,
         JSON.stringify({

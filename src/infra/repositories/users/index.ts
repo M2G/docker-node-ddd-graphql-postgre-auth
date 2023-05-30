@@ -66,26 +66,23 @@ export default ({ model, jwt }: any) => {
         };
       }
 
-      const [total, data] = await Promise.all([
-        model.count(),
-        model.findAndCountAll(
-          {
-            ...query,
-            attributes,
-            limit: pageSize,
-            offset: pageSize * (page - 1),
-          },
-          { raw: true },
-        ),
-      ]);
+      const data = await model.findAndCountAll(
+        {
+          ...query,
+          attributes,
+          limit: pageSize,
+          offset: pageSize * (page - 1),
+        },
+        { raw: true },
+      );
 
-      const pages = Math.ceil(total / pageSize);
+      const pages = Math.ceil(data.count / pageSize);
       const prev = page > 1 ? page - 1 : null;
       const next = page < pages ? page + 1 : null;
 
       return {
         pageInfo: {
-          count: total,
+          count: data.count,
           next,
           pages,
           prev,
