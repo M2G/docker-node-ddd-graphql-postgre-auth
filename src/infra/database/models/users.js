@@ -31,7 +31,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       last_connected_at: {
         allowNull: true,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
       },
       last_name: {
         allowNull: true,
