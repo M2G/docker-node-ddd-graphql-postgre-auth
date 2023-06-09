@@ -16,13 +16,7 @@ export default ({
   };
   usersRepository: IUsersRepository;
 }) => {
-  const all = async ({
-    ...arg
-  }: {
-    filters: string;
-    pageSize: number;
-    page: number;
-  }) => {
+  const all = async ({ ...arg }: { filters: string; pageSize: number; page: number }) => {
     try {
       if (arg && Object.values(arg).filter(Boolean).length) {
         return usersRepository.getAll({
