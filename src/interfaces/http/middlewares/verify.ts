@@ -16,7 +16,7 @@ export default ({ jwt }: { jwt: any }) => {
         body: { query },
       } = req;
 
-      console.log('authorization query query query query query', query);
+      // console.log('authorization query query query query query', query);
 
       if (
         query?.includes('resetPassword') ||

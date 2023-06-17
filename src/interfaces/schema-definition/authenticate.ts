@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
@@ -6,9 +5,7 @@ import { comparePassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
 
 export default ({ postUseCase, jwt, logger }: any) => {
-  const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'),
-  );
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
 
   const resolvers = {
     Mutation: {
@@ -21,22 +18,18 @@ export default ({ postUseCase, jwt, logger }: any) => {
         try {
           const data: IUser = await postUseCase.authenticate({ email });
 
-          console.log('data data data data', data);
-
           if (!data || !data.email) {
-            throw new Error(
-              `User not found (email: ${data.email}).`,
-            );
+            throw new Error(`User not found (email: ${data.email}).`);
           }
 
           const match = comparePassword(password, data.password);
 
+          console.log('match match match match', match);
+
           if (!match) {
-            throw new Error(
-              'Wrong username and password combination.',
-            );
+            throw new Error('Wrong username and password combination.');
           }
-          //@ts-ignore
+
           const payload: IUser = {
             id: data.id,
             email: data.email,
@@ -52,7 +45,7 @@ export default ({ postUseCase, jwt, logger }: any) => {
           // if user is found and password is right, create a token
           const token: string = jwt.signin(options)(payload);
 
-          console.log('token token token', token)
+          console.log('token token token', token);
 
           logger.info({ token });
 

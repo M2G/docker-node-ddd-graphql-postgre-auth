@@ -63,9 +63,9 @@ module.exports = function (sequelize, DataTypes) {
         beforeCreate: (user) => {
           console.log('beforeCreate dataValues', user);
 
-          user.dataValues.created_at = sequelize.fn('statement_timestamp');
-          user.dataValues.modified_at = sequelize.fn('statement_timestamp');
-          user.password = encryptPassword(user.dataValues.password);
+          // user.dataValues.created_at = sequelize.fn('statement_timestamp');
+          // user.dataValues.modified_at = sequelize.fn('statement_timestamp');
+          //user.password = encryptPassword(user.dataValues.password);
         },
         beforeUpdate: (user, options) => {
           console.log('beforeCreate dataValues', user);

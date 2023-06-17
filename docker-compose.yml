@@ -24,8 +24,8 @@ services:
     depends_on:
       - postgres
       - redis
-#    networks:
-#      - common_network
+  #    networks:
+  #      - common_network
 
   redis:
     image: redis:alpine
@@ -34,8 +34,8 @@ services:
       - ${HOST_PORT_REDIS}:${CONTAINER_PORT_REDIS}
     volumes:
       - ./redis-data:/data
-#    networks:
-#      - common_network
+  #    networks:
+  #      - common_network
 
   postgres:
     image: postgres:15.2-alpine
@@ -58,6 +58,7 @@ services:
     volumes:
       # chmod +x ./postgres-initdb.sh
       # chmod +x ./sql
+      # any problem exec : docker-compose down --volumes; docker volume prune
       - postgres-data:/var/lib/postgresql/data
       - ./postgres-initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
       - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
@@ -67,6 +68,12 @@ services:
       - seccomp:unconfined
     cap_add:
       - SYS_NICE
+    healthcheck:
+      #CHANGE 1: this command checks if the database is ready, right on the source db server
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 #    networks:
 #      - common_network
 
