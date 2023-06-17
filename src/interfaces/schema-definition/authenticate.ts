@@ -24,8 +24,6 @@ export default ({ postUseCase, jwt, logger }: any) => {
 
           const match = comparePassword(password, data.password);
 
-          console.log('match match match match', match);
-
           if (!match) {
             throw new Error('Wrong username and password combination.');
           }
