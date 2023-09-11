@@ -22,15 +22,15 @@ beforeEach((done) => {
       created_at: createdAt,
       deleted_at: 0,
       last_connected_at: null,
-    }).then((user: { id: any; }) => {
-    userId = user.id;
-    done();
-  });
+    })
+    .then((user: { id: any }) => {
+      userId = user.id;
+      done();
+    });
 });
-afterEach( () => {
+afterEach(() => {
   usersRepository.remove({ id: userId });
 });
-
 
 const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
   return {
@@ -38,7 +38,7 @@ const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
   };
 });
 
-describe('e2e demo', () => {
+describe('forgot password', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
@@ -50,7 +50,7 @@ describe('e2e demo', () => {
     await server?.stop();
   });
 
-  it('says hello', async () => {
+  it('forgot password', async () => {
     const queryData = {
       query: `mutation ForgotPassword($email: String!) {
         forgotPassword(email: $email) {
@@ -71,4 +71,3 @@ describe('e2e demo', () => {
     expect(spy).toBeCalledTimes(1);
   });
 });
-

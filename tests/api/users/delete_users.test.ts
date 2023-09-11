@@ -44,7 +44,7 @@ afterEach(() => {
   usersRepository.remove({ id: userId });
 });
 
-describe('e2e demo', () => {
+describe('delete users', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
@@ -56,7 +56,7 @@ describe('e2e demo', () => {
     await server?.stop();
   });
 
-  it('says hello', async () => {
+  it('delete users', async () => {
     const queryData = {
       query: `mutation DeleteUser($id: Int!) {
         deleteUser(id: $id) {
@@ -70,6 +70,5 @@ describe('e2e demo', () => {
     const user = response?.body?.data?.deleteUser;
     expect(user).toEqual({ success: true });
     expect(response.errors).toBeUndefined();
-
   });
 });

@@ -16,32 +16,33 @@ let userId: string;
 const createdAt = Math.floor(Date.now() / 1000);
 
 beforeEach((done) => {
-  usersRepository.register({
-    email: randomEmail,
-    username: randomUserName,
-    password: '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG',
-    created_at: createdAt,
-    deleted_at: 0,
-    last_connected_at: null,
-  }).then((user: { id: any; email: any; username: any, password: any }) => {
+  usersRepository
+    .register({
+      email: randomEmail,
+      username: randomUserName,
+      password: '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG',
+      created_at: createdAt,
+      deleted_at: 0,
+      last_connected_at: null,
+    })
+    .then((user: { id: any; email: any; username: any; password: any }) => {
+      userId = user.id;
 
-    userId = user.id;
-
-    token = signIn({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      password: user.password,
+      token = signIn({
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        password: user.password,
+      });
+      console.log('token', token);
+      done();
     });
-    console.log('token', token)
-    done();
-  });
 });
 afterEach(() => {
   usersRepository.remove({ id: userId });
 });
 
-describe('e2e demo', () => {
+describe('get users', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
@@ -53,7 +54,7 @@ describe('e2e demo', () => {
     await server?.stop();
   });
 
-  it('says hello', async () => {
+  it('get users', async () => {
     const queryData = {
       query: `query getUserList($filters: String, $pageSize: Int, $page: Int) {
         users(filters: $filters, pageSize: $pageSize, page: $page) {

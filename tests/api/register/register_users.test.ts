@@ -10,7 +10,7 @@ const jwt = container.resolve('jwt') as any;
 const { usersRepository } = container.resolve('repository');
 const randomEmail = faker.internet.email();
 const randomUserName = faker.internet.userName();
-const password = "$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG";
+const password = '$2a$10$5DgmInxX6fJGminwlgv2jeMoO.28z0A6HXN.tBE7vhmPxo1LwTWaG';
 const signIn = jwt.signin();
 let userId: number;
 let token: string;
@@ -38,11 +38,11 @@ beforeEach((done) => {
       done();
     });
 });
-afterEach( () => {
+afterEach(() => {
   usersRepository.remove({ id: userId });
 });
 
-describe('e2e demo', () => {
+describe('register', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
@@ -54,7 +54,7 @@ describe('e2e demo', () => {
     await server?.stop();
   });
 
-  it('says hello', async () => {
+  it('register', async () => {
     const queryData = {
       query: `mutation Signup($input: SignupInput) {
          signup(input: $input)
@@ -62,15 +62,14 @@ describe('e2e demo', () => {
       variables: {
         input: {
           email: randomEmail,
-          password: "test",
+          password: 'test',
         },
       },
     };
 
     const response: any = await request(url).post('/').send(queryData);
     const user = response?.body?.data?.signup;
-    console.log('user user useruser', user)
+    console.log('user user useruser', user);
     expect(response.errors).toBeUndefined();
   });
 });
-

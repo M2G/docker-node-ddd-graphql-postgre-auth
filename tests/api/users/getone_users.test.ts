@@ -41,7 +41,7 @@ afterEach(() => {
   usersRepository.remove({ id: userId });
 });
 
-describe('e2e demo', () => {
+describe('get one users', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
@@ -53,7 +53,7 @@ describe('e2e demo', () => {
     await server?.stop();
   });
 
-  it('says hello', async () => {
+  it('get one users', async () => {
     const queryData = {
       query: `query GetUser($id: Int!) {
         getUser(id: $id) {
@@ -71,7 +71,7 @@ describe('e2e demo', () => {
     const response: any = await request(url).post('/').send(queryData);
     const user = response?.body?.data?.getUser;
 
-    console.log('getUser getUser getUser', response?.body)
+    console.log('getUser getUser getUser', response?.body);
 
     expect(user?.id).toBe(userId);
     expect(user?.email).toBe(randomEmail);

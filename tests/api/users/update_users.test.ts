@@ -42,7 +42,7 @@ afterEach(() => {
   usersRepository.remove({ id: userId });
 });
 
-describe('e2e demo', () => {
+describe('update users', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
@@ -54,7 +54,7 @@ describe('e2e demo', () => {
     await server?.stop();
   });
 
-  it('says hello', async () => {
+  it('update users', async () => {
     const updateEmail = faker.internet.email();
     const updateUserName = faker.internet.userName();
 

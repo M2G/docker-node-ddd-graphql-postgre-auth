@@ -28,7 +28,7 @@ beforeEach((done) => {
       deleted_at: 0,
       last_connected_at: null,
     })
-    .then((user: { id: number; }) => {
+    .then((user: { id: number }) => {
       userId = user.id;
       usersRepository.forgotPassword({ email: randomEmail });
       sleep(2000).then(async () => {
@@ -36,7 +36,7 @@ beforeEach((done) => {
         token = data?.reset_password_token;
         done();
       });
-    })
+    });
 });
 
 afterEach(() => {
@@ -48,7 +48,7 @@ const spy = jest.spyOn(smtpTransport, 'sendMail').mockImplementation(() => {
     messageId: true,
   };
 });
-describe('e2e demo', () => {
+describe('reset password', () => {
   let server: { stop: () => any }, url: any, serverStandalone: any;
 
   beforeAll(async () => {
@@ -60,7 +60,7 @@ describe('e2e demo', () => {
     await server?.stop();
   });
 
-  it('says hello', async () => {
+  it('reset password', async () => {
     const queryData = {
       query: `mutation ResetPassword($input: ResetPasswordInput!) {
         resetPassword(input: $input) {
