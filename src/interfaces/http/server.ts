@@ -64,8 +64,7 @@ await fastify.register(fastifyApollo(apollo), {
               cors(),
               json(),
               expressMiddleware(apolloServer, {
-                // context: verify.authorization,
-                context: verify,
+                context: verify.authorization,
               }),
             );
             logger.info(`🚀 Server ready at http://localhost:8181/graphql`);
