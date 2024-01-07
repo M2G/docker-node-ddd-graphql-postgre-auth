@@ -34,7 +34,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
   );
   app.disable('x-powered-by');
   app.use(auth.initialize());
-  // app.use(auth.authenticate); //TODO to mv to autorization like dis
+  // app.use(auth.authenticate); // TODO TEST EVERYTHING
 
   /*
       const myContextFunction: ApolloFastifyContextFunction<MyContext> = async (request, reply) => ({
@@ -64,7 +64,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
               cors(),
               json(),
               expressMiddleware(apolloServer, {
-                // TODO TEST
+                // TODO TEST EVERYTHING
                 // context: verify.authorization,
               }),
             );
