@@ -37,13 +37,13 @@ export default ({ config, logger, auth, schema, verify }: any) => {
   // app.use(auth.authenticate); //TODO to mv to autorization like dis
 
   /*
-  const myContextFunction: ApolloFastifyContextFunction<MyContext> = async (request, reply) => ({
-  authorization: await isAuthorized(request.headers.authorization),
-});
+      const myContextFunction: ApolloFastifyContextFunction<MyContext> = async (request, reply) => ({
+      authorization: await isAuthorized(request.headers.authorization),
+    });
 
-await fastify.register(fastifyApollo(apollo), {
-  context: myContextFunction,
-});
+    await fastify.register(fastifyApollo(apollo), {
+      context: myContextFunction,
+    });
 
    */
 
@@ -64,7 +64,8 @@ await fastify.register(fastifyApollo(apollo), {
               cors(),
               json(),
               expressMiddleware(apolloServer, {
-                context: verify.authorization,
+                // TODO TEST
+                // context: verify.authorization,
               }),
             );
             logger.info(`🚀 Server ready at http://localhost:8181/graphql`);
