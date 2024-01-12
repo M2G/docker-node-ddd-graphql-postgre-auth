@@ -1,7 +1,8 @@
 /*eslint-disable*/
-import { GraphQLError } from 'graphql';
 import Status from 'http-status';
 import { Request } from 'express';
+import { GraphQLError, parse, OperationDefinitionNode, FieldNode } from 'graphql';
+const WHITE_LIST = ['resetPassword', 'forgotPassword', 'signin', 'signup', 'IntrospectionQuery'];
 
 const time = process.env.NODE_ENV === 'development' ? process.env.JWT_TOKEN_EXPIRE_TIME : '2s';
 
@@ -16,8 +17,12 @@ export default ({ jwt }: { jwt: any }) => {
         body: { query },
       } = req;
 
+      const obj = parse(query);
+      const operationDefinition = obj.definitions[0] as OperationDefinitionNode;
+      const selection = operationDefinition.selectionSet.selections[0] as FieldNode;
+      console.log('operationName: ', selection?.name?.value);
+      if (WHITE_LIST.includes(selection?.name?.value)) return null;
       // console.log('authorization query query query query query', query);
-
       //@TODO to rewrite
       /*
       if (

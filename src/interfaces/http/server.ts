@@ -17,6 +17,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     cache: 'bounded',
     csrfPrevention: true,
     introspection: true,
+    playground: true,
     plugins: [
       ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -34,7 +35,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
   );
   app.disable('x-powered-by');
   app.use(auth.initialize());
-  // app.use(auth.authenticate); // TODO TEST EVERYTHING
+  app.use(auth.authenticate); // TODO TEST EVERYTHING
 
   /*
       const myContextFunction: ApolloFastifyContextFunction<MyContext> = async (request, reply) => ({
@@ -66,6 +67,9 @@ export default ({ config, logger, auth, schema, verify }: any) => {
               expressMiddleware(apolloServer, {
                 // TODO TEST EVERYTHING
                 // context: verify.authorization,
+                context: async () => {
+                  //app.use(auth.authenticate);
+                },
               }),
             );
             logger.info(`🚀 Server ready at http://localhost:8181/graphql`);
