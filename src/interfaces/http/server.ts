@@ -66,10 +66,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
               json(),
               expressMiddleware(apolloServer, {
                 // TODO TEST EVERYTHING
-                // context: verify.authorization,
-                context: async () => {
-                  //app.use(auth.authenticate);
-                },
+                context: verify.authorization,
               }),
             );
             logger.info(`🚀 Server ready at http://localhost:8181/graphql`);
