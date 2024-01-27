@@ -2,7 +2,14 @@
 import Status from 'http-status';
 import { Request } from 'express';
 import { GraphQLError, parse, OperationDefinitionNode, FieldNode } from 'graphql';
-const WHITE_LIST = ['resetPassword', 'forgotPassword', 'signin', 'signup', 'IntrospectionQuery'];
+const WHITE_LIST = [
+  'resetPassword',
+  'forgotPassword',
+  'signin',
+  'signup',
+  'IntrospectionQuery',
+  '__schema',
+];
 
 const time = process.env.NODE_ENV === 'development' ? process.env.JWT_TOKEN_EXPIRE_TIME : '2s';
 
@@ -43,6 +50,8 @@ export default ({ jwt }: { jwt: any }) => {
         try {
           jwt.verify({ maxAge: time })(token);
         } catch (e: any) {
+          console.log('----------------------------', e);
+
           if (e.name === TOKEN_EXPIRED_ERROR)
             throw new GraphQLError(<string>Status[Status.UNAUTHORIZED], {
               extensions: {
