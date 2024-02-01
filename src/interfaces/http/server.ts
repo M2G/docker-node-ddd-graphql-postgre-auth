@@ -2,7 +2,6 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
@@ -21,7 +20,6 @@ export default ({ config, logger, auth, schema, verify }: any) => {
     cache: 'bounded',
     csrfPrevention: true,
     introspection: true,
-    playground: true,
     plugins: [
       ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
       ApolloServerPluginDrainHttpServer({ httpServer }),

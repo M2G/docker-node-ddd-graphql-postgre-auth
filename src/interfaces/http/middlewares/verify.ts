@@ -18,29 +18,20 @@ const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
 
 export default ({ jwt }: { jwt: any }) => {
   return {
-    authorization: ({ req }: { req: Request }) => {
+    authorization: ({ req }: { req: Request }): null => {
       const {
         headers: { authorization },
         body: { query },
       } = req;
 
+      // @see https://stackoverflow.com/questions/64168556/apollo-nodejs-server-how-to-get-mutation-query-schema-path-in-the-request-conte
       const obj = parse(query);
       const operationDefinition = obj.definitions[0] as OperationDefinitionNode;
       const selection = operationDefinition.selectionSet.selections[0] as FieldNode;
       console.log('operationName: ', selection?.name?.value);
+
       if (WHITE_LIST.includes(selection?.name?.value)) return null;
-      // console.log('authorization query query query query query', query);
-      //@TODO to rewrite
-      /*
-      if (
-        query?.includes('resetPassword') ||
-        query?.includes('forgotPassword') ||
-        query?.includes('signin') ||
-        query?.includes('signup') ||
-        query?.includes('IntrospectionQuery')
-      )
-        return null;
-*/
+
       const extractToken = authorization?.startsWith('Bearer ');
 
       console.log('extractToken extractToken', extractToken);

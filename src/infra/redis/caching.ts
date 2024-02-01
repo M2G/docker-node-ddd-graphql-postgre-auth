@@ -1,12 +1,12 @@
 /*eslint-disable*/
-import redis from 'redis';
+import * as redis from 'redis';
 import validatedTtl from './validatedTtl';
 
 const HOST = process.env.NODE_ENV === 'development' ? 'redis' : 'localhost';
 
 const portRedis = process.env.CONTAINER_PORT_REDIS || 6379;
 
-const createClient = (redisOptions: { port: number; host: string }) => {
+function createClient(redisOptions: { port: number; host: string }) {
   console.log('Start redis createClient', redisOptions);
   const client = redis.createClient(redisOptions as any);
 
@@ -18,9 +18,10 @@ const createClient = (redisOptions: { port: number; host: string }) => {
   });
 
   return client;
-};
+}
 
 const redisOptions = {
+  legacyMode: true,
   port: Number(portRedis),
   host: HOST,
 };

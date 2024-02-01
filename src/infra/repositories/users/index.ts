@@ -2,6 +2,7 @@ import { UniqueConstraintError, Op } from 'sequelize';
 import type IUser from 'core/IUser';
 import { comparePassword } from 'infra/encryption';
 import toEntity from './transform';
+import console from 'console';
 
 export default ({ model, jwt }: any) => {
   const getAll = async ({
@@ -212,6 +213,9 @@ export default ({ model, jwt }: any) => {
   const authenticate = async ({ email }: { email: string }): Promise<unknown | null> => {
     try {
       const user = await model.findOne({ where: { email } }, { raw: true });
+
+      console.log('authenticate', user);
+      if (!user) return null;
       return toEntity(user);
     } catch (error) {
       throw new Error(error as string | undefined);

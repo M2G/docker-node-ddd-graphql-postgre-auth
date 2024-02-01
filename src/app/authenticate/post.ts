@@ -23,9 +23,12 @@ export default ({
   const authenticate = async ({ email }: { readonly email: string }): Promise<IUser> => {
     try {
       const user = Users({ email });
+      console.log('user user user user', user);
       const authenticatedUser = await usersRepository.authenticate({
         email: (user as any).email,
       });
+
+      console.log('authenticatedUser', authenticatedUser);
 
       redis.set(
         `${KEY}:${authenticatedUser?.id}`,

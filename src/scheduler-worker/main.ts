@@ -15,8 +15,10 @@ function subtractMonths(numOfMonths: number, date: Date = new Date()) {
   return dateCopy;
 }
 
-function lastConnectedUser() {
+async function lastConnectedUser() {
   try {
+    //TODO doesnt work on redis v4.6.12
+    /*
     redis.scan(KEY, (err: any, matchingKeys: readonly any[]) => {
       console.log('redis.scan err', err);
       console.log('redis.scan matchingKeys', matchingKeys);
@@ -33,10 +35,13 @@ function lastConnectedUser() {
           id: usersInfo?.id,
           last_connected_at: usersInfo?.last_connected_at,
         }); */
+    // logger.info('[Users.updateLastConnectedAt] users updated in database', updatedUser?.id);
+    /*
 
-        // logger.info('[Users.updateLastConnectedAt] users updated in database', updatedUser?.id);
       });
     });
+
+    */
   } catch (error: unknown) {
     logger.error('[Users.updateLastConnectedAt]', error);
     throw new Error(error as string | undefined);
