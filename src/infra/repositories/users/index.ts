@@ -1,11 +1,13 @@
 import { UniqueConstraintError, Op } from 'sequelize';
 import type IUser from 'core/IUser';
-import { comparePassword } from 'infra/encryption';
 import toEntity from './transform';
-import console from 'console';
+import { comparePassword, encryptPassword } from 'infra/encryption';
+
+const validatePassword = (endcodedPassword: string) => (password: string) =>
+  comparePassword(password, endcodedPassword);
 
 export default ({ model, jwt }: any) => {
-  const getAll = async ({
+  async function getAll({
     filters,
     pageSize,
     page,
@@ -15,7 +17,7 @@ export default ({ model, jwt }: any) => {
     pageSize: number;
     page: number;
     attributes: string[] | undefined;
-  }): Promise<unknown> => {
+  }): Promise<unknown> {
     try {
       const query: {
         where: {
@@ -93,9 +95,9 @@ export default ({ model, jwt }: any) => {
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const register = async ({
+  async function register({
     created_at,
     email,
     password,
@@ -105,7 +107,7 @@ export default ({ model, jwt }: any) => {
     deleted_at: number;
     email: string;
     password: string;
-  }): Promise<IUser> => {
+  }): Promise<IUser> {
     try {
       const { dataValues } = await model.create({
         created_at,
@@ -122,9 +124,36 @@ export default ({ model, jwt }: any) => {
 
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const forgotPassword = async ({ email }: { email: string }): Promise<unknown> => {
+  async function changePassword({
+    id,
+    password,
+    oldPassword,
+  }: {
+    id: string;
+    password: string;
+    oldPassword: string;
+  }): Promise<unknown> {
+    console.log('changePassword', { id, password, oldPassword });
+    try {
+      const dataValues = await model.findOne({ where: { id } }, { raw: true });
+
+      console.log('dataValues dataValues', dataValues?.dataValues);
+      console.log('MATCHHHHHHH', validatePassword(dataValues?.dataValues?.password)(oldPassword));
+
+      if (validatePassword(dataValues?.dataValues?.password)(oldPassword)) {
+        const hashPassword = encryptPassword(password);
+        return update({ id, password: hashPassword });
+      }
+
+      return null;
+    } catch (error) {
+      throw new Error(error as string | undefined);
+    }
+  }
+
+  async function forgotPassword({ email }: { email: string }): Promise<unknown> {
     try {
       const { dataValues } = await model.findOne({ where: { email } }, { raw: true });
 
@@ -150,15 +179,15 @@ export default ({ model, jwt }: any) => {
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const resetPassword = async ({
+  async function resetPassword({
     password,
     reset_password_token,
   }: {
     password: string;
     reset_password_token: string;
-  }): Promise<unknown | null> => {
+  }): Promise<unknown | null> {
     try {
       const dataValues = await model.findOne(
         {
@@ -182,9 +211,9 @@ export default ({ model, jwt }: any) => {
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const findOne = async ({ id }: { id: number }): Promise<unknown | null> => {
+  async function findOne({ id }: { id: number }): Promise<unknown | null> {
     try {
       const data = await model.findByPk(id, { raw: true });
       if (!data) return null;
@@ -192,25 +221,25 @@ export default ({ model, jwt }: any) => {
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const remove = ({ id }: { id: number }): number => {
+  function remove({ id }: { id: number }): number {
     try {
       return model.destroy({ where: { id } });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const update = ({ id, ...params }: { id: number; params: IUser }) => {
+  function update({ id, ...params }: { id: number; params: IUser }): unknown | null {
     try {
       return model.update({ ...params }, { where: { id } }, { raw: true });
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const authenticate = async ({ email }: { email: string }): Promise<unknown | null> => {
+  async function authenticate({ email }: { email: string }): Promise<unknown | null> {
     try {
       const user = await model.findOne({ where: { email } }, { raw: true });
 
@@ -220,15 +249,15 @@ export default ({ model, jwt }: any) => {
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  const validatePassword = (endcodedPassword: string) => (password: string) =>
-    comparePassword(password, endcodedPassword);
-
-  const destroy = (...args: any[]) => model.destroy(...args);
+  function destroy(...args: any[]) {
+    return model.destroy(...args);
+  }
 
   return {
     authenticate,
+    changePassword,
     destroy,
     findOne,
     forgotPassword,
@@ -237,6 +266,5 @@ export default ({ model, jwt }: any) => {
     remove,
     resetPassword,
     update,
-    validatePassword,
   };
 };
