@@ -10,6 +10,7 @@ const Users = t.struct({
   last_name: t.maybe(t.String),
   modified_at: t.maybe(t.Any),
   password: t.maybe(t.String),
+  oldPassword: t.maybe(t.String),
   reset_password_expires: t.maybe(t.Any),
   reset_password_token: t.maybe(t.String),
   username: t.maybe(t.String),
