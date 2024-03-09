@@ -4,7 +4,6 @@ import { join } from 'path';
 import gql from 'graphql-tag';
 import type IUser from '../../core/IUser';
 import { encryptPassword } from 'infra/encryption';
-import console from 'console';
 
 // @ts-ignore
 export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, postUseCase }) => {
@@ -54,7 +53,9 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
         },
       ) => {
         const { input, id } = args;
-        const { email, first_name, last_name, username } = input || {};
+        const { email, first_name, last_name, username, password } = input || {};
+
+        const hasPassword = encryptPassword(password);
 
         try {
           const updateValue = {
@@ -63,6 +64,7 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
             last_name,
             username,
             modified_at: Date.now(),
+            password: hasPassword,
           };
 
           const [data] = await putUseCase.update({ id, ...updateValue });

@@ -7,6 +7,7 @@ import register from 'interfaces/http/modules/register';
 import users from 'interfaces/http/modules/users';
 import forgotPassword from 'interfaces/http/modules/forgot_password';
 import resetPassword from 'interfaces/http/modules/reset_password';
+import changePassword from 'interfaces/http/modules/change_password';
 // SCHEMA DEFINITIONS AND RESOLVERS
 
 export default () => {
@@ -16,13 +17,13 @@ export default () => {
   const { resolvers: resetPasswordResolvers, typeDefs: resetPasswordTypeDefs } =
     resetPassword().resetPassword;
 
-  const {
-    resolvers: forgotPasswordResolvers,
-    typeDefs: forgotPasswordTypeDefs,
-  } = forgotPassword().forgotPassword;
+  const { resolvers: forgotPasswordResolvers, typeDefs: forgotPasswordTypeDefs } =
+    forgotPassword().forgotPassword;
 
-  const { resolvers: registerResolvers, typeDefs: registerTypeDefs } =
-    register().register;
+  const { resolvers: changePasswordResolvers, typeDefs: changePasswordTypeDefs } =
+    changePassword().changePassword;
+
+  const { resolvers: registerResolvers, typeDefs: registerTypeDefs } = register().register;
 
   const { resolvers: usersResolvers, typeDefs: usersTypeDefs } = users().users;
 
@@ -32,6 +33,7 @@ export default () => {
       ...authenticateResolvers.Type,
       ...registerResolvers.Type,
       Mutation: {
+        ...changePasswordResolvers.Mutation,
         ...resetPasswordResolvers.Mutation,
         ...forgotPasswordResolvers.Mutation,
         ...authenticateResolvers.Mutation,
@@ -49,6 +51,7 @@ export default () => {
       usersTypeDefs,
       forgotPasswordTypeDefs,
       resetPasswordTypeDefs,
+      changePasswordTypeDefs,
     ],
   };
 };
