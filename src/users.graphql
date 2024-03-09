@@ -86,6 +86,15 @@ type Mutation {
   updateUser(id: Int!, input: UpdateUserInput): Status!
 }
 
+type Mutation {
+  changePassword(id: Int!, input: ChangePasswordInput): Status!
+}
+
+input ChangePasswordInput {
+  oldPassword: String!
+  password: String!
+}
+
 input ResetPasswordInput {
   password: String!
   token: String!
