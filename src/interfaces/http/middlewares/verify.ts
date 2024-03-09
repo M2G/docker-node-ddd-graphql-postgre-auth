@@ -28,7 +28,7 @@ export default ({ jwt }: { jwt: any }) => {
       const obj = parse(query);
       const operationDefinition = obj.definitions[0] as OperationDefinitionNode;
       const selection = operationDefinition.selectionSet.selections[0] as FieldNode;
-      console.log('operationName: ', selection?.name?.value);
+      // console.log('operationName: ', selection?.name?.value);
 
       if (WHITE_LIST.includes(selection?.name?.value)) return null;
 
