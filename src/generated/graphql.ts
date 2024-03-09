@@ -6,31 +6,45 @@ export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Date: string;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Date: { input: string; output: string; }
+};
+
+export type ChangePasswordInput = {
+  oldPassword: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changePassword: Status;
   createUser: User;
   deleteUser: Status;
   forgotPassword: Status;
   resetPassword: Status;
-  signin: Scalars['String'];
+  signin: Scalars['String']['output'];
   signup: User;
   updateUser: Status;
+};
+
+
+export type MutationChangePasswordArgs = {
+  id: Scalars['Int']['input'];
+  input?: InputMaybe<ChangePasswordInput>;
 };
 
 
@@ -40,12 +54,12 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
@@ -65,16 +79,16 @@ export type MutationSignupArgs = {
 
 
 export type MutationUpdateUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   input?: InputMaybe<UpdateUserInput>;
 };
 
 export type PageInfo = {
   __typename?: 'PageInfo';
-  count?: Maybe<Scalars['Int']>;
-  next?: Maybe<Scalars['Int']>;
-  pages?: Maybe<Scalars['Int']>;
-  prev?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']['output']>;
+  next?: Maybe<Scalars['Int']['output']>;
+  pages?: Maybe<Scalars['Int']['output']>;
+  prev?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Query = {
@@ -85,57 +99,57 @@ export type Query = {
 
 
 export type QueryGetUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type QueryUsersArgs = {
-  filters?: InputMaybe<Scalars['String']>;
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  pageSize?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ResetPasswordInput = {
-  password: Scalars['String'];
-  token: Scalars['String'];
+  password: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 export type SigninInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type SignupInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Status = {
   __typename?: 'Status';
-  success?: Maybe<Scalars['Boolean']>;
+  success?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type UpdateUserInput = {
-  email?: InputMaybe<Scalars['String']>;
-  first_name?: InputMaybe<Scalars['String']>;
-  last_name?: InputMaybe<Scalars['String']>;
-  username?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  first_name?: InputMaybe<Scalars['String']['input']>;
+  last_name?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
   __typename?: 'User';
-  created_at?: Maybe<Scalars['Date']>;
-  deleted_at?: Maybe<Scalars['Int']>;
-  email?: Maybe<Scalars['String']>;
-  first_name?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  last_connected_at?: Maybe<Scalars['Int']>;
-  last_name?: Maybe<Scalars['String']>;
-  modified_at?: Maybe<Scalars['Date']>;
-  password?: Maybe<Scalars['String']>;
-  reset_password_expires?: Maybe<Scalars['Date']>;
-  reset_password_token?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['Date']['output']>;
+  deleted_at?: Maybe<Scalars['Int']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  first_name?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  last_connected_at?: Maybe<Scalars['Int']['output']>;
+  last_name?: Maybe<Scalars['String']['output']>;
+  modified_at?: Maybe<Scalars['Date']['output']>;
+  password?: Maybe<Scalars['String']['output']>;
+  reset_password_expires?: Maybe<Scalars['Date']['output']>;
+  reset_password_token?: Maybe<Scalars['String']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 export type Users = {
@@ -217,12 +231,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  ChangePasswordInput: ChangePasswordInput;
   CreateUserInput: CreateUserInput;
-  Date: ResolverTypeWrapper<Scalars['Date']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
@@ -230,7 +247,7 @@ export type ResolversTypes = ResolversObject<{
   SigninInput: SigninInput;
   SignupInput: SignupInput;
   Status: ResolverTypeWrapper<Status>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
   Users: ResolverTypeWrapper<Users>;
@@ -239,10 +256,11 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Boolean: Scalars['Boolean'];
+  Boolean: Scalars['Boolean']['output'];
+  ChangePasswordInput: ChangePasswordInput;
   CreateUserInput: CreateUserInput;
-  Date: Scalars['Date'];
-  Int: Scalars['Int'];
+  Date: Scalars['Date']['output'];
+  Int: Scalars['Int']['output'];
   Mutation: {};
   PageInfo: PageInfo;
   Query: {};
@@ -250,7 +268,7 @@ export type ResolversParentTypes = ResolversObject<{
   SigninInput: SigninInput;
   SignupInput: SignupInput;
   Status: Status;
-  String: Scalars['String'];
+  String: Scalars['String']['output'];
   UpdateUserInput: UpdateUserInput;
   User: User;
   Users: Users;
@@ -261,6 +279,7 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  changePassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'id'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteUser?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
   forgotPassword?: Resolver<ResolversTypes['Status'], ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
