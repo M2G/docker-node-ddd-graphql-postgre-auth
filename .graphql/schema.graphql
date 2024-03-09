@@ -3,6 +3,11 @@ schema {
   mutation: Mutation
 }
 
+input ChangePasswordInput {
+  oldPassword: String!
+  password: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -11,6 +16,7 @@ input CreateUserInput {
 scalar Date
 
 type Mutation {
+  changePassword(id: Int!, input: ChangePasswordInput): Status!
   createUser(input: CreateUserInput!): User!
   deleteUser(id: Int!): Status!
   forgotPassword(email: String!): Status!
