@@ -6,12 +6,10 @@ import { encryptPassword } from 'infra/encryption';
 // import type IUser from '../../core/IUser';
 // import { comparePassword } from "infra/encryption";
 // import type IUser from "core/IUser";
-import { template, smtpTransport } from '../../nodemailer';
+// import { template, smtpTransport } from '../../nodemailer';
 
 export default ({ postUseCase, logger, jwt }: any) => {
-  const typeDefs = gql(
-    readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'),
-  );
+  const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
   const resolvers = {
     Mutation: {
@@ -26,13 +24,14 @@ export default ({ postUseCase, logger, jwt }: any) => {
 
         console.log('input', { password, token });
         try {
-         jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
-         const hashPassword = encryptPassword(password);
-         const user = await postUseCase.resetPassword({
-           password: hashPassword,
-           reset_password_token: token,
-         });
+          jwt.verify({ maxAge: process.env.JWT_TOKEN_EXPIRE_TIME })(token);
+          const hashPassword = encryptPassword(password);
+          const user = await postUseCase.resetPassword({
+            password: hashPassword,
+            reset_password_token: token,
+          });
 
+          /*
         const htmlToSend = template({
            name: 'test',
          });
@@ -49,13 +48,15 @@ export default ({ postUseCase, logger, jwt }: any) => {
 
          const info = await smtpTransport.sendMail(mailOptions);
 
-         logger.info('Successfully sent email.');
-         logger.info('Message sent successfully as %s', info.messageId);
-         logger.info({ ...user });
+          logger.info('Message sent successfully as %s', info.messageId);
 
-         return {
-           success: true,
-         };
+          */
+          logger.info('Successfully sent email.');
+          logger.info({ ...user });
+
+          return {
+            success: true,
+          };
         } catch (error: unknown) {
           logger.error(error);
           throw new Error(error as string | undefined);
