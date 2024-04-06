@@ -1,18 +1,29 @@
-/*eslint-disable*/
 import * as redis from 'redis';
 import validatedTtl from './validatedTtl';
 
 const HOST = process.env.NODE_ENV === 'development' ? 'redis' : 'localhost';
 
-const portRedis = process.env.CONTAINER_PORT_REDIS || 6379;
+const portRedis = process.env.CONTAINER_PORT_REDIS ?? 6379;
 
-function createClient(redisOptions: { port: number; host: string }) {
-  console.log('Start redis createClient', redisOptions);
-  const client = redis.createClient(redisOptions as any);
+/**
+ * Create a Redis client
+ * @param redisOptions
+ * @returns
+ */
+async function createClient(redisOptions: { port: number; host: string }) {
+  const client = redis.createClient({
+    socket: { port: redisOptions.port, host: redisOptions.host },
+  });
 
-  client.on('error', (err: any) => {
+  client.on('error', (err) => {
     console.log('Failed redis createClient', err);
   });
+
+  if (!client.isOpen) {
+    await client.connect();
+    console.log('Connected to Redis');
+  }
+
   client.on('connect', () => {
     console.log('Succeeded redis createClient', redisOptions);
   });
@@ -27,6 +38,8 @@ const redisOptions = {
 };
 
 const redisClient = createClient(redisOptions);
+
+console.log('redisClient redisClient redisClient redisClient', redisClient);
 
 const TTL = 5 * 60;
 
@@ -89,19 +102,13 @@ export default ({ config }: any) => {
   ) => {
     if (!callback) {
       callback = eachScanCallback;
-      //@ts-ignore
       eachScanCallback = options;
       options = {};
     }
-    //@ts-ignore
     const method = options.method || 'scan';
-    //@ts-ignore
     const key = options.key || '';
-    //@ts-ignore
     const count = options.count || 0;
-    //@ts-ignore
     const type = options.type || '';
-    //@ts-ignore
     const limit = options.limit || Infinity;
 
     let matchesCount = 0;
@@ -178,9 +185,8 @@ export default ({ config }: any) => {
    * of the Redis keyspace completes having searched for the given pattern.
    * Invoked with (err, matchingKeys).
    */
-  const scan = (pattern: string, options: object = {}, callback: Function) => {
+  function scan(pattern: string, options: object = {}, callback: Function) {
     if (!callback) {
-      //@ts-ignore
       callback = options;
       options = {};
     }
@@ -203,7 +209,7 @@ export default ({ config }: any) => {
         }
       },
     );
-  };
+  }
 
   /**
    * Returns 'OK' if successful
@@ -214,15 +220,15 @@ export default ({ config }: any) => {
    * @returns 'OK' if successful
    */
 
-  const set = (key: string, value: any, ttlInSeconds?: number): boolean => {
+  async function set(key: string, value: any, ttlInSeconds?: number): Promise<boolean> {
     const str = Array.isArray(value) ? JSON.stringify(value) : value;
 
     const ttl = validatedTtl(ttlInSeconds, defaultTtlInS);
 
-    if (ttl) return redisClient.setex(key, ttl, str);
+    if (ttl) return (await redisClient).setEx(key, ttl, str);
 
-    return redisClient.set(key, str);
-  };
+    return (await redisClient).set(key, str);
+  }
 
   /**
    * Returns value or null when the key is missing - See [redis get]{@link https://redis.io/commands/get}
@@ -231,15 +237,15 @@ export default ({ config }: any) => {
    * @returns value or null when the key is missing
    */
 
-  const get = (key: string): Promise<Error | string | null> => {
-    return new Promise((resolve, reject) => {
-      return redisClient.get(key, (err: Error | null, res: string | null) => {
+  async function get(key: string): Promise<Error | string | null> {
+    return new Promise(async (resolve, reject) => {
+      (await redisClient).get(key, (err: Error | null, res: string | null) => {
         if (err) return reject(err);
-
-        return resolve(res ? JSON.parse(<string>res) : null);
+        resolve(res ? JSON.parse(res) : null);
       });
     });
-  };
+  }
+
   /**
    * Returns 'OK' if successful
    * @async
@@ -248,16 +254,12 @@ export default ({ config }: any) => {
    * @param ttlInSeconds - time to live in seconds
    * @returns
    */
-  const getset = async (
-    key: string,
-    value: any,
-    ttlInSeconds: number | undefined,
-  ): Promise<any> => {
+  async function getset(key: string, value: any, ttlInSeconds: number | undefined): Promise<any> {
     const str = Array.isArray(value) ? JSON.stringify(value) : value;
 
     const ttl = validatedTtl(ttlInSeconds, defaultTtlInS);
 
-    let result = redisClient.getset(key, str) as any;
+    let result = redisClient.getSet(key, str) as any;
 
     try {
       result = JSON.parse(result);
@@ -270,7 +272,7 @@ export default ({ config }: any) => {
       redisClient.expire(key, ttl);
     }
     return result;
-  };
+  }
 
   /**
    * Returns 'PONG'
@@ -279,7 +281,9 @@ export default ({ config }: any) => {
    * @returns 'PONG'/string passed
    */
 
-  const ping = (str?: string | any): boolean => redisClient.ping(str ? str : []);
+  function ping(str?: any | string): boolean {
+    return redisClient.ping(str || []);
+  }
 
   /**
    * Returns 1 if the timeout was set/ 0 if key does not exist or the timeout could not be set - See [redis expire]{@link https://redis.io/commands/expire}
@@ -289,10 +293,10 @@ export default ({ config }: any) => {
    * @returns 1 if the timeout was set successfully; if not 0
    */
 
-  const expire = (key: string, ttlInSeconds: number): boolean => {
+  function expire(key: string, ttlInSeconds: number): boolean {
     const ttl = validatedTtl(ttlInSeconds);
-    return redisClient.expire(key, <number>ttl);
-  };
+    return redisClient.expire(key, ttl!);
+  }
 
   /**
    * Returns all keys matching pattern - See [redis keys]{@link https://redis.io/commands/keys}
@@ -300,26 +304,26 @@ export default ({ config }: any) => {
    * @param pattern - glob-style patterns/default '*'
    * @returns all keys matching pattern
    */
-  const keys = (pattern = '*'): boolean => {
+  function keys(pattern = '*'): boolean {
     return redisClient.keys(pattern);
-  };
+  }
 
   /**
    * Unsets the defaultTtlInS
    * @returns true
    */
-  const unsetDefaultTtlInS = (): boolean => {
+  function unsetDefaultTtlInS(): boolean {
     defaultTtlInS = undefined;
     return true;
-  };
+  }
 
   /**
    * Return the defaultTtlInS
    * @returns defaultTtlInS
    */
-  const getDefaultTtlInS = (): number | undefined => {
+  function getDefaultTtlInS(): number | undefined {
     return defaultTtlInS;
-  };
+  }
 
   /**
    * Sets the defaultTtlInS
@@ -327,10 +331,10 @@ export default ({ config }: any) => {
    * @returns defaultTtlInS
    */
 
-  const setDefaultTtlInS = (ttl: number): number | undefined => {
+  function setDefaultTtlInS(ttl: number): number | undefined {
     defaultTtlInS = validatedTtl(ttl);
     return defaultTtlInS;
-  };
+  }
 
   return {
     eachScan,
