@@ -1,3 +1,5 @@
 import IUsersRepository from './IUsersRepository';
+import Errors from './errors';
 
-export default IUsersRepository;
+export type { IUsersRepository };
+export { Errors };
