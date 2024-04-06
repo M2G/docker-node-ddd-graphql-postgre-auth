@@ -12,3 +12,4 @@ type Mutation {
   signup(input: SignupInput!): User!
   signin(input: SigninInput!): String!
 }
+
