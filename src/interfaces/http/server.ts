@@ -11,6 +11,35 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { json } from 'body-parser';
+import { Errors } from '../../types';
+
+const setHttpPlugin = {
+  async requestDidStart() {
+    return {
+      async willSendResponse(ctx) {
+        const message: string = ctx.response.body.singleResult.errors?.[0]?.message;
+
+        if (
+          message === Errors.WRONG_COMBINATION ||
+          message === Errors.USER_NOT_FOUND ||
+          message === Errors.CHANGE_PASSWORD_MATCH_ERROR
+        ) {
+          ctx.response.http.status = 401;
+        }
+        if (message === Errors.DUPLICATE_ERROR) {
+          ctx.response.http.status = 409;
+        }
+
+        console.log(
+          'response.body.singleResult.errors?.[0]?.extensions?.code',
+          ctx.response.body.singleResult.errors?.[0],
+        );
+
+        return ctx;
+      },
+    };
+  },
+};
 
 export default ({ config, logger, auth, schema, verify }: any) => {
   const app = express();
@@ -29,6 +58,7 @@ export default ({ config, logger, auth, schema, verify }: any) => {
             footer: false,
           })
         : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+      setHttpPlugin,
     ],
     resolvers: schema.resolvers,
     typeDefs: schema.typeDefs,
