@@ -3,6 +3,10 @@ import { join } from 'path';
 import gql from 'graphql-tag';
 import { encryptPassword } from 'infra/encryption';
 import type IUser from 'core/IUser';
+import HttpException from 'infra/support';
+import { Errors } from '../../types';
+
+const DUPLICATE_ERROR = 'Duplicate error';
 
 export default ({ postUseCase, logger }: any) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
@@ -32,8 +36,11 @@ export default ({ postUseCase, logger }: any) => {
             last_name: data?.last_name,
             modified_at: Date.now(),
           };
-        } catch (error: unknown) {
-          console.log('error error', error);
+        } catch (error: Error) {
+          console.log('error', error.message);
+          if (error.message === DUPLICATE_ERROR) {
+            throw new HttpException(409, Errors.DUPLICATE_ERROR);
+          }
 
           logger.error(error);
           throw new Error(error as string | undefined);
