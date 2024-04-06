@@ -9,29 +9,9 @@ import type IUsersRepository from 'types/IUsersRepository';
  * function for create user.
  */
 export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
-  const register = ({
-    email,
-    password,
-    first_name,
-    last_name,
-    username,
-    created_at,
-    deleted_at,
-    last_connected_at,
-  }: IUser) => {
-
+  const register = ({ ...args }: IUser) => {
     try {
-      const users = Users({
-        created_at,
-        deleted_at,
-        email,
-        first_name,
-        last_connected_at,
-        last_name,
-        password,
-        username,
-      });
-
+      const users = Users({ ...args });
       return usersRepository.register(users as IUser);
     } catch (error) {
       throw new Error(error as string | undefined);
