@@ -135,14 +135,13 @@ export default ({ model, jwt }: any) => {
     password: string;
     oldPassword: string;
   }): Promise<unknown> {
-    console.log('changePassword', { id, password, oldPassword });
     try {
       const dataValues = await model.findOne({ where: { id } }, { raw: true });
 
-      console.log('dataValues dataValues', dataValues?.dataValues);
-      console.log('MATCHHHHHHH', validatePassword(dataValues?.dataValues?.password)(oldPassword));
-
-      if (validatePassword(dataValues?.dataValues?.password)(oldPassword)) {
+      if (
+        dataValues?.dataValues?.password &&
+        validatePassword(dataValues.dataValues.password)(oldPassword)
+      ) {
         const hashPassword = encryptPassword(password);
         return update({ id, password: hashPassword });
       }
@@ -155,24 +154,24 @@ export default ({ model, jwt }: any) => {
 
   async function forgotPassword({ email }: { email: string }): Promise<unknown> {
     try {
-      const { dataValues } = await model.findOne({ where: { email } }, { raw: true });
+      const data = await model.findOne({ where: { email } }, { raw: true });
 
-      if (!dataValues) return null;
+      if (!data?.dataValues) return null;
 
       const payload = {
-        email: dataValues.email,
-        id: dataValues.id,
-        password: dataValues.password,
+        email: data?.dataValues.email,
+        id: data?.dataValues.id,
+        password: data?.dataValues.password,
       };
       const options = {
         audience: [],
         expiresIn: process.env.JWT_TOKEN_EXPIRE_TIME,
-        subject: dataValues.email,
+        subject: data?.dataValues.email,
       };
       const token: string = jwt.signin(options)(payload);
 
       return update({
-        id: dataValues.id,
+        id: data?.dataValues.id,
         reset_password_expires: Date.now() + 86400000,
         reset_password_token: token,
       });
