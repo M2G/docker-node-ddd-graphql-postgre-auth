@@ -13,14 +13,8 @@ export default ({ postUseCase, jwt, logger }: any) => {
       signin: async (parent: any, args: any) => {
         const { input } = args;
         const { email, password } = (input as IUser) || {};
-
-        console.log('input input input input', { email, password });
-
         try {
           const data: IUser = await postUseCase.authenticate({ email });
-
-          console.log('authenticate authenticate authenticate', data);
-
           if (!data?.email) {
             logger.info(`User not found (email: ${email}).`);
             throw new HttpException(401, 'USER_NOT_FOUND');

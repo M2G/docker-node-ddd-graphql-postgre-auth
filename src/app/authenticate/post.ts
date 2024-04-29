@@ -20,7 +20,7 @@ export default ({
   };
   usersRepository: IUsersRepository;
 }) => {
-  const authenticate = async ({ email }: { readonly email: string }): Promise<IUser> => {
+  async function authenticate({ email }: { readonly email: string }): Promise<IUser> {
     try {
       const user = Users({ email });
       console.log('user user user user', user);
@@ -43,9 +43,7 @@ export default ({
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  return {
-    authenticate,
-  };
+  return { authenticate };
 };

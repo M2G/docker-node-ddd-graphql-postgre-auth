@@ -10,16 +10,14 @@ import type IUsersRepository from 'types/IUsersRepository';
  */
 // @ts-ignore
 export default ({ usersRepository }: IUsersRepository) => {
-  const forgotPassword = ({ email }: { readonly email: string }) => {
+  function forgotPassword({ email }: { readonly email: string }) {
     try {
       const users = Users({ email });
       return usersRepository.forgotPassword(users);
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  return {
-    forgotPassword,
-  };
+  return { forgotPassword };
 };

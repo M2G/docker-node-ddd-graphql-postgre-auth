@@ -6,7 +6,7 @@ import { comparePassword, encryptPassword } from 'infra/encryption';
 const validatePassword = (endcodedPassword: string) => (password: string) =>
   comparePassword(password, endcodedPassword);
 
-export default ({ model, jwt }: any) => {
+export default ({ model, jwt }) => {
   async function getAll({
     filters,
     pageSize,

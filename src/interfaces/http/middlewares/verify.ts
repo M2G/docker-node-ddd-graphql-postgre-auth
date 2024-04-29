@@ -1,7 +1,7 @@
-/*eslint-disable*/
 import Status from 'http-status';
 import { Request } from 'express';
 import { GraphQLError, parse, OperationDefinitionNode, FieldNode } from 'graphql';
+
 const WHITE_LIST = [
   'resetPassword',
   'forgotPassword',
@@ -47,14 +47,14 @@ export default ({ jwt }: { jwt: any }) => {
             throw new GraphQLError(<string>Status[Status.UNAUTHORIZED], {
               extensions: {
                 code: Status.UNAUTHORIZED,
-                http: { status: 401 },
+                http: { status: Status.UNAUTHORIZED },
               },
             });
 
           throw new GraphQLError(<string>Status[Status.BAD_REQUEST], {
             extensions: {
               code: Status.BAD_REQUEST,
-              http: { status: 400 },
+              http: { status: Status.BAD_REQUEST },
             },
           });
         }

@@ -11,6 +11,7 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { json } from 'body-parser';
+import Status from 'http-status';
 import { Errors } from '../../types';
 
 const setHttpPlugin = {
@@ -24,10 +25,10 @@ const setHttpPlugin = {
           message === Errors.USER_NOT_FOUND ||
           message === Errors.CHANGE_PASSWORD_MATCH_ERROR
         ) {
-          ctx.response.http.status = 401;
+          ctx.response.http.status = Status.UNAUTHORIZED;
         }
         if (message === Errors.DUPLICATE_ERROR) {
-          ctx.response.http.status = 409;
+          ctx.response.http.status = Status.CONFLICT;
         }
 
         console.log(

@@ -9,16 +9,14 @@ import type IUser from 'core/IUser';
  * function for remove user.
  */
 export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
-  const remove = ({ id }: { readonly id: number }) => {
+  function remove({ id }: { readonly id: number }) {
     try {
       const users = Users({ id });
       return usersRepository.remove(users as IUser);
     } catch (error: unknown) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  return {
-    remove,
-  };
+  return { remove };
 };

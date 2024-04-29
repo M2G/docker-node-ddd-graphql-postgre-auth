@@ -16,7 +16,7 @@ export default ({
   };
   usersRepository: IUsersRepository;
 }) => {
-  const all = async ({ ...arg }: { filters: string; pageSize: number; page: number }) => {
+  async function all({ ...arg }: { filters: string; pageSize: number; page: number }) {
     try {
       if (arg && Object.values(arg).filter(Boolean).length) {
         return usersRepository.getAll({
@@ -40,9 +40,7 @@ export default ({
     } catch (error) {
       throw new Error(error as string | undefined);
     }
-  };
+  }
 
-  return {
-    all,
-  };
+  return { all };
 };
