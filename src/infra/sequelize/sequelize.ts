@@ -50,7 +50,8 @@ export default ({ config, basePath }: any) => {
 
   const dir = path.join(basePath as string, './models');
 
-  fs.readdirSync(dir)
+  fs
+    .readdirSync(dir)
     ?.filter((file) => !file.startsWith('.') && file !== 'index.js' && file.endsWith('.js'))
     ?.forEach((file) => {
       const modelDir = path.join(dir, file);
