@@ -1,14 +1,6 @@
-/*
-const convertNodeToCursor = (node: { _id: string }) => {
-  return new Buffer(node._id, 'binary').toString('base64');
-};
+import { comparePassword } from 'infra/encryption';
 
-const convertCursorToNodeId = (cursor: string) => {
-  return new Buffer(cursor, 'base64').toString('binary');
-};
+const validatePassword = (endcodedPassword: string) => (password: string) =>
+  comparePassword(password, endcodedPassword);
 
-export {
-  convertNodeToCursor,
-  convertCursorToNodeId
-}
-*/
+export { validatePassword };

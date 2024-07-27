@@ -1,12 +1,11 @@
 import { UniqueConstraintError, Op } from 'sequelize';
 import type IUser from 'core/IUser';
 import toEntity from './transform';
-import { comparePassword, encryptPassword } from 'infra/encryption';
+import { encryptPassword } from 'infra/encryption';
+import { validatePassword } from './helpers';
 
-const validatePassword = (endcodedPassword: string) => (password: string) =>
-  comparePassword(password, endcodedPassword);
-
-export default ({ model, jwt }) => {
+export default ({ model, jwt, ...args }) => {
+  console.log('------------------------', model);
   async function getAll({
     filters,
     pageSize,
@@ -239,6 +238,8 @@ export default ({ model, jwt }) => {
   }
 
   async function authenticate({ email }: { email: string }): Promise<unknown | null> {
+    console.log('authenticate authenticate authenticate', model);
+
     try {
       const user = await model.findOne({ where: { email } }, { raw: true });
 
@@ -250,14 +251,9 @@ export default ({ model, jwt }) => {
     }
   }
 
-  function destroy(...args: any[]) {
-    return model.destroy(...args);
-  }
-
   return {
     authenticate,
     changePassword,
-    destroy,
     findOne,
     forgotPassword,
     getAll,

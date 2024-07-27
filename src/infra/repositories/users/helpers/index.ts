@@ -1,4 +1,3 @@
-/* import { convertNodeToCursor, convertCursorToNodeId } from './helpers';
+import { validatePassword } from './helpers';
 
-export { convertNodeToCursor, convertCursorToNodeId };
-*/
+export { validatePassword };
