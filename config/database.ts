@@ -12,9 +12,9 @@ export default {
     dialect: 'postgres',
     dialectOptions: {
       ssl: {
-        require: true
-      }
-    }
+        require: true,
+      },
+    },
   },
   production: {
     version: 'v1',
@@ -23,9 +23,9 @@ export default {
     dialect: 'postgres',
     dialectOptions: {
       ssl: {
-        require: true
-      }
-    }
+        require: true,
+      },
+    },
   },
   test: {
     version: 'v1',
@@ -33,5 +33,5 @@ export default {
     port: process.env.DB_PORT || 5432,
     dialect: 'postgres',
     logging: console.log,
-  }
+  },
 };
