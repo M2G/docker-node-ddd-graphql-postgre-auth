@@ -12,29 +12,49 @@ import cors from 'cors';
 import http from 'http';
 import { json } from 'body-parser';
 import Status from 'http-status';
-import { Errors } from '../../types';
 
 const setHttpPlugin = {
   async requestDidStart() {
     return {
-      async willSendResponse(ctx) {
+      async willSendResponse(ctx: {
+        response: { body: { singleResult: { errors: any[] } }; http: { status: number } };
+      }) {
         const message: string = ctx.response.body.singleResult.errors?.[0]?.message;
 
         if (
+          message?.includes('User not found') ||
+          message?.includes('Wrong username and password combination')
+        ) {
+          ctx.response.http.status = Status.UNAUTHORIZED;
+        }
+
+        if (
+          message?.includes('Refresh Token is required') ||
+          message?.includes('Refresh token is not in database') ||
+          message?.includes('Refresh token was expired. Please make a new signin request')
+        ) {
+          ctx.response.http.status = Status.FORBIDDEN;
+        }
+
+        /*
+        if (
           message === Errors.WRONG_COMBINATION ||
-          message === Errors.USER_NOT_FOUND ||
           message === Errors.CHANGE_PASSWORD_MATCH_ERROR
         ) {
           ctx.response.http.status = Status.UNAUTHORIZED;
         }
+
         if (message === Errors.DUPLICATE_ERROR) {
           ctx.response.http.status = Status.CONFLICT;
         }
 
-        console.log(
-          'response.body.singleResult.errors?.[0]?.extensions?.code',
-          ctx.response.body.singleResult.errors?.[0],
-        );
+        if (
+          message === Errors.REFRESH_TOKEN_REQUIRED ||
+          message === Errors.REFRESH_TOKEN_NOT_FOUND ||
+          message === Errors.REFRESH_TOKEN_EXPIRED
+        ) {
+          ctx.response.http.status = Status.FORBIDDEN;
+        }*/
 
         return ctx;
       },

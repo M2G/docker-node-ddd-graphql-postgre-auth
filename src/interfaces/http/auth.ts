@@ -36,8 +36,6 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
   return {
     authenticate: (req: Request, res: Response, next: NextFunction) =>
       passport.authenticate('bearer', { session: false }, (err: string, _: any) => {
-        console.log('passport.authenticate', err);
-
         if (err === Status[Status.NOT_FOUND]) {
           return res.status(Status.NOT_FOUND).json(Fail({ message: Status[Status.NOT_FOUND] }));
         }

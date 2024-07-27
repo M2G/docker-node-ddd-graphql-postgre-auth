@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { GraphQLError, parse, OperationDefinitionNode, FieldNode } from 'graphql';
 
 const WHITE_LIST = [
+  'refreshToken',
   'resetPassword',
   'forgotPassword',
   'signin',
