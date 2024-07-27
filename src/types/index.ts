@@ -1,5 +1,4 @@
-import IUsersRepository from './IUsersRepository';
-import Errors from './errors';
+import type IUsersRepository from './IUsersRepository';
+import type ITokenRepository from './ITokenRepository';
 
-export type { IUsersRepository };
-export { Errors };
+export type { IUsersRepository, ITokenRepository };
