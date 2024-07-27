@@ -8,8 +8,14 @@ input SigninInput {
   password: String!
 }
 
+type Token {
+   accessToken: String
+   refreshToken: String
+}
+
 type Mutation {
   signup(input: SignupInput!): User!
-  signin(input: SigninInput!): String!
+  signin(input: SigninInput!): Token!
+  refreshToken(requestToken: String!): Token!
 }
 
