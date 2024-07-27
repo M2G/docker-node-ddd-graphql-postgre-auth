@@ -4,3 +4,7 @@ declare module 'redis' {
     get: (key: string) => Promise<Error | string | null>;
   }
 }
+
+declare module 'uuid' {
+  export default function uuidv4(): string;
+}
