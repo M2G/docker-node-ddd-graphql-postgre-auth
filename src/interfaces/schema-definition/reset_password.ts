@@ -8,7 +8,7 @@ import { encryptPassword } from 'infra/encryption';
 // import type IUser from "core/IUser";
 // import { template, smtpTransport } from '../../nodemailer';
 
-export default ({ postUseCase, logger, jwt }: any) => {
+export default ({ postUseCase, logger, jwt }) => {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
   const resolvers = {
@@ -32,25 +32,22 @@ export default ({ postUseCase, logger, jwt }: any) => {
           });
 
           /*
-        const htmlToSend = template({
-           name: 'test',
-         });
+          const htmlToSend = template({
+            name: 'test',
+          });
 
-         const mailOptions = {
-           from: 'sendersemail@example.com',
-           html: htmlToSend,
-           subject: 'Password reset confirmation',
-           to:
-             process.env.NODE_ENV === 'test'
-               ? user.email
-               : process.env.REAL_EMAIL,
-         };
+          const mailOptions = {
+            from: 'sendersemail@example.com',
+            html: htmlToSend,
+            subject: 'Password reset confirmation',
+            to: process.env.NODE_ENV === 'test' ? user.email : process.env.REAL_EMAIL,
+          };
 
-         const info = await smtpTransport.sendMail(mailOptions);
+          const info = await smtpTransport.sendMail(mailOptions);
 
           logger.info('Message sent successfully as %s', info.messageId);
 
-          */
+           */
           logger.info('Successfully sent email.');
           logger.info({ ...user });
 

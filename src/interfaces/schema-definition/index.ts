@@ -8,9 +8,13 @@ import users from 'interfaces/http/modules/users';
 import forgotPassword from 'interfaces/http/modules/forgot_password';
 import resetPassword from 'interfaces/http/modules/reset_password';
 import changePassword from 'interfaces/http/modules/change_password';
+import refreshToken from 'interfaces/http/modules/refresh_token';
 // SCHEMA DEFINITIONS AND RESOLVERS
 
 export default () => {
+  const { resolvers: refreshTokenResolvers, typeDefs: refreshTokenTypeDefs } =
+    refreshToken().refreshToken;
+
   const { resolvers: authenticateResolvers, typeDefs: authenticateTypeDefs } =
     authenticate().authenticate;
 
@@ -33,6 +37,7 @@ export default () => {
       ...authenticateResolvers.Type,
       ...registerResolvers.Type,
       Mutation: {
+        ...refreshTokenResolvers.Mutation,
         ...changePasswordResolvers.Mutation,
         ...resetPasswordResolvers.Mutation,
         ...forgotPasswordResolvers.Mutation,
@@ -46,6 +51,7 @@ export default () => {
     },
     typeDefs: [
       DateTimeTypeDefinition,
+      refreshTokenTypeDefs,
       authenticateTypeDefs,
       registerTypeDefs,
       usersTypeDefs,
