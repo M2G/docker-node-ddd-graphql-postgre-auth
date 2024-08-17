@@ -1,16 +1,13 @@
-/*eslint-disable*/
 /**
  * this file will hold all the get use-case for user domain
  */
 import Users from 'domain/users';
 import type IUsersRepository from 'types/IUsersRepository';
-import console from 'console';
 
 /**
  * function for change password user.
  */
-// @ts-ignore
-export default ({ usersRepository }: IUsersRepository) => {
+export default function ({ usersRepository }: IUsersRepository) {
   function changePassword({
     id,
     password,
@@ -21,12 +18,12 @@ export default ({ usersRepository }: IUsersRepository) => {
     oldPassword: string;
   }) {
     try {
-      const users = Users({ id, password, oldPassword });
+      const users = Users({ id, oldPassword, password });
       return usersRepository.changePassword(users);
     } catch (error) {
-      throw new Error(error as string | undefined);
+      throw new Error(error as string);
     }
   }
 
   return { changePassword };
-};
+}

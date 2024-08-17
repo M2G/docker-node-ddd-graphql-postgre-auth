@@ -22,14 +22,8 @@ export default ({ model, jwt }) => {
     id: number;
     token: string;
   }): Promise<IUser> {
-    console.log('::::::::::::::::', {
-      expiryDate,
-      id,
-      token,
-    });
-
     try {
-      const { dataValues } = await model.create({
+      const [{ dataValues }, created] = await model.upsert({
         expiryDate,
         id,
         token,

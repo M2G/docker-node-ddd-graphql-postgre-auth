@@ -8,7 +8,7 @@ import type IUser from 'core/IUser';
 /**
  * function for update user.
  */
-export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
+export default function ({ usersRepository }: { usersRepository: IUsersRepository }) {
   function update({ ...arg }) {
     try {
       const users = Users({
@@ -17,9 +17,9 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
 
       return usersRepository.update(users as IUser);
     } catch (error) {
-      throw new Error(error as string | undefined);
+      throw new Error(error as string);
     }
   }
 
   return { update };
-};
+}

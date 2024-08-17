@@ -8,7 +8,7 @@ import { Errors } from '../../types';
 
 const DUPLICATE_ERROR = 'Duplicate error';
 
-export default ({ postUseCase, logger }: any) => {
+export default function ({ postUseCase, logger }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
@@ -55,4 +55,4 @@ export default ({ postUseCase, logger }: any) => {
     resolvers,
     typeDefs,
   };
-};
+}

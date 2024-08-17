@@ -6,7 +6,14 @@ import type IUser from '../../core/IUser';
 import { encryptPassword } from 'infra/encryption';
 
 // @ts-ignore
-export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, postUseCase }) => {
+export default function ({
+  getUseCase,
+  getOneUseCase,
+  deleteUseCase,
+  logger,
+  putUseCase,
+  postUseCase,
+}) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
@@ -112,4 +119,4 @@ export default ({ getUseCase, getOneUseCase, deleteUseCase, logger, putUseCase, 
     resolvers,
     typeDefs,
   };
-};
+}

@@ -1,4 +1,3 @@
-/*eslint-disable*/
 /**
  * this file will hold all the get use-case for user domain
  */
@@ -8,7 +7,7 @@ import type IUsersRepository from 'types/IUsersRepository';
 /**
  * function for reset password user.
  */
-export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
+export default function ({ usersRepository }: { usersRepository: IUsersRepository }) {
   function resetPassword({
     password,
     reset_password_token,
@@ -20,9 +19,9 @@ export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
       const users = Users({ password, reset_password_token });
       return usersRepository.resetPassword(users);
     } catch (error) {
-      throw new Error(error as string | undefined);
+      throw new Error(error as string);
     }
   }
 
   return { resetPassword };
-};
+}

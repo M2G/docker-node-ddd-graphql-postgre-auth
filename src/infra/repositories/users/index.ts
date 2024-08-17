@@ -5,7 +5,6 @@ import { encryptPassword } from 'infra/encryption';
 import { validatePassword } from './helpers';
 
 export default ({ model, jwt, ...args }) => {
-  console.log('------------------------', model);
   async function getAll({
     filters,
     pageSize,

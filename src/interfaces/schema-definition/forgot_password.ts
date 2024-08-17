@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import type IUser from 'core/IUser';
 // import { template, smtpTransport } from '../../nodemailer';
 
-export default ({ postUseCase, logger }: any) => {
+export default function ({ postUseCase, logger }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
   const resolvers = {
@@ -57,4 +57,4 @@ export default ({ postUseCase, logger }: any) => {
     resolvers,
     typeDefs,
   };
-};
+}

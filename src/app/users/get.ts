@@ -6,7 +6,7 @@ const TTL = 1 * 60;
 /**
  * function for get users.
  */
-export default ({
+export default function ({
   redis,
   usersRepository,
 }: {
@@ -15,7 +15,7 @@ export default ({
     get: (key: string) => Promise<Error | string | null>;
   };
   usersRepository: IUsersRepository;
-}) => {
+}) {
   async function all({ ...arg }: { filters: string; pageSize: number; page: number }) {
     try {
       if (arg && Object.values(arg).filter(Boolean).length) {
@@ -38,9 +38,9 @@ export default ({
 
       return userList;
     } catch (error) {
-      throw new Error(error as string | undefined);
+      throw new Error(error as string);
     }
   }
 
   return { all };
-};
+}

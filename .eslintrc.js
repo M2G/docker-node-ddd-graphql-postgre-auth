@@ -49,6 +49,7 @@ module.exports = {
     'multiline-ternary': 0,
     'init-declarations': 0,
     'func-style': 0,
+    'func-names': 1,
     camelcase: 1,
 
     'max-statements': 0,

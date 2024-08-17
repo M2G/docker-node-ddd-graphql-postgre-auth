@@ -1,4 +1,4 @@
-import { createContainer, asValue, asFunction } from 'awilix';
+import { createContainer, asValue, asFunction, AwilixContainer } from 'awilix';
 
 import app from './app';
 import server from './interfaces/http/server';
@@ -13,9 +13,7 @@ import database from './infra/database';
 import schema from './interfaces/schema-definition';
 import response from './infra/support/response';
 
-const container = createContainer();
-
-container.register({
+const nameAndRegistration = {
   app: asFunction(app).singleton(),
   auth: asFunction(auth).singleton(),
   config: asValue(config),
@@ -28,6 +26,10 @@ container.register({
   schema: asFunction(schema).singleton(),
   server: asFunction(server).singleton(),
   verify: asFunction(verify).singleton(),
-});
+};
+
+const container: AwilixContainer = createContainer();
+
+container.register(nameAndRegistration);
 
 export default container;

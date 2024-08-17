@@ -8,7 +8,7 @@ import { encryptPassword } from 'infra/encryption';
 // import type IUser from "core/IUser";
 // import { template, smtpTransport } from '../../nodemailer';
 
-export default ({ postUseCase, logger, jwt }) => {
+export default function ({ postUseCase, logger, jwt }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
   const resolvers = {
@@ -68,4 +68,4 @@ export default ({ postUseCase, logger, jwt }) => {
     resolvers,
     typeDefs,
   };
-};
+}

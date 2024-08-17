@@ -8,14 +8,14 @@ import type IUser from 'core/IUser';
 /**
  * function for create user.
  */
-export default ({ usersRepository }: { usersRepository: IUsersRepository }) => {
+export default function ({ usersRepository }: { usersRepository: IUsersRepository }) {
   function register({ ...args }: any) {
     try {
       const users = Users({ ...args });
       return usersRepository.register(users as IUser);
     } catch (error) {
-      throw new Error(error as string | undefined);
+      throw new Error(error as string);
     }
   }
   return { register };
-};
+}

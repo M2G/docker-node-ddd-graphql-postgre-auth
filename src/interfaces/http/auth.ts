@@ -16,7 +16,6 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
       console.log('bearerStrategy', {
         id,
         token,
-        usersRepository,
       });
 
       usersRepository

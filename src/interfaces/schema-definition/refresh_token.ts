@@ -8,7 +8,7 @@ import type IUser from 'core/IUser';
 import config from '../../../config';
 import { GraphQLError } from 'graphql/index';
 
-export default ({ getOneUseCase2, removeUseCase, getOneUseCase, jwt, logger }: any) => {
+export default function ({ getOneUseCase2, removeUseCase, getOneUseCase, jwt, logger }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
 
   const resolvers = {
@@ -70,13 +70,14 @@ export default ({ getOneUseCase2, removeUseCase, getOneUseCase, jwt, logger }: a
           const payload = {
             id: user?.id,
           };
+
           const options = {
             audience: [],
             expiresIn: config.jwtExpiration,
             subject: user?.id?.toString(),
           };
 
-          const newAccessToken = jwt.signin(options, payload);
+          const newAccessToken = jwt.signin(options)(payload);
 
           return {
             accessToken: newAccessToken,
@@ -96,4 +97,4 @@ export default ({ getOneUseCase2, removeUseCase, getOneUseCase, jwt, logger }: a
     resolvers,
     typeDefs,
   };
-};
+}

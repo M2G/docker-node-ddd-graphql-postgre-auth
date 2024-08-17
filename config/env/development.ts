@@ -11,6 +11,6 @@ export default {
   authSession: {
     session: false,
   },
-  jwtExpiration: 60, // 1 minute
-  jwtRefreshExpiration: 120, // 2 minutes
+  jwtExpiration: 2 * 120, // 1 minute
+  jwtRefreshExpiration: 2 * 120, // 2 minutes
 };

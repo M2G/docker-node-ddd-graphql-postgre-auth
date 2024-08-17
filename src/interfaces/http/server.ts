@@ -16,7 +16,7 @@ import Status from 'http-status';
 const setHttpPlugin = {
   async requestDidStart() {
     return {
-      async willSendResponse(ctx: {
+      willSendResponse(ctx: {
         response: { body: { singleResult: { errors: any[] } }; http: { status: number } };
       }) {
         const message: string = ctx.response.body.singleResult.errors?.[0]?.message;
@@ -30,7 +30,7 @@ const setHttpPlugin = {
 
         if (
           message?.includes('Refresh Token is required') ||
-          message?.includes('Refresh token is not in database') ||
+          message?.includes('Refresh token is not in database!') ||
           message?.includes('Refresh token was expired. Please make a new signin request')
         ) {
           ctx.response.http.status = Status.FORBIDDEN;
@@ -62,7 +62,7 @@ const setHttpPlugin = {
   },
 };
 
-export default ({ config, logger, auth, schema, verify }: any) => {
+export default function ({ config, logger, auth, schema, verify }) {
   const app = express();
 
   const httpServer = http.createServer(app);
@@ -120,4 +120,4 @@ export default ({ config, logger, auth, schema, verify }: any) => {
         }
       }),
   };
-};
+}

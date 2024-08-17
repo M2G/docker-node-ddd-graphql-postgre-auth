@@ -8,7 +8,7 @@ import type IUser from 'core/IUser';
 import Status from 'http-status';
 import { GraphQLError } from 'graphql';
 
-export default ({ postUseCase2, postUseCase, jwt, logger }: any) => {
+export default function ({ postUseCase2, postUseCase, jwt, logger }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
 
   console.log('config', config);
@@ -43,7 +43,7 @@ export default ({ postUseCase2, postUseCase, jwt, logger }: any) => {
             });
           }
 
-          const payload: IUser = {
+          const payload = {
             email: data.email,
             id: data.id,
             password: data.password,
@@ -51,7 +51,7 @@ export default ({ postUseCase2, postUseCase, jwt, logger }: any) => {
 
           const options = {
             audience: [],
-            expiresIn: 5 * 60,
+            expiresIn: 1 * 30,
             subject: data.email,
           };
 
@@ -84,7 +84,7 @@ export default ({ postUseCase2, postUseCase, jwt, logger }: any) => {
           };
         } catch (error: unknown) {
           logger.error(error);
-          throw new Error(error as string | undefined);
+          throw new Error(error as string);
         }
       },
     },
@@ -96,4 +96,4 @@ export default ({ postUseCase2, postUseCase, jwt, logger }: any) => {
     resolvers,
     typeDefs,
   };
-};
+}

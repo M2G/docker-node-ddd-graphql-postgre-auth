@@ -1,10 +1,10 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import gql from 'graphql-tag';
-import HttpException from 'infra/support';
-import { Errors } from '../../types';
+import { GraphQLError } from 'graphql/index';
+import Status from 'http-status';
 
-export default ({ postUseCase, logger }: any) => {
+export default function ({ postUseCase, logger }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
 
   const resolvers = {
@@ -27,8 +27,12 @@ export default ({ postUseCase, logger }: any) => {
           logger.info({ ...result });
 
           if (!result) {
-            // "An error occurred while changing the password"
-            throw new HttpException(401, Errors.CHANGE_PASSWORD_MATCH_ERROR);
+            throw new GraphQLError('An error occurred while changing the password', {
+              extensions: {
+                code: Status.UNAUTHORIZED,
+                http: { status: 401 },
+              },
+            });
           }
 
           return {
@@ -36,7 +40,7 @@ export default ({ postUseCase, logger }: any) => {
           };
         } catch (error: unknown) {
           logger.error(error);
-          throw new Error(error as string | undefined);
+          throw new Error(error as string);
         }
       },
     },
@@ -48,4 +52,4 @@ export default ({ postUseCase, logger }: any) => {
     resolvers,
     typeDefs,
   };
-};
+}

@@ -7,15 +7,15 @@ import type ITokenRepository from 'types/ITokenRepository';
 /**
  * function for create user.
  */
-export default ({ tokenRepository }: { tokenRepository: ITokenRepository }) => {
+export default function ({ tokenRepository }: { tokenRepository: ITokenRepository }) {
   function register({ ...args }: IUser) {
     try {
       const token = Token({ ...args });
       return tokenRepository.register(token as IUser);
     } catch (error) {
-      throw new Error(error as string | undefined);
+      throw new Error(error as string);
     }
   }
 
   return { register };
-};
+}
