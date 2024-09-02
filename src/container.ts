@@ -1,4 +1,4 @@
-import { createContainer, asValue, asFunction, AwilixContainer } from 'awilix';
+import { createContainer, asValue, asClass, asFunction, AwilixContainer, Lifetime } from 'awilix';
 
 import app from './app';
 import server from './interfaces/http/server';
@@ -13,6 +13,9 @@ import database from './infra/database';
 import schema from './interfaces/schema-definition';
 import response from './infra/support/response';
 
+import i18n from './i18n.config';
+import LocaleService from './services/localeService';
+
 const nameAndRegistration = {
   app: asFunction(app).singleton(),
   auth: asFunction(auth).singleton(),
@@ -26,6 +29,8 @@ const nameAndRegistration = {
   schema: asFunction(schema).singleton(),
   server: asFunction(server).singleton(),
   verify: asFunction(verify).singleton(),
+  localeService: asClass(LocaleService, { lifetime: Lifetime.SINGLETON }),
+  i18nProvider: asValue(i18n),
 };
 
 const container: AwilixContainer = createContainer();
