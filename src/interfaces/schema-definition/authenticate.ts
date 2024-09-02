@@ -8,21 +8,19 @@ import type IUser from 'core/IUser';
 import Status from 'http-status';
 import { GraphQLError } from 'graphql';
 
-export default function ({ postUseCase2, postUseCase, jwt, logger }) {
+export default function ({ postUseCase2, postUseCase, jwt, logger, localeService, i18nProvider }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
-
-  console.log('config', config);
-
+  // userNotFound %s
   const resolvers = {
     Mutation: {
-      signin: async (_: any, args: { input: IUser }) => {
+      async signin(_: any, args: { input: IUser }) {
         const { input } = args;
         const { email, password } = input || {};
         try {
           const data: IUser = await postUseCase.authenticate({ email });
           if (!data?.email) {
-            logger.info(`User not found (email: ${email}).`);
-            throw new GraphQLError(`User not found (email: ${data.email}).`, {
+            logger.info(localeService.translate(`userNotFound %s`, email));
+            throw new GraphQLError(localeService.translate(`userNotFound %s`, email) as string, {
               extensions: {
                 code: Status.UNAUTHORIZED,
                 http: { status: 401 },
@@ -33,14 +31,17 @@ export default function ({ postUseCase2, postUseCase, jwt, logger }) {
           const match = comparePassword(password, data.password);
 
           if (!match) {
-            throw new GraphQLError('Wrong username and password combination.', {
-              extensions: {
-                code: Status.UNAUTHORIZED,
-                http: {
-                  status: 401,
+            throw new GraphQLError(
+              localeService.translate(`wrongUsernamePasswordCombination`) as string,
+              {
+                extensions: {
+                  code: Status.UNAUTHORIZED,
+                  http: {
+                    status: 401,
+                  },
                 },
               },
-            });
+            );
           }
 
           const payload = {
@@ -59,11 +60,7 @@ export default function ({ postUseCase2, postUseCase, jwt, logger }) {
 
           expiredAt.setSeconds(expiredAt.getSeconds() + config.jwtRefreshExpiration);
 
-          console.log('------', {
-            expiryDate: expiredAt.getTime(),
-            id: data.id,
-            token: uuidv4(),
-          });
+          console.log('postUseCase2', postUseCase2);
 
           const refreshToken = await postUseCase2.register({
             expiryDate: expiredAt.getTime(),
@@ -82,7 +79,7 @@ export default function ({ postUseCase2, postUseCase, jwt, logger }) {
             accessToken: token,
             refreshToken: refreshToken.token,
           };
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string);
         }

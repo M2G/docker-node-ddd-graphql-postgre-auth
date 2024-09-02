@@ -8,6 +8,7 @@ export default () => {
     refreshToken: refreshToken({
       removeUseCase,
       getOneUseCase,
+      // @TODO rename it to refreshTokenUseCase
       getOneUseCase2,
       jwt,
       logger,

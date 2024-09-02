@@ -4,7 +4,7 @@ import container from '../../../../container';
 
 export default () => {
   const { cradle } = container;
-  const { redis, repository, jwt, logger } = cradle;
+  const { redis, repository, jwt, logger, localeService, i18nProvider } = cradle;
   const { usersRepository, tokenRepository } = repository;
 
   const postUseCase = authenticate({ redis, usersRepository });
@@ -15,5 +15,7 @@ export default () => {
     logger,
     postUseCase,
     postUseCase2,
+    localeService,
+    i18nProvider,
   };
 };

@@ -45,6 +45,8 @@
       "interfaces/*": ["./src/interfaces/*"],
       "types/*": ["./src/types/*"],
       "schema/*": ["./src/interfaces/schema-definition/*"],
+      "services/*": ["./src/services/*"],
+
     }
   },
   "include": ["src/**/*"],

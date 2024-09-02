@@ -62,7 +62,7 @@ const setHttpPlugin = {
   },
 };
 
-export default function ({ config, logger, auth, schema, verify }) {
+export default function ({ config, logger, auth, schema, verify, localeService, i18nProvider }) {
   const app = express();
 
   const httpServer = http.createServer(app);
@@ -94,7 +94,20 @@ export default function ({ config, logger, auth, schema, verify }) {
   app.disable('x-powered-by');
   app.use(auth.initialize());
   app.use(auth.authenticate);
+  app.use(i18nProvider.init);
 
+  console.log('--------------------', {
+    localeService: localeService.getLocales(),
+    i18nProvider: i18nProvider.__('userNotFound %s', 'test'),
+  });
+
+  /*
+  const localeService = new LocaleService(i18n);
+  console.log(localeService.getLocales()); // ['en', 'el']
+  console.log(localeService.getCurrentLocale()); // 'en'
+  console.log(localeService.translate('Hello')); //  'Hello'
+  //console.log(localeService.translatePlurals('You have %s message', 3));
+*/
   return {
     server: apolloServer,
     serverStandalone:
