@@ -13,7 +13,7 @@ export default function ({ getOneUseCase2, removeUseCase, getOneUseCase, jwt, lo
 
   const resolvers = {
     Mutation: {
-      refreshToken: async (_: any, args: { input: IRefreshToken }) => {
+      async refreshToken(_: any, args: { input: IRefreshToken }) {
         const { requestToken } = args;
 
         console.log('args', args);
@@ -83,7 +83,7 @@ export default function ({ getOneUseCase2, removeUseCase, getOneUseCase, jwt, lo
             accessToken: newAccessToken,
             refreshToken: refreshToken.token,
           };
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string | undefined);
         }

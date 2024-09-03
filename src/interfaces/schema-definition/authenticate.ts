@@ -60,15 +60,11 @@ export default function ({ postUseCase2, postUseCase, jwt, logger, localeService
 
           expiredAt.setSeconds(expiredAt.getSeconds() + config.jwtRefreshExpiration);
 
-          console.log('postUseCase2', postUseCase2);
-
           const refreshToken = await postUseCase2.register({
             expiryDate: expiredAt.getTime(),
             id: data.id,
             token: uuidv4(),
           });
-
-          console.log('refreshToken refreshToken', refreshToken);
 
           // if user is found and password is right, create a token
           const token: string = jwt.signin(options)(payload);

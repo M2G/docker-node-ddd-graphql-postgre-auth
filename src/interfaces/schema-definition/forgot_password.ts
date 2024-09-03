@@ -9,7 +9,7 @@ export default function ({ postUseCase, logger }) {
 
   const resolvers = {
     Mutation: {
-      forgotPassword: async (parent: any, args: any) => {
+      async forgotPassword(parent, args) {
         const { email } = args;
         try {
           const user: IUser = await postUseCase.forgotPassword({ email });

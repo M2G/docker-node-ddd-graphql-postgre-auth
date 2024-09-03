@@ -9,10 +9,10 @@ export default function ({ postUseCase, logger }) {
 
   const resolvers = {
     Mutation: {
-      changePassword: async (
+      async changePassword(
         parent: any,
         args: { id: number; input: { password: string; oldPassword: string } },
-      ) => {
+      ) {
         const {
           id,
           input: { password, oldPassword },
@@ -38,7 +38,7 @@ export default function ({ postUseCase, logger }) {
           return {
             success: !!result,
           };
-        } catch (error: unknown) {
+        } catch (error) {
           logger.error(error);
           throw new Error(error as string);
         }

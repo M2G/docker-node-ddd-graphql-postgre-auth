@@ -13,12 +13,12 @@ export default function ({ postUseCase, logger, jwt }) {
 
   const resolvers = {
     Mutation: {
-      resetPassword: async (
+      async resetPassword(
         _: any,
         args: {
           readonly input: { readonly password: string; readonly token: string };
         },
-      ) => {
+      ) {
         const { input } = args;
         const { password, token } = input;
 

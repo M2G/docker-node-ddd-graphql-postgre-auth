@@ -12,7 +12,7 @@ export default function ({ postUseCase, logger }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
-      signup: async (_: any, args: any) => {
+      async signup(_, args) {
         const { input } = args;
         const { email, password } = input as IUser;
 

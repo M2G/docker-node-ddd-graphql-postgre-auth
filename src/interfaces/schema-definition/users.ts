@@ -17,7 +17,7 @@ export default function ({
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'users.graphql'), 'utf-8'));
   const resolvers = {
     Mutation: {
-      createUser: async (_: any, args: { input: IUser }) => {
+      async createUser(_: any, args: { input: IUser }) {
         const { input } = args;
         const { ...params } = input;
 
@@ -52,13 +52,13 @@ export default function ({
           throw new Error(error as string | undefined);
         }
       },
-      updateUser: async (
+      async updateUser(
         _: any,
         args: {
           readonly input: any;
           readonly id: string;
         },
-      ) => {
+      ) {
         const { input, id } = args;
         const { email, first_name, last_name, username, password } = input || {};
 
@@ -90,7 +90,7 @@ export default function ({
       },
     },
     Query: {
-      getUser: async (_: any, args: { id: any }) => {
+      async getUser(_: any, args: { id: any }) {
         const { id } = args;
         try {
           const data = await getOneUseCase.getOne({ id });
@@ -101,7 +101,7 @@ export default function ({
           throw new Error(error as string | undefined);
         }
       },
-      users: async (_: any, { ...args }) => {
+      async users(_: any, { ...args }) {
         try {
           const data = await getUseCase.all({ ...args });
           logger.info({ ...data });

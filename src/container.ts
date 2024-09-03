@@ -21,7 +21,9 @@ const nameAndRegistration = {
   auth: asFunction(auth).singleton(),
   config: asValue(config),
   database: asFunction(database).singleton(),
+  i18nProvider: asValue(i18n),
   jwt: asFunction(jwt).singleton(),
+  localeService: asClass(LocaleService, { lifetime: Lifetime.SINGLETON }),
   logger: asFunction(logger).singleton(),
   redis: asFunction(redis).singleton(),
   repository: asFunction(repository).singleton(),
@@ -29,8 +31,6 @@ const nameAndRegistration = {
   schema: asFunction(schema).singleton(),
   server: asFunction(server).singleton(),
   verify: asFunction(verify).singleton(),
-  localeService: asClass(LocaleService, { lifetime: Lifetime.SINGLETON }),
-  i18nProvider: asValue(i18n),
 };
 
 const container: AwilixContainer = createContainer();
