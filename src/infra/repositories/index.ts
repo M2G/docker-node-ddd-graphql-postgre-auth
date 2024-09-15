@@ -1,7 +1,7 @@
 import Users from './users';
 import Token from './token';
 
-export default ({ database, jwt }: any) => {
+export default function ({ database, jwt }: any) {
   const { models } = database;
   const { users, tokens } = models;
   const usersModel = users;
@@ -11,4 +11,4 @@ export default ({ database, jwt }: any) => {
     tokenRepository: Token({ jwt, model: tokenModel }),
     usersRepository: Users({ jwt, model: usersModel }),
   };
-};
+}

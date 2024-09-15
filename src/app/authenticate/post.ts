@@ -12,22 +12,20 @@ const TTL = 60 * 60;
  * function for authenticate user.
  */
 export default function ({
-  redis,
+  redisService,
   usersRepository,
 }: {
-  redis: {
-    set: (key: string, value: any, ttlInSeconds?: number) => boolean;
-  };
+  redisService;
   usersRepository: IUsersRepository;
 }) {
   async function authenticate({ email }: { readonly email: string }): Promise<IUser> {
     try {
       const user = Users({ email });
       const authenticatedUser = await usersRepository.authenticate({
-        email: (user as any).email,
+        email: user.email,
       });
 
-      redis.set(
+      await redisService.setWithExpiry(
         `${KEY}:${authenticatedUser?.id}`,
         JSON.stringify({
           id: authenticatedUser?.id,
@@ -38,7 +36,7 @@ export default function ({
 
       return authenticatedUser;
     } catch (error) {
-      throw new Error(error as string);
+      throw new Error(error);
     }
   }
 

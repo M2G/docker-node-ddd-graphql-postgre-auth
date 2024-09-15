@@ -7,8 +7,8 @@ import Status from 'http-status';
  * middleware to check the if auth vaid
  */
 
-export default ({ repository: { usersRepository }, response: { Fail }, jwt }: any) => {
-  const bearerStrategy: any = new BearerStrategy(
+export default function ({ repository: { usersRepository }, response: { Fail }, jwt }: any) {
+  const bearerStrategy = new BearerStrategy(
     'bearer',
     (token: string, done: (arg0: any, arg1: { email: string; password: string } | null) => any) => {
       const { id }: number = jwt.decode()(token);
@@ -24,7 +24,7 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
           if (!user) return done(Status[Status.NOT_FOUND], null);
           done(null, { email: user.email, password: user.password });
         })
-        .catch((error: null) => done(error, null));
+        .catch((error) => done(error, null));
     },
   );
 
@@ -47,4 +47,4 @@ export default ({ repository: { usersRepository }, response: { Fail }, jwt }: an
       })(req, res, next),
     initialize: () => passport.initialize(),
   };
-};
+}

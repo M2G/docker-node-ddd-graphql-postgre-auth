@@ -5,10 +5,13 @@ import container from '../../../../container';
 
 export default () => {
   const { cradle } = container;
-  const { redis, repository, jwt, logger } = cradle;
+  const { redisService, repository, jwt, logger } = cradle;
   const { usersRepository, tokenRepository } = repository;
 
-  const postUseCase = authenticate({ redis, usersRepository });
+  const postUseCase = authenticate({
+    redisService,
+    usersRepository,
+  });
   const removeUseCase = remove({ tokenRepository });
   const postUseCase2 = post({ tokenRepository });
   const getOneUseCase = getOne({ tokenRepository });

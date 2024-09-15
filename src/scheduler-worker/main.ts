@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import container from '../container';
 
 const { cradle } = container;
-const { redis, repository, logger } = cradle;
+const { repository, logger, redisService } = cradle;
 const { usersRepository } = repository;
 
 const KEY = 'LAST_CONNECTED_AT:*';
@@ -18,33 +18,45 @@ function subtractMonths(numOfMonths: number, date: Date = new Date()) {
 async function lastConnectedUser() {
   try {
     //TODO doesnt work on redis v4.6.12
+
+    for await (const key of redisService.scanIterator({
+      TYPE: 'string', // `SCAN` only
+      MATCH: KEY,
+      COUNT: 100,
+    })) {
+      console.log('key', key);
+
+      const usersInfo = await redisService.get(key);
+
+      console.log('usersInfo', usersInfo);
+      console.log('usersRepository', usersRepository);
+    }
+
     /*
     redis.scan(KEY, (err: any, matchingKeys: readonly any[]) => {
       console.log('redis.scan err', err);
       console.log('redis.scan matchingKeys', matchingKeys);
+      /*
+              if (err) throw err;
+              // matchingKeys will be an array of strings if matches were found
+              // otherwise it will be an empty array.
+              matchingKeys?.map(async (userKey) => {
+                const usersInfo: { id: number; last_connected_at: number } = await redis.get(userKey);
 
-      if (err) throw err;
-      // matchingKeys will be an array of strings if matches were found
-      // otherwise it will be an empty array.
-      matchingKeys?.map(async (userKey) => {
-        const usersInfo: { id: number; last_connected_at: number } = await redis.get(userKey);
+                console.log('usersInfo', usersInfo);
 
-        console.log('usersInfo', usersInfo);
-
-        /* const updatedUser: any = await usersRepository.update({
-          id: usersInfo?.id,
-          last_connected_at: usersInfo?.last_connected_at,
-        }); */
+                /* const updatedUser: any = await usersRepository.update({
+                  id: usersInfo?.id,
+                  last_connected_at: usersInfo?.last_connected_at,
+                }); */
     // logger.info('[Users.updateLastConnectedAt] users updated in database', updatedUser?.id);
     /*
 
       });
-    });
-
-    */
+    }); */
   } catch (error: unknown) {
     logger.error('[Users.updateLastConnectedAt]', error);
-    throw new Error(error as string | undefined);
+    throw new Error(error);
   }
 }
 
@@ -110,9 +122,9 @@ async function deleteInactiveUser() {
   }
 }
 
-cron.schedule('* * * * *', () => {
-  void (async () => {
-    lastConnectedUser();
-    await deleteInactiveUser();
-  })();
-});
+// cron.schedule('* * * * *', () => {
+void (async () => {
+  lastConnectedUser();
+  await deleteInactiveUser();
+})();
+//});

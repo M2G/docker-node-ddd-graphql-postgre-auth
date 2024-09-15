@@ -2,8 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { Sequelize, DataTypes } from 'sequelize';
 
-export default ({ config, basePath }: any) => {
-  console.log(':::::::', config);
+export default function ({ config, basePath }: any) {
+  console.log('config', config);
+  console.log('process', process.env.POSTGRES_DB, process.env.DB_USER, process.env.DB_PASSWORD);
+
   const sequelize = new Sequelize(
     process.env.POSTGRES_DB ?? '',
     process.env.DB_USER ?? '',
@@ -79,4 +81,4 @@ export default ({ config, basePath }: any) => {
   });
 
   return db;
-};
+}

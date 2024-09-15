@@ -79,7 +79,7 @@ export default function ({ config, logger, auth, schema, verify, localeService, 
             footer: false,
           })
         : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
-      setHttpPlugin,
+      setHttpPlugin as any,
     ],
     resolvers: schema.resolvers,
     typeDefs: schema.typeDefs,
@@ -118,7 +118,6 @@ export default function ({ config, logger, auth, schema, verify, localeService, 
       new Promise(() => {
         if (process.env.NODE_ENV === 'development') {
           return app.listen(config.port, async () => {
-            console.log('config.port config.port', config.port);
             await apolloServer.start();
             app.use(
               '/graphql',

@@ -1,7 +1,7 @@
 /**
  * LocaleService
  */
-export default class LocaleService {
+class LocaleService {
   private readonly i18nProvider: any;
   /**
    *
@@ -52,3 +52,5 @@ export default class LocaleService {
     return this.i18nProvider.__n(phrase, count);
   }
 }
+
+export default LocaleService;

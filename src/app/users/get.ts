@@ -6,16 +6,7 @@ const TTL = 1 * 60;
 /**
  * function for get users.
  */
-export default function ({
-  redis,
-  usersRepository,
-}: {
-  redis: {
-    set: (key: string, value: any, ttlInSeconds?: number) => boolean;
-    get: (key: string) => Promise<Error | string | null>;
-  };
-  usersRepository: IUsersRepository;
-}) {
+export default function ({ redisService, usersRepository }: { usersRepository: IUsersRepository }) {
   async function all({ ...arg }: { filters: string; pageSize: number; page: number }) {
     try {
       if (arg && Object.values(arg).filter(Boolean).length) {
@@ -25,7 +16,7 @@ export default function ({
         });
       }
 
-      const cachingUserList = await redis.get(KEY);
+      const cachingUserList = await redisService.get(KEY);
 
       if (cachingUserList) return cachingUserList;
 
@@ -34,7 +25,7 @@ export default function ({
         ...arg,
       });
 
-      redis.set(KEY, JSON.stringify(userList), TTL);
+      await redisService.setWithExpiry(KEY, JSON.stringify(userList), TTL);
 
       return userList;
     } catch (error) {

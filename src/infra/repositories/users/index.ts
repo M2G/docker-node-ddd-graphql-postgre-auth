@@ -4,7 +4,7 @@ import toEntity from './transform';
 import { encryptPassword } from 'infra/encryption';
 import { validatePassword } from './helpers';
 
-export default ({ model, jwt, ...args }) => {
+export default function ({ model, jwt, ...args }) {
   async function getAll({
     filters,
     pageSize,
@@ -261,4 +261,4 @@ export default ({ model, jwt, ...args }) => {
     resetPassword,
     update,
   };
-};
+}

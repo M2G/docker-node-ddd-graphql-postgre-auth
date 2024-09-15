@@ -30,7 +30,6 @@ export default function ({ jwt }: { jwt: any }) {
       const obj = parse(query);
       const operationDefinition = obj.definitions[0] as OperationDefinitionNode;
       const selection = operationDefinition.selectionSet.selections[0] as FieldNode;
-      // console.log('operationName: ', selection?.name?.value);
 
       if (WHITE_LIST.includes(selection.name.value)) return null;
 
@@ -43,7 +42,7 @@ export default function ({ jwt }: { jwt: any }) {
             maxAge: '60s',
             // time,
           })(token);
-        } catch (e: any) {
+        } catch (e) {
           console.log('----------------------------', e);
 
           if (e.name === TOKEN_EXPIRED_ERROR) {

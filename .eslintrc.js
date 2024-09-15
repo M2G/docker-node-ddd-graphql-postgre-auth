@@ -50,6 +50,7 @@ module.exports = {
     'init-declarations': 0,
     'func-style': 0,
     'func-names': 1,
+    'prefer-arrow-callback': 1,
     camelcase: 1,
 
     'max-statements': 0,
