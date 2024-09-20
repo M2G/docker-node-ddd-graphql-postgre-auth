@@ -12,7 +12,8 @@ import repository from './infra/repositories';
 import database from './infra/database';
 import schema from './interfaces/schema-definition';
 import response from './infra/support/response';
-import { RedisService, LocaleService } from './services';
+import Redis from './infra/cache';
+import Locale from './locales';
 
 import cache from './cache.config';
 import i18n from './i18n.config';
@@ -24,10 +25,10 @@ const nameAndRegistration = {
   database: asFunction(database).singleton(),
   i18nProvider: asValue(i18n),
   jwt: asFunction(jwt).singleton(),
-  localeService: asClass(LocaleService, { lifetime: Lifetime.SINGLETON }),
+  locale: asClass(Locale, { lifetime: Lifetime.SINGLETON }),
   logger: asFunction(logger).singleton(),
   redisClient: asValue(cache),
-  redisService: asClass(RedisService, { lifetime: Lifetime.SINGLETON }),
+  redis: asClass(Redis, { lifetime: Lifetime.SINGLETON }),
   repository: asFunction(repository).singleton(),
   response: asFunction(response).singleton(),
   schema: asFunction(schema).singleton(),

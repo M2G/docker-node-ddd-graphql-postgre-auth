@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import container from '../container';
 
 const { cradle } = container;
-const { repository, logger, redisService } = cradle;
+const { repository, logger, redis } = cradle;
 const { usersRepository } = repository;
 
 const KEY = 'LAST_CONNECTED_AT:*';
@@ -17,19 +17,16 @@ function subtractMonths(numOfMonths: number, date: Date = new Date()) {
 
 async function lastConnectedUser() {
   try {
-    //TODO doesnt work on redis v4.6.12
-
-    for await (const key of redisService.scanIterator({
+    for await (const key of redis.scanIterator({
       TYPE: 'string', // `SCAN` only
       MATCH: KEY,
       COUNT: 100,
     })) {
       console.log('key', key);
 
-      const usersInfo = await redisService.get(key);
+      const usersInfo = await redis.get(key);
 
       console.log('usersInfo', usersInfo);
-      console.log('usersRepository', usersRepository);
     }
 
     /*
@@ -54,7 +51,7 @@ async function lastConnectedUser() {
 
       });
     }); */
-  } catch (error: unknown) {
+  } catch (error) {
     logger.error('[Users.updateLastConnectedAt]', error);
     throw new Error(error);
   }

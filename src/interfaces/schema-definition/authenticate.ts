@@ -8,7 +8,7 @@ import type IUser from 'core/IUser';
 import Status from 'http-status';
 import { GraphQLError } from 'graphql';
 
-export default function ({ postUseCase2, postUseCase, jwt, logger, localeService, i18nProvider }) {
+export default function ({ postUseCase2, postUseCase, jwt, logger, locale, i18nProvider }) {
   const typeDefs = gql(readFileSync(join(__dirname, '../..', 'auth.graphql'), 'utf-8'));
   // userNotFound %s
   const resolvers = {
@@ -19,8 +19,8 @@ export default function ({ postUseCase2, postUseCase, jwt, logger, localeService
         try {
           const data: IUser = await postUseCase.authenticate({ email });
           if (!data?.email) {
-            logger.info(localeService.translate(`userNotFound %s`, email));
-            throw new GraphQLError(localeService.translate(`userNotFound %s`, email) as string, {
+            logger.info(locale.translate(`userNotFound %s`, email));
+            throw new GraphQLError(locale.translate(`userNotFound %s`, email) as string, {
               extensions: {
                 code: Status.UNAUTHORIZED,
                 http: { status: 401 },
@@ -31,17 +31,14 @@ export default function ({ postUseCase2, postUseCase, jwt, logger, localeService
           const match = comparePassword(password, data.password);
 
           if (!match) {
-            throw new GraphQLError(
-              localeService.translate(`wrongUsernamePasswordCombination`) as string,
-              {
-                extensions: {
-                  code: Status.UNAUTHORIZED,
-                  http: {
-                    status: 401,
-                  },
+            throw new GraphQLError(locale.translate(`wrongUsernamePasswordCombination`) as string, {
+              extensions: {
+                code: Status.UNAUTHORIZED,
+                http: {
+                  status: 401,
                 },
               },
-            );
+            });
           }
 
           const payload = {

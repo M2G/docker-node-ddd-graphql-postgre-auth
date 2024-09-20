@@ -11,13 +11,7 @@ const TTL = 60 * 60;
 /**
  * function for authenticate user.
  */
-export default function ({
-  redisService,
-  usersRepository,
-}: {
-  redisService;
-  usersRepository: IUsersRepository;
-}) {
+export default function ({ redis, usersRepository }: { redis; usersRepository: IUsersRepository }) {
   async function authenticate({ email }: { readonly email: string }): Promise<IUser> {
     try {
       const user = Users({ email });
@@ -25,7 +19,7 @@ export default function ({
         email: user.email,
       });
 
-      await redisService.setWithExpiry(
+      await redis.setWithExpiry(
         `${KEY}:${authenticatedUser?.id}`,
         JSON.stringify({
           id: authenticatedUser?.id,

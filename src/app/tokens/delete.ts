@@ -3,7 +3,7 @@ import type ITokenRepository from 'types/ITokenRepository';
 import type IRefreshToken from 'core/IRefreshToken';
 
 /**
- * function for remove user.
+ * function for remove refresh token.
  */
 export default function ({ tokenRepository }: { tokenRepository: ITokenRepository }) {
   function remove({ id }: { readonly id: number }) {

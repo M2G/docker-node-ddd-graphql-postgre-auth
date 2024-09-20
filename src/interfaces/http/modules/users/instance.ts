@@ -5,13 +5,13 @@ import container from '../../../../container';
 export default () => {
   const { cradle } = container;
   const {
-    redisService,
+    redis,
     logger,
     repository: { usersRepository },
   } = cradle;
 
   const getUseCase = get({
-    redisService,
+    redis,
     usersRepository,
   });
   const getOneUseCase = getOne({ usersRepository });

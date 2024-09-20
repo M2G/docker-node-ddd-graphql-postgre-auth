@@ -62,7 +62,7 @@ const setHttpPlugin = {
   },
 };
 
-export default function ({ config, logger, auth, schema, verify, localeService, i18nProvider }) {
+export default function ({ config, logger, auth, schema, verify, locale, i18nProvider }) {
   const app = express();
 
   const httpServer = http.createServer(app);
@@ -97,7 +97,7 @@ export default function ({ config, logger, auth, schema, verify, localeService, 
   app.use(i18nProvider.init);
 
   console.log('--------------------', {
-    localeService: localeService.getLocales(),
+    locale: locale.getLocales(),
     i18nProvider: i18nProvider.__('userNotFound %s', 'test'),
   });
 

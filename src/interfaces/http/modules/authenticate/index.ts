@@ -2,7 +2,7 @@ import authenticate from 'interfaces/schema-definition/authenticate';
 import instance from './instance';
 
 export default () => {
-  const { jwt, logger, postUseCase, postUseCase2, localeService, i18nProvider } = instance();
+  const { jwt, logger, postUseCase, postUseCase2, locale, i18nProvider } = instance();
   return {
     authenticate: authenticate({
       jwt,
@@ -10,7 +10,7 @@ export default () => {
       postUseCase,
       // @TODO rename it to refreshTokenUseCase
       postUseCase2,
-      localeService,
+      locale,
       i18nProvider,
     }),
   };

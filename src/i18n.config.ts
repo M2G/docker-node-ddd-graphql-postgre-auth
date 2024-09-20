@@ -4,7 +4,7 @@ import path from 'path';
 i18n.configure({
   autoReload: true,
   defaultLocale: 'en',
-  directory: path.join(__dirname, 'locales'),
+  directory: path.join(__dirname, 'lang'),
   header: 'accept-language',
   locales: ['en', 'fr'],
   queryParameter: 'lang',

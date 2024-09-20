@@ -2,7 +2,7 @@ import type ITokenRepository from 'types/ITokenRepository';
 import Token from 'domain/token';
 
 /**
- * function for get one user.
+ * function for get one refresh token.
  */
 export default function ({ tokenRepository }: { tokenRepository: ITokenRepository }) {
   function getOne({ token }: { readonly token: string }) {

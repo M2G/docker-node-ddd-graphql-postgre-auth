@@ -5,11 +5,11 @@ import container from '../../../../container';
 
 export default () => {
   const { cradle } = container;
-  const { redisService, repository, jwt, logger } = cradle;
+  const { redis, repository, jwt, logger } = cradle;
   const { usersRepository, tokenRepository } = repository;
 
   const postUseCase = authenticate({
-    redisService,
+    redis,
     usersRepository,
   });
   const removeUseCase = remove({ tokenRepository });
