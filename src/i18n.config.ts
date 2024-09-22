@@ -4,20 +4,23 @@ import path from 'path';
 i18n.configure({
   autoReload: true,
   defaultLocale: 'en',
-  directory: path.join(__dirname, 'lang'),
+  // directory: path.join(__dirname, 'lang'),
   header: 'accept-language',
   locales: ['en', 'fr'],
-  queryParameter: 'lang',
   logDebugFn(msg): void {
     console.log('debug', msg);
   },
-  logWarnFn: function (msg): void {
+  // setting of log level ERROR - default to require('debug')('i18n:error')
+  logErrorFn(msg): void {
+    console.log('error', msg);
+  },
+  logWarnFn(msg): void {
     console.log('warn', msg);
   },
-
-  // setting of log level ERROR - default to require('debug')('i18n:error')
-  logErrorFn: function (msg): void {
-    console.log('error', msg);
+  queryParameter: 'lang',
+  staticCatalog: {
+    en: import('./en.json'),
+    fr: import('./fr.json'),
   },
 });
 
